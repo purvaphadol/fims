@@ -12,7 +12,7 @@ $(document).ready(function () {
     // toggle member wedding date 
 
     // $('.member-wed').hide();
-    // $('input[name="members_0_member_marital"]').on('change', function () {
+    // $('#member-container .member-row .member-wed input[type="radio]').on('change', function () {
     //     if ($(this).val().toLowerCase() === "married") {
     //         $('.member-wed').show();
     //     } else {
@@ -80,3 +80,39 @@ $(document).ready(function () {
     $('.removeMember').hide();
     
 });
+const memberrow = document.querySelectorAll('.member-row')
+console.log(memberrow)
+
+const radiobtn = document.querySelectorAll('input[type="radio"]');
+console.log(radiobtn);
+const member_wedDate = document.querySelector(".member-wed");
+console.log(member_wedDate)
+radiobtn.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        console.log(radio);
+        console.log(this.value);
+
+        if (this.value.toLowerCase() === "married"){
+            member_wedDate.style.display = 'block';
+        } else {
+            member_wedDate.style.display = 'none';
+        }
+    }) 
+});
+
+
+    // In a <script> tag within your template or a linked .js file
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     document.querySelectorAll('input[type="radio"][name$="-choice_field"]').forEach(function(radio) {
+    //         radio.addEventListener('change', function() {
+    //             const formRow = this.closest('.form-row');
+    //             const toggledContent = formRow.querySelector('.toggled-content');
+
+    //             if (this.value === 'option2' && this.checked) { // Assuming 'option2' triggers the toggle
+    //                 toggledContent.style.display = 'block';
+    //             } else {
+    //                 toggledContent.style.display = 'none';
+    //             }
+    //         });
+    //     });
+    // });

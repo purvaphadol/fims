@@ -15,6 +15,9 @@ def get_cities(request, state_id):
     return JsonResponse(data, safe=False)
 
 def family_form(request):
+    head_form = FamilyHeadForm()
+    hobby_formset = HobbyFormSet(prefix="hobbies")
+    member_formset = MemberFormset(prefix="members")
     if request.method == 'POST':
         head_form = FamilyHeadForm(request.POST, request.FILES)
         if head_form.is_valid():
@@ -25,17 +28,14 @@ def family_form(request):
                 head.save()
                 hobby_formset.save()
                 member_formset.save()
-                return redirect('home')
-        else:
-            print("Head form errors:", head_form.errors)    
-            print("Hobby formset errors:", hobby_formset.errors)
-            print("Member formset errors:", member_formset.errors)
-        
-    else:
-        head_form = FamilyHeadForm()
-        hobby_formset = HobbyFormSet(prefix="hobbies")
-        member_formset = MemberFormset(prefix="members")
-
+                return JsonResponse({"success": True})
+                # return redirect('home')
+            else:
+                print("Head form errors:", head_form.errors)    
+                print("Hobby formset errors:", hobby_formset.errors)
+                print("Member formset errors:", member_formset.errors)
+                return JsonResponse({"success": False, "errorMessage": head_form.errors })
+    
     context = {
         'head_form': head_form,
         'hobby_formset': hobby_formset,

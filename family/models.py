@@ -45,7 +45,7 @@ class FamilyHead(models.Model):
     address = models.TextField()
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null = True, blank=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null = True, blank=True)
-    pincode = models.IntegerField()
+    pincode = models.CharField(max_length=6)
     marital_status = models.CharField(max_length=10, choices=MaritalStatus.choices, default='')
     wedding_date = models.DateField(null=True, blank=True)
     photo = models.ImageField(upload_to="pictures")
