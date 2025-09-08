@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Family Form</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/familystyle.css' %}" />
+</head>
+
+<body>
+  <h1>Registration Form</h1>
+  <div class="form-container">
+
+    <form id="familyForm" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h2>Family Head</h2>
+      <div class="head-container">
+        {{ head_form.name.label_tag }} {{ head_form.name }} {{ head_form.name.errors}}
+        {{ head_form.surname.label_tag }} {{ head_form.surname }} {{ head_form.surname.errors }}
+        {{ head_form.dob.label_tag }} {{ head_form.dob }} {{ head_form.dob.errors }}
+        {{ head_form.mobno.label_tag }} {{ head_form.mobno }} {{ head_form.mobno.errors }}
+        {{ head_form.address.label_tag }} {{ head_form.address }} {{ head_form.address.errors }}
+        {{ head_form.state.label_tag }} {{ head_form.state }} {{ head_form.state.errors }}
+        {{ head_form.city.label_tag }} {{ head_form.city }} {{ head_form.city.errors }}
+        {{ head_form.pincode.label_tag }} {{ head_form.pincode }} {{ head_form.pincode.errors }}
+        {{ head_form.marital_status.label_tag }} {{ head_form.marital_status }} {{ head_form.marital_status.errors }}
+        <div id="wedding_date">
+          {{ head_form.wedding_date.label_tag }} {{ head_form.wedding_date }} {{ head_form.wedding_date.errors }}
+        </div>
+        {{ head_form.photo.label_tag }} {{ head_form.photo }} {{ head_form.photo.errors }}
+
+        <!-- <h3>Hobbies</h3> -->
+        {{ hobby_formset.management_form }}
+        <div id="hobby-container">
+          {% for form in hobby_formset %}
+          <div class="hobby-row">
+            {{ form.hobby.label_tag }} {{ form.hobby }} {{ form.hobby.errors }}
+            <button type="button" class="removeHobby">Remove</button>
+          </div>
+          {% endfor %}
+        </div>
+        <button type="button" id="addHobby">+ Add Hobby</button>
+      </div>
+
+      <h3>Members</h3>
+      {{ member_formset.management_form }}
+      <div id="member-container">
+        {% for form in member_formset %}
+        <div class="member-row">
+          {{ form.member_name.label_tag }} {{ form.member_name }} {{form.member_name.errors}}
+          {{ form.member_dob.label_tag }} {{ form.member_dob }} {{form.member_dob.errors}}
+          {{ form.member_marital.label_tag }} {{ form.member_marital }} {{form.member_marital.errors}}
+          <div class="member-wed">
+            {{ form.member_wedDate.label_tag }} {{ form.member_wedDate }} {{form.member_wedDate.errors}}
+          </div>
+          {{ form.education.label_tag }} {{ form.education }} {{form.education.errors}}
+          {{ form.member_photo.label_tag }} {{ form.member_photo }} {{form.member_photo.errors}}
+          <button type="button" class="removeMember">Remove</button>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="button" id="addMember">+ Add Member</button>
+
+      {{ head_form.non_field_errors }}
+      {{ hobby_formset.non_form_errors }}
+      {% for hidden in head_form.hidden_files %}
+      {{ hidden }}
+      {% endfor %}
+      
+      <button type="submit" class="submitBtn">Submit</button>
+    </form>
+  </div>
+  <script src="{% static 'js/form.js' %}"></script>
+  <script src="{% static 'js/statecity.js' %}"></script>
+</body>
+
+</html>
