@@ -73,9 +73,9 @@ form > div {
     display: block;
     margin-top: 0.2rem;
 }
-/* .errorInput {
+.errorInput {
     border-color: red;
-} */
+}
 
 .textbox {
     display: flex;

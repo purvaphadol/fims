@@ -20,6 +20,16 @@ $(document).ready(function () {
     //     }
     // });
 
+    $('#member-container').on('change', 'input[type="radio"][name$="member_marital"]', function () {
+        let memberRow = $(this).closest('.member-row');
+        // Hide all member-wed in this row first
+        memberRow.find('.member-wed').hide();
+        // Only show if this radio is checked and value is married
+        if ($(this).is(':checked') && $(this).val().toLowerCase() === "married") {
+            memberRow.find('.member-wed').show();
+        }
+    });
+
     // Add Hobby
     // let formIdx = {{ formset.total_form_count|add:"-1" }};
     let formIdx = $('#id_hobbies-TOTAL_FORMS').val(); 
@@ -54,20 +64,29 @@ $(document).ready(function () {
     let memberIdx = $('#id_members-TOTAL_FORMS').val(); 
 
     $('#addMember').click(function() {
-        let lastInput = $('#member-container .member-row:last input[type="text"]'); 
-        if (lastInput.val().trim() === "") { 
+        let lastRow = $('#member-container .member-row:last');
+        let nameInput = lastRow.find('input[type="text"][name$="member_name"]');
+        if (nameInput.val().trim() === "") { 
             alert("Please fill the current member before adding a new one."); 
-            lastInput.focus(); 
+            nameInput.focus(); 
             return; 
         }
-        $('#member-container').append($('#member-container .member-row:last').clone().find('input').each(function() {
-            let name = $(this).attr('name').replace(/-\d+-/, '-' + memberIdx + '-');
-            let id = $(this).attr('id').replace(/-\d+-/, '-' + memberIdx + '-');	
-            $(this).attr('name', name);  
+        let newRow = lastRow.clone();
+        newRow.find('input,select,textarea').each(function () {
+            let name = $(this).attr('name').replace(/-\\d+-/, '-' + memberIdx + '-');
+            $(this).attr('name', name);
+            let id = $(this).attr('id').replace(/-\\d+-/, '-' + memberIdx + '-');
             $(this).attr('id', id);
-            $(this).val('');
-            }).end().find('input[name$=-id]').val('').end().find('.removeMember').show().end());
-
+            
+            if ($(this).is(':radio') || $(this).is(':checkbox')) {
+                $(this).prop('checked', false);
+            } else {
+                $(this).val('');
+            }
+        }).end().find('.removeMember').show().end();
+        
+        $('#member-container').append(newRow);
+        newRow.find('.member-wed').hide();
         memberIdx++;       
         $('#id_members-TOTAL_FORMS').val(memberIdx);
     });
@@ -80,39 +99,37 @@ $(document).ready(function () {
     $('.removeMember').hide();
     
 });
-const memberrow = document.querySelectorAll('.member-row')
-console.log(memberrow)
+// const memberrow = document.querySelectorAll('.member-row')
+// console.log(memberrow)
 
-const radiobtn = document.querySelectorAll('input[type="radio"]');
-console.log(radiobtn);
-const member_wedDate = document.querySelector(".member-wed");
-console.log(member_wedDate)
-radiobtn.forEach(function(radio) {
-    radio.addEventListener('change', function() {
-        console.log(radio);
-        console.log(this.value);
+// const radiobtn = document.querySelectorAll('input[type="radio"]');
+// console.log(radiobtn);
+// const member_wedDate = document.querySelector(".member-wed");
+// console.log(member_wedDate)
+// radiobtn.forEach(function(radio) {
+//     radio.addEventListener('change', function() {
+//         console.log(radio);
+//         console.log(this.value);
 
-        if (this.value.toLowerCase() === "married"){
-            member_wedDate.style.display = 'block';
-        } else {
-            member_wedDate.style.display = 'none';
-        }
-    }) 
-});
+//         if (this.value.toLowerCase() === "married"){
+//             member_wedDate.style.display = 'block';
+//         } else {
+//             member_wedDate.style.display = 'none';
+//         }
+//     }) 
+// });
 
-
-    // In a <script> tag within your template or a linked .js file
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     document.querySelectorAll('input[type="radio"][name$="-choice_field"]').forEach(function(radio) {
-    //         radio.addEventListener('change', function() {
-    //             const formRow = this.closest('.form-row');
-    //             const toggledContent = formRow.querySelector('.toggled-content');
-
-    //             if (this.value === 'option2' && this.checked) { // Assuming 'option2' triggers the toggle
-    //                 toggledContent.style.display = 'block';
-    //             } else {
-    //                 toggledContent.style.display = 'none';
-    //             }
-    //         });
-    //     });
-    // });
+// if (name) {
+//                 name = name.replace(/-\\d+-/, '-' + memberIdx + '-');
+//                 $(this).attr('name', name);
+//             }
+//             let id = $(this).attr('id');
+//             if (id) {
+//                 id = id.replace(/-\\d+-/, '-' + memberIdx + '-');
+//                 $(this).attr('id', id);
+//             }
+//             if ($(this).is(':radio') || $(this).is(':checkbox')) {
+//                 $(this).prop('checked', false);
+//             } else {
+//                 $(this).val('');
+//             }
