@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Family</h1>
+    
+    <div>
+        <div>
+            <h3>Head Details</h3>
+            <h5>ID: {{ head.id }} </h5>
+            <h5>Name: {{ head.name }} </h5>
+            <h5>Surname: {{ head.surname }} </h5>
+            <h5>Birth Date: {{ head.dob }} </h5>
+            <h5>Mobile No: {{ head.mobno }} </h5>
+            <h5>Address: {{ head.address }} </h5>
+            <h5>State: {{ head.state }} </h5>
+            <h5>City: {{ head.city }} </h5>
+            <h5>Pincode: {{ head.pincode }} </h5>
+            <h5>Marital Status: {{ head.marital_status }} </h5>
+            {% if head.marital_status == "Married" %}
+                <h5>Wedding Date: {{ head.wedding_date }} </h5>
+            {% endif %}
+            <h5>Photo: <img src="/media/{{head.photo}}" alt="{{head.photo}}" height="100px" width="auto"></h5>
+            <h4>Hobbies</h4>
+            {% for hobby in hobbies %}
+                <h5>{{forloop.counter}}. {{ hobby.hobby }}</h5>
+            {% endfor %}
+            <hr>
+        </div>
+        <div>
+            <h3>Member Details</h3>
+            {% for member in members %}
+            <div>
+                <h4>Member {{forloop.counter}}</h4>
+                <h5>ID: {{ member.id }} </h5>
+                <h5>Name: {{ member.member_name }} </h5>
+                <h5>Birth Date: {{ member.member_dob }} </h5>
+                <h5>Marital Status: {{ member.member_marital }} </h5>
+                {% if member.marital_status == "Married" %}
+                    <h5>Wedding Date: {{ member.member_wedDate }} </h5>
+                {% endif %}
+                <h5>Education: {{ member.education }} </h5>
+
+                <h5>Photo: <img src="/media/{{member.member_photo}}" alt="{{member.member_photo}}" height="100px" width="auto"></h5>
+                <hr>
+            </div>
+            {% endfor %}
+        </div>   
+    </div>
+   
+</body>
+</html>
+

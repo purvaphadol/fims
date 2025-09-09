@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <h3> Total Family: {{ heads.count }}</h3>
+    <h3> Total Members: {{ members.count }}</h3>
+    <h3> Total States: {{ states.count }}</h3>
+    <h3> Total Cities: {{ cities.count }}</h3>
+    <a href="{% url 'family_list' %}">View Families</a>
+<br>
+
+    <a href="{% url 'logout_page' %}" class="btn btn-primary">Logout</a>
+</body>
+</html>
+

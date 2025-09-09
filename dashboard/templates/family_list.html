@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Family List</h1>
+    <a href="{% url 'family_form' %}">Create Family</a>
+    <hr>
+    <div>
+        {% for head in page_obj.object_list %}
+            <div>
+                <a href="{% url 'view_family' head.id %}">View</a>
+                <!-- <span>@{{room.host.username}}</span> -->
+                <h5>{{ head.id }} -- {{ head.name }} </h5>
+                <a href="{% url 'update_family' head.id %}">Edit</a>
+                <a href="{% url 'delete_family' head.id %}">Delete</a>
+                <!-- <small>{{room.topic.name}}</small> -->
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+    <div>
+        {%if page_obj.has_previous %} 
+            <a href="family_list?page=1">First</a>
+            <button type="button"><a href="?page={{page_obj.previous_page_number}}"> Previous</a></button>
+        {% endif %}
+
+        <!-- <span>{{page_obj.number}}</span> -->
+        {% for n in totalPagelist %}
+            <a href="family_list?page={{n}}">{{n}}</a>
+        {% endfor %}
+      
+        {%if page_obj.has_next %} 
+            <button type="button"><a href="?page={{page_obj.next_page_number}}">Next</a></button>
+            <a href="?page={{ lastPage }}">Last</a>
+        {% endif %}
+    </div>
+
+   <br>
+   <br><br>
+</body>
+</html>
+
+<!-- {% for head in heads %}
+        <h3> {{ head.name }}</h3>
+        {% for member in members%}
+            {% if head.id == member.family_head_id %}
+                <h4>{{member.member_name}}</h4>
+            {% endif %}
+        {% endfor %}
+    {% endfor %} -->
