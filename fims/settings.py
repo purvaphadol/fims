@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'family',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -124,9 +125,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static', # Or the path to your static directory
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = "/media/"
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

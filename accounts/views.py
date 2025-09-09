@@ -32,10 +32,7 @@ def login_page(request):
 def logout_page(request):
     logout(request)
     return redirect('login_page')
- 
-@login_required(login_url='login_page')
-def dashboard(request):
-    return render(request, 'dashboard.html')
+
 
 def forgot_password(request):
     if request.method == "POST":

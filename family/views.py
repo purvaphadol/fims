@@ -6,7 +6,7 @@ from .models import City
 
 # Create your views here.
 def home(request):
-    return HttpResponse("Hello")
+    return render(request, 'index.html')
 
 def get_cities(request, state_id):
     # state_id = request.GET.get('state_id')
