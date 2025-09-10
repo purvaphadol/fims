@@ -40,7 +40,7 @@
                 <h5>Name: {{ member.member_name }} </h5>
                 <h5>Birth Date: {{ member.member_dob }} </h5>
                 <h5>Marital Status: {{ member.member_marital }} </h5>
-                {% if member.marital_status == "Married" %}
+                {% if member.member_marital == "Married" %}
                     <h5>Wedding Date: {{ member.member_wedDate }} </h5>
                 {% endif %}
                 <h5>Education: {{ member.education }} </h5>

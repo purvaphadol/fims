@@ -77,14 +77,13 @@ class FamilyHeadForm(ModelForm):
         elif not re.match(r"^[0-9]{6}$", pincode):
             self.add_error('pincode', 'Pincode must be exactly 6 digits.')
         # marital status
-        # marital_status = self.cleaned_data.get('marital_status')
-        # if not marital_status:
-        #     self.add_error('marital_status', 'Please select Marital Status')
-        # # wedding date
-        # wedding_date = self.cleaned_data.get('wedding_date')
-        # if marital_status:
-        #     if not wedding_date:
-        #         self.add_error('wedding_date', 'Wedding date is required.')
+        marital_status = self.cleaned_data.get('marital_status')
+        if not marital_status:
+            self.add_error('marital_status', 'Please select Marital Status')
+        # wedding date
+        wedding_date = self.cleaned_data.get('wedding_date')
+        if marital_status == 'Married' and not wedding_date:
+            self.add_error('wedding_date', 'Wedding date is required.')
         # photo
         photo = self.cleaned_data.get('photo')
         if not photo:
@@ -121,8 +120,6 @@ class FamilyHeadForm(ModelForm):
                 pass 
         elif self.instance.pk:
             self.fields['city'].queryset = self.instance.state.city_set
-
-    
 
 class HobbyForm(ModelForm):
     class Meta:
@@ -175,9 +172,13 @@ class MemberInlineFormSet(BaseInlineFormSet):
             if not member_dob:
                 form.add_error('member_dob', 'Date of Birth is required.')
             # marital status
-            # member_marital = form.cleaned_data.get('member_marital')
-            # if not member_marital:
-            #     form.add_error('member_marital', 'Please select Marital Status')
+            member_marital = form.cleaned_data.get('member_marital')
+            if not member_marital:
+                form.add_error('member_marital', 'Please select Marital Status')
+            # member wed date 
+            member_wedDate = form.cleaned_data.get('member_wedDate')
+            if member_marital == 'Married' and not member_wedDate:
+                form.add_error('member_wedDate', 'Wedding date is required if married.')
             # photo
             member_photo = form.cleaned_data.get('member_photo')
             if member_photo:

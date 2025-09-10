@@ -13,8 +13,8 @@ form.addEventListener("submit", async (e) => {
 
     const result = await response.json();
     console.log(result);
-    // document.querySelectorAll('.errorMsg').forEach(span => span.innerText = '');
-    // document.querySelectorAll('.errorInput').forEach(input => input.classList.remove('errorInput'));
+    document.querySelectorAll('.errorMsg').forEach(span => span.innerText = '');
+    document.querySelectorAll('.errorInput').forEach(input => input.classList.remove('errorInput'));
 
     if (!result.success) {
       // Head form errors
@@ -66,19 +66,24 @@ form.addEventListener("submit", async (e) => {
 });
 
 function setErrorMsg(input, errorMsg) {
-  //     if (!input) return;
-  const inputField = input.parentElement;
-  // console.log(inputField);
-  //     if (!inputField) return;
-  const span = inputField.querySelector("span.errorMsg");
-  // console.log(span)
-  if (!span) return;
+  if (!input) return;
+    let inputField = input.closest("div");
+    // For radio buttons, 
+    if (input.type === "radio") {
+        while (inputField && !inputField.querySelector("span.errorMsg")) {
+            inputField = inputField.parentElement;
+        }
+    }
+    if (!inputField) return;
+    const span = inputField.querySelector("span.errorMsg");
+    if (!span) return;
+  
   span.classList.add("errorMsg");
   input.classList.add("errorInput");
   span.innerText = errorMsg;
 }
 
-$(document).on("input", 'input[type="text"], input[type="date"], input[type="file"]',function () {
+$(document).on("input", 'input[type="text"], input[type="date"], input[type="file"]', function () {
   let span = $(this).parent().find(".errorMsg");
   span.text("");
   $(this).removeClass("errorInput");

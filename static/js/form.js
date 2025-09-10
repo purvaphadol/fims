@@ -6,27 +6,17 @@ $(document).ready(function () {
             $('#wedding_date').show();
         } else {
             $('#wedding_date').hide();
+            $('input[name="wedding_date"]').val('');
         }
     });
 
     // toggle member wedding date 
-
-    // $('.member-wed').hide();
-    // $('#member-container .member-row .member-wed input[type="radio]').on('change', function () {
-    //     if ($(this).val().toLowerCase() === "married") {
-    //         $('.member-wed').show();
-    //     } else {
-    //         $('.member-wed').hide();
-    //     }
-    // });
-
     $('#member-container').on('change', 'input[type="radio"][name$="member_marital"]', function () {
         let memberRow = $(this).closest('.member-row');
-        // Hide all member-wed in this row first
         memberRow.find('.member-wed').hide();
-        // Only show if this radio is checked and value is married
         if ($(this).is(':checked') && $(this).val().toLowerCase() === "married") {
             memberRow.find('.member-wed').show();
+            memberRow.find('input[name$="member_wedDate"]').val('');
         }
     });
 
@@ -73,18 +63,23 @@ $(document).ready(function () {
         }
         let newRow = lastRow.clone();
         newRow.find('input,select,textarea').each(function () {
-            let name = $(this).attr('name').replace(/-\\d+-/, '-' + memberIdx + '-');
-            $(this).attr('name', name);
-            let id = $(this).attr('id').replace(/-\\d+-/, '-' + memberIdx + '-');
-            $(this).attr('id', id);
-            
+            let name = $(this).attr('name');
+            if (name) {
+                name = name.replace(/-\d+-/, '-' + memberIdx + '-');
+                $(this).attr('name', name);
+            }
+            let id = $(this).attr('id');
+            if (id) {
+                id = id.replace(/-\d+-/, '-' + memberIdx + '-');
+                $(this).attr('id', id);
+            }
             if ($(this).is(':radio') || $(this).is(':checkbox')) {
                 $(this).prop('checked', false);
             } else {
                 $(this).val('');
             }
-        }).end().find('.removeMember').show().end();
-        
+        });
+        newRow.find('.removeMember').show();
         $('#member-container').append(newRow);
         newRow.find('.member-wed').hide();
         memberIdx++;       
