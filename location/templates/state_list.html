@@ -10,15 +10,29 @@
     <a href="{% url 'create_state' %}">Create State</a>
     <hr>
     <div>
-        {% for state in page_obj.object_list %}
-            <div>
-                <h5>{{ state.id }} -- {{ state.state_name }} -- > {{ state.status }} </h5>
-                <a href="{% url 'update_state' state.id %}">Edit</a>
-                <a href="{% url 'delete_state' state.id %}">Delete</a>
-                <hr>
-            </div>
-        {% endfor %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for state in page_obj.object_list %}
+                <tr>
+                    <td>{{ state.id }}</td>
+                    <td>{{ state.state_name }}</td>
+                    <td>{{ state.status }}</td>
+                    <td><a href="{% url 'update_state' state.id %}">Edit</a></td>
+                    <td><a href="{% url 'delete_state' state.id %}">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    
     <div>
         {%if page_obj.has_previous %} 
             <button type="button"><a href="state_list?page=1">First</a></button> 

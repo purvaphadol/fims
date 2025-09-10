@@ -22,10 +22,17 @@ def dashboard(request):
 def family_list(request):
     heads = FamilyHead.objects.all()
     members = FamilyMember.objects.all()
+    
+    if request.GET.get('search'):
+        # print("hii")
+        heads = heads.filter(name__icontains=request.GET.get('search'))
+        # print(heads)
+
     p = Paginator(heads, 5)  
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
     totalPages = page_obj.paginator.num_pages
+
     context = {
         'members': members,
         'page_obj': page_obj,
