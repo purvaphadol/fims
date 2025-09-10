@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'family',
     'dashboard',
+    'location',
 ]
 
 MIDDLEWARE = [

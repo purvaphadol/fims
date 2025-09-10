@@ -22,8 +22,7 @@ def dashboard(request):
 def family_list(request):
     heads = FamilyHead.objects.all()
     members = FamilyMember.objects.all()
-    p = Paginator(heads, 5)  # creating a paginator object
-    # getting the desired page number from url
+    p = Paginator(heads, 5)  
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
     totalPages = page_obj.paginator.num_pages
@@ -56,9 +55,8 @@ def update_family(request, pk):
     if request.method == 'POST':
         head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
-        member_formset = MemberFormset(request.POST, request.FILES, instance=head.instance, prefix="members")
+        member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
         if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
-            print(hiii)
             # head_form.save()
             h = head_form.save()
             hobby_formset.instance = h
@@ -79,7 +77,7 @@ def update_family(request, pk):
         'hobby_formset': hobby_formset,
         'member_formset': member_formset
     }
-    return render(request, 'update_family.html', context)
+    return render(request, 'family_form.html', context)
 
 def delete_family(request, pk):
     return render(request, 'delete_family.html')

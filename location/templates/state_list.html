@@ -7,30 +7,27 @@
 </head>
 <body>
     <h1>Family List</h1>
-    <a href="{% url 'family_form' %}">Create Family</a>
+    <a href="{% url 'create_state' %}">Create State</a>
     <hr>
     <div>
-        {% for head in page_obj.object_list %}
+        {% for state in page_obj.object_list %}
             <div>
-                <a href="{% url 'view_family' head.id %}">View</a>
-                <!-- <span>@{{room.host.username}}</span> -->
-                <h5>{{ head.id }} -- {{ head.name }} </h5>
-                <a href="{% url 'update_family' head.id %}">Edit</a>
-                <a href="{% url 'delete_family' head.id %}">Delete</a>
-                <!-- <small>{{room.topic.name}}</small> -->
+                <h5>{{ state.id }} -- {{ state.state_name }} -- > {{ state.status }} </h5>
+                <a href="{% url 'update_state' state.id %}">Edit</a>
+                <a href="{% url 'delete_state' state.id %}">Delete</a>
                 <hr>
             </div>
         {% endfor %}
     </div>
     <div>
         {%if page_obj.has_previous %} 
-            <button type="button"><a href="family_list?page=1">First</a></button> 
+            <button type="button"><a href="state_list?page=1">First</a></button> 
             <button type="button"><a href="?page={{page_obj.previous_page_number}}"> Previous</a></button>
         {% endif %}
 
         <!-- <span>{{page_obj.number}}</span> -->
         {% for n in totalPagelist %}
-            <button type="button"><a href="family_list?page={{n}}">{{n}}</a></button>
+            <button type="button"><a href="state_list?page={{n}}">{{n}}</a></button>
             
         {% endfor %}
       
