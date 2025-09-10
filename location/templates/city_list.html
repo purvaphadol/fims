@@ -6,28 +6,28 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>State List</h1>
-    <a href="{% url 'create_state' %}">Create State</a>
+    <h1>City List</h1>
+    <a href="{% url 'create_city' %}">Create city</a>
     <hr>
     <div>
-        {% for state in page_obj.object_list %}
+        {% for city in page_obj.object_list %}
             <div>
-                <h5>{{ state.id }} -- {{ state.state_name }} -- > {{ state.status }} </h5>
-                <a href="{% url 'update_state' state.id %}">Edit</a>
-                <a href="{% url 'delete_state' state.id %}">Delete</a>
+                <h5>{{ city.id }} -- {{ city.city_name }} -- {{ city.state }} -- > {{ city.status }} </h5>
+                <a href="{% url 'update_city' city.id %}">Edit</a>
+                <a href="{% url 'delete_city' city.id %}">Delete</a>
                 <hr>
             </div>
         {% endfor %}
     </div>
     <div>
         {%if page_obj.has_previous %} 
-            <button type="button"><a href="state_list?page=1">First</a></button> 
+            <button type="button"><a href="city_list?page=1">First</a></button> 
             <button type="button"><a href="?page={{page_obj.previous_page_number}}"> Previous</a></button>
         {% endif %}
 
         <button type="button">{{page_obj.number}}</button>
         <!-- {% for n in totalPagelist %}
-            <button type="button"><a href="state_list?page={{n}}">{{n}}</a></button>
+            <button type="button"><a href="city_list?page={{n}}">{{n}}</a></button>
         {% endfor %} -->
       
         {%if page_obj.has_next %} 
@@ -37,6 +37,5 @@
     </div>
 
    <br>
-   <br><br>
 </body>
 </html>

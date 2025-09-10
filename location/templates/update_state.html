@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Update State</h1>
-    <form id="state" method="post">
+    <form method="post">
       {% csrf_token %} 
       {{ state_form.state_name.label_tag }} 
       {{ state_form.state_name }} 
