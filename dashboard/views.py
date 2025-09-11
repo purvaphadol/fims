@@ -25,8 +25,15 @@ def family_list(request):
     
     if request.GET.get('search'):
         # print("hii")
-        heads = heads.filter(name__icontains=request.GET.get('search'))
+        name = heads.filter(name__icontains=request.GET.get('search'))
+        mobno = heads.filter(mobno__icontains=request.GET.get('search'))
+        # state = heads.filter(state__icontains=request.GET.get('search'))
+        # city = heads.filter(city__icontains=request.GET.get('search'))
+        
+        heads = name.union(mobno)
         # print(heads)
+    # if heads.count() == 0:
+    #     messages.warning(request, "No result found.")
 
     p = Paginator(heads, 5)  
     page_number = request.GET.get('page')
@@ -57,19 +64,20 @@ def update_family(request, pk):
     head = FamilyHead.objects.get(id=pk)
     head_form = FamilyHeadForm(instance=head)
     # hobby = Hobby.objects.filter(family_head_id=pk).all()
-    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies")
-    member_formset = MemberFormset(prefix="members", instance=head)
+    # hobby_formset = HobbyFormSet(instance=head, prefix="hobbies")
+    # member_formset = MemberFormset(prefix="members", instance=head)
     if request.method == 'POST':
         head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
-        hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
-        member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
-        if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
+        # hobby_formset = HobbyFormSet(request.POST, instance=head_form.instance, prefix="hobbies")
+        # member_formset = MemberFormset(request.POST, request.FILES, instance=head_form.instance, prefix="members")
+        if head_form.is_valid():
+            # if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
             # head_form.save()
-            h = head_form.save()
-            hobby_formset.instance = h
-            hobby_formset.save()
-            member_formset.instance = h
-            member_formset.save()
+            head_form.save()
+            # hobby_formset.instance = h
+            # hobby_formset.save()
+            # member_formset.instance = h
+            # member_formset.save()
             return JsonResponse({"success": True})
         else:
             print(head_form.errors)
@@ -81,10 +89,10 @@ def update_family(request, pk):
     #     head_form = FamilyHeadForm(instance=head)
     context = {
         'head_form': head_form,
-        'hobby_formset': hobby_formset,
-        'member_formset': member_formset
+        # 'hobby_formset': hobby_formset,
+        # 'member_formset': member_formset
     }
-    return render(request, 'family_form.html', context)
+    return render(request, 'update_family.html', context)
 
 def delete_family(request, pk):
     return render(request, 'delete_family.html')

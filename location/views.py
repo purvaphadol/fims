@@ -6,6 +6,9 @@ from .forms import StateForm, CityForm
 
 def state_list(request):
     states = State.objects.all()
+    if request.GET.get('search'):
+        states = states.filter(state_name__icontains=request.GET.get('search'))
+
     p = Paginator(states, 10)  
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
@@ -50,6 +53,9 @@ def delete_state(request, pk):
 
 def city_list(request):
     cities = City.objects.all()
+    if request.GET.get('search'):
+        cities = cities.filter(city_name__icontains=request.GET.get('search'))
+
     p = Paginator(cities, 10)  
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)

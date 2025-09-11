@@ -7,6 +7,20 @@
 </head>
 <body>
     <h1>State List</h1>
+    <div class="search-container">
+        <form action="">
+            <div class="search-bar">
+                <label for="search">Search Here</label>
+                <input name="search" id="search" type="text">
+            </div>
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </div>
+    <div>
+        {% if not page_obj.object_list %}
+            <p>Not result found</p>
+        {% endif %}
+    </div>
     <a href="{% url 'create_state' %}">Create State</a>
     <hr>
     <div>

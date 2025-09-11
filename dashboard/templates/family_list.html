@@ -13,12 +13,17 @@
     <hr>
     <div class="search-container">
         <form action="">
-            <div>
+            <div class="search-bar">
                 <label for="search">Search Here</label>
                 <input name="search" id="search" type="text">
             </div>
-            <button type="submit" class="searchBtn">Search</button>
+            <button type="submit" class="search-btn">Search</button>
         </form>
+    </div>
+    <div>
+        {% if not page_obj.object_list %}
+            <p>Not result found</p>
+        {% endif %}
     </div>
     <div>
         {% for head in page_obj.object_list %}
