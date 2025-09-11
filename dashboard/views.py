@@ -160,6 +160,26 @@ def update_member(request, pk):
     }
     return render(request, 'update_member.html', context)
 
+# def update_member(request, pk):
+#     head = FamilyHead.objects.get(id=pk)
+#     form = FamilyMemberForm(instance=head)
+#     if request.method == 'POST':
+#         form = FamilyMemberForm(request.POST, request.FILES, instance=head)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view_family', pk=pk)
+#         else:
+#             print(form.errors)
+#             return JsonResponse({
+#                 "success": False,
+#                 "member_formset": form.errors,
+#             })
+#     context = {
+#         'head': head,
+#         'form': form
+#     }
+#     return render(request, 'update_member.html', context)
+
 
 def delete_family(request, pk):
     return render(request, 'delete_family.html')
