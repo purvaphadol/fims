@@ -29,11 +29,8 @@
         {% for head in page_obj.object_list %}
         <div>
             <a href="{% url 'view_family' head.id %}">View</a>
-            <!-- <span>@{{room.host.username}}</span> -->
-            <h5>{{ head.id }} -- {{ head.name }} </h5>
-            <a href="{% url 'update_family' head.id %}">Edit</a>
+            <p>{{ head.id }} -- {{ head.name }} </p>
             <a href="{% url 'delete_family' head.id %}">Delete</a>
-            <!-- <small>{{room.topic.name}}</small> -->
             <hr>
         </div>
         {% endfor %}

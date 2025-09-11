@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <form method="post">
+    {% csrf_token %}
+    <h2>head: {{ head.name }}</h2>
+    <h3>Add Hobby</h3>
+    {{ hobby_formset.management_form }}
+
+    <div id="hobby-container">
+      {% for form in hobby_formset %}
+      <div class="hobby-row">
+        {{ form.hobby.label_tag }} {{ form.hobby }}
+        <span class="errorMsg"></span>
+        <button type="button" class="removeHobby">Remove</button>
+      </div>
+      {% endfor %}
+    </div>
+    <button type="button" id="addHobby">+ Add Hobby</button>
+
+    <button type="submit">Save</button>
+  </form>
+  <script src="{% static 'js/form.js' %}"></script>
+
+</body>
+</html>

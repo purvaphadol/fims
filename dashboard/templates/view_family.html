@@ -25,10 +25,15 @@
                 <h5>Wedding Date: {{ head.wedding_date }} </h5>
             {% endif %}
             <h5>Photo: <img src="/media/{{head.photo}}" alt="{{head.photo}}" height="100px" width="auto"></h5>
+            <a href="{% url 'update_head' head.id %}">Edit</a>
+            <hr>
+            
             <h4>Hobbies</h4>
             {% for hobby in hobbies %}
                 <h5>{{forloop.counter}}. {{ hobby.hobby }}</h5>
             {% endfor %}
+            <a href="{% url 'update_hobby' head.id %}">Update Hobby</a> | 
+            <a href="{% url 'add_hobby' head.id %}">Add Hobby</a>
             <hr>
         </div>
         <div>
