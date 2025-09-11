@@ -1,20 +1,24 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-    <form action="" method="post">
-        <h2>head: {{ head.name }}</h2>
-        {% csrf_token %}
-        <h3>Members</h3>
+  <form method="post">
+    {% csrf_token %}
+    <h2>head: {{ head.name }}</h2>
+    <h3>Members:</h3>
+    {{ member_formset.management_form }}
+    {% for form in member_formset %}
+      {{ form.as_p }}
+      <hr>
+    {% endfor %}
+        <!-- <h3>Members</h3>
         {{ member_formset.management_form }}
         <div id="member-container">
             {% for form in member_formset %}
@@ -43,18 +47,14 @@
                     {{ form.member_photo.label_tag }} {{ form.member_photo }}
                     <span class="errorMsg">{{ form.member_photo.errors }}</span>
                 </div>
-                <button type="button" class="removeMember">Remove</button>
             </div>
+            <hr>
             {% endfor %}
         </div>
         <button type="button" id="addMember">+ Add Member</button>
-
-        {{ member_formset.non_field_errors }}
-
-        <button type="submit" class="submitBtn">Submit</button>
-    </form>
-  <script src="{% static 'js/form.js' %}"></script>
-
+     -->
+    <button type="submit">Save</button>
+    <script src="{% static 'js/form.js' %}"></script>
+  </form>
 </body>
-
 </html>

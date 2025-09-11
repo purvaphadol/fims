@@ -38,6 +38,9 @@
         </div>
         <div>
             <h3>Member Details</h3>
+            <a href="{% url 'add_member' head.id %}">Add Member</a>
+            <a href="{% url 'update_member' head.id %}">Update Member</a>
+
             {% for member in members %}
             <div>
                 <h4>Member {{forloop.counter}}</h4>
@@ -51,6 +54,8 @@
                 <h5>Education: {{ member.education }} </h5>
 
                 <h5>Photo: <img src="/media/{{member.member_photo}}" alt="{{member.member_photo}}" height="100px" width="auto"></h5>
+                
+                
                 <hr>
             </div>
             {% endfor %}
