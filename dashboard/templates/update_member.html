@@ -54,7 +54,17 @@
         <button type="button" id="addMember">+ Add Member</button>
      -->
     <button type="submit">Save</button>
-    <script src="{% static 'js/form.js' %}"></script>
+    <script>
+        // $('#id_member_wedDate').hide();
+        $('input[type="radio"][name$="member_marital"]').on('change', function () {
+        if ($(this).val().toLowerCase() === "married") {
+            $('input[name$="member_wedDate"]').show();
+        } else {
+            $('input[name$="member_wedDate"]').hide();
+            $('input[name$="member_wedDate"]').val('');
+        }
+    }); 
+    </script>
   </form>
 </body>
 </html>

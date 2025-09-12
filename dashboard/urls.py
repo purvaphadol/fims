@@ -13,5 +13,5 @@ urlpatterns = [
     path('add_hobby/<int:pk>', add_hobby, name='add_hobby'),
     path('update_hobby/<int:pk>', update_hobby, name='update_hobby'),
 
-    path('delete_family<int:pk>', delete_family, name='delete_family'),
+    path('delete_family/<int:pk>', delete_family, name='delete_family'),
 ]

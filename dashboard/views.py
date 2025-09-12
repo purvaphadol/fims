@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from family.models import FamilyMember, FamilyHead, State, City
+from family.models import FamilyMember, FamilyHead, State, City, statusChoice 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from family.forms import *
 from django.http import JsonResponse
@@ -160,13 +160,13 @@ def update_member(request, pk):
     return render(request, 'update_member.html', context)
 
 # def update_member(request, pk):
-#     head = FamilyHead.objects.get(id=pk)
-#     form = FamilyMemberForm(instance=head)
+#     member = FamilyMember.objects.get(id=pk)
+#     form = FamilyMemberForm(instance=member)
 #     if request.method == 'POST':
-#         form = FamilyMemberForm(request.POST, request.FILES, instance=head)
+#         form = FamilyMemberForm(request.POST, request.FILES, instance=member)
 #         if form.is_valid():
 #             form.save()
-#             return redirect('view_family', pk=pk)
+#             return redirect('view_family', pk=member.family_head.id)
 #         else:
 #             print(form.errors)
 #             return JsonResponse({
@@ -174,11 +174,48 @@ def update_member(request, pk):
 #                 "member_formset": form.errors,
 #             })
 #     context = {
-#         'head': head,
+#         'member': member,
 #         'form': form
 #     }
 #     return render(request, 'update_member.html', context)
 
 
 def delete_family(request, pk):
-    return render(request, 'delete_family.html')
+    head = FamilyHead.objects.get(id=pk)
+    if request.method == 'POST':
+        head.status = statusChoice.DELETE
+        head.save()
+        FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
+        return redirect('family_list')
+    context = {'head':head}
+    return render(request, 'delete_family.html', context)
+
+def update_family(request,pk):
+    head = FamilyHead.objects.get(id=pk)
+    head_form = FamilyHeadForm(instance=head)
+    hobby_formset = HobbyFormSet(instance=head,prefix="hobbies")
+    member_formset = MemberFormset(instance=head,prefix="members")
+    if request.method == 'POST':
+        head_form = FamilyHeadForm(request.POST, request.FILES)
+        hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
+        member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
+        if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
+            head_form.save()
+            
+            hobby_formset.save()
+            member_formset.save()
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({
+                "success": False,
+                "head_errors": head_form.errors,
+                "hobby_errors": hobby_formset.errors,
+                "member_errors": member_formset.errors,
+            }, status=400)
+    # Only render HTML for GET requests
+    context = {
+        'head_form': head_form,
+        'hobby_formset': hobby_formset,
+        'member_formset': member_formset
+    }
+    return render(request, 'update_family.html', context)

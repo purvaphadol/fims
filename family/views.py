@@ -12,6 +12,9 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
+from openpyxl import Workbook
+from openpyxl.styles import *
+import decimal
 
 # Create your views here.
 def home(request):
@@ -133,4 +136,57 @@ def family_pdf(request, pk):
         count += 1
 
     doc.build(elements)
+    return response
+
+def family_excel(request, pk):
+    head = FamilyHead.objects.get(pk=pk)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
+    response['Content-Disposition'] = 'attachment; filename="' + 'Countries GDP List' +'.xlsx"'
+    workbook = Workbook()
+
+    worksheet = workbook.active
+
+    worksheet.merge_cells('A1:D1')
+    worksheet.merge_cells('A2:D2')
+    first_cell = worksheet['A1']
+    first_cell.value = "Family Report"
+    first_cell.fill = PatternFill("solid", fgColor="246ba1")
+    first_cell.font  = Font(bold=True, color="F7F6FA")
+    first_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    # second_cell = worksheet['A2']
+    # second_cell.value = head.surname
+    # second_cell.font  = Font(bold=True, color="246ba1")
+    # second_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    worksheet.title = 'Family Reprt'
+    worksheet.append(['Name','Surname','DOB', 'Mobile No'])
+    # Define the titles for columns
+    columns = ['Name','Surname','DOB', 'Mobile No']
+    row_num = 3
+
+    # Assign the titles for each cell of the header
+    for col_num, column_title in enumerate(columns, 1):
+        cell = worksheet.cell(row=row_num, column=col_num)
+        cell.value = column_title
+        cell.fill = PatternFill("solid", fgColor="50C878")
+        cell.font  = Font(bold=True, color="F7F6FA")
+        third_cell = worksheet['D3']
+        third_cell.alignment = Alignment(horizontal="right")
+
+    # for head in heads:
+    #     row_num += 1
+
+        # Define the data for each cell in the row
+    row = [head.name, head.surname, head.dob, head.mobno]
+
+    # Assign the data for each cell of the row
+    for col_num, cell_value in enumerate(row, 1):
+        cell = worksheet.cell(row=row_num, column=col_num)
+        cell.value = cell_value
+        if isinstance(cell_value, decimal.Decimal):
+            cell.number_format = numbers.FORMAT_NUMBER_COMMA_SEPARATED1
+
+    workbook.save(response)
     return response
