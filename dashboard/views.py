@@ -26,14 +26,13 @@ def family_list(request):
     members = FamilyMember.objects.all()
     
     if request.GET.get('search'):
-        # print("hii")
         name = heads.filter(name__icontains=request.GET.get('search'))
         mobno = heads.filter(mobno__icontains=request.GET.get('search'))
-        # state = heads.filter(state__icontains=request.GET.get('search'))
-        # city = heads.filter(city__icontains=request.GET.get('search'))
+        state = heads.filter(state__state_name__icontains=request.GET.get('search'))
+        city = heads.filter(city__city_name__icontains=request.GET.get('search'))
         
-        heads = name.union(mobno)
-        # print(heads)
+        heads = name.union(mobno, state, city)
+
     # if heads.count() == 0:
     #     messages.warning(request, "No result found.")
 

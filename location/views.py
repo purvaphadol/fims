@@ -54,7 +54,9 @@ def delete_state(request, pk):
 def city_list(request):
     cities = City.objects.all()
     if request.GET.get('search'):
-        cities = cities.filter(city_name__icontains=request.GET.get('search'))
+        city = cities.filter(city_name__icontains=request.GET.get('search'))
+        state = cities.filter(state__state_name__icontains=request.GET.get('search'))
+        cities = city.union(state)
 
     p = Paginator(cities, 10)  
     page_number = request.GET.get('page')
