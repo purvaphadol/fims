@@ -22,7 +22,7 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 def family_list(request):
-    heads = FamilyHead.objects.all()
+    heads = FamilyHead.objects.all().exclude(status=statusChoice.DELETE)
     members = FamilyMember.objects.all()
     
     if request.GET.get('search'):
@@ -51,8 +51,8 @@ def family_list(request):
 
 def view_family(request, pk):
     head = FamilyHead.objects.get(id=pk)
-    members = FamilyMember.objects.filter(family_head_id=pk).all()
-    hobbies = Hobby.objects.filter(family_head_id=pk).all()
+    members = FamilyMember.objects.filter(family_head_id=pk).exclude(status=statusChoice.DELETE).all()
+    hobbies = Hobby.objects.filter(family_head_id=pk).exclude(status=statusChoice.DELETE).all()
     
     context = {
         'head': head,
@@ -109,6 +109,8 @@ def update_hobby(request, pk):
     if request.method == 'POST':
         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
         if hobby_formset.is_valid():
+            # for form in formset.deleted_forms:
+
             hobby_formset.save()
             return redirect('view_family', pk=pk)
     context = {

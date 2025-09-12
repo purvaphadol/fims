@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .forms import FamilyHeadForm, HobbyFormSet, MemberFormset
-from .models import FamilyHead, FamilyMember, Hobby, City
+from .models import FamilyHead, FamilyMember, Hobby, City, statusChoice
 
 from django.http import FileResponse
 import io
@@ -22,7 +22,7 @@ def home(request):
 
 def get_cities(request, state_id):
     # state_id = request.GET.get('state_id')
-    cities = City.objects.filter(state_id=state_id).all()
+    cities = City.objects.filter(state_id=state_id).filter(status=statusChoice.ACTIVE).all()
     data = list(cities.values('id', 'city_name'))
     return JsonResponse(data, safe=False)
 
@@ -139,54 +139,56 @@ def family_pdf(request, pk):
     return response
 
 def family_excel(request, pk):
-    head = FamilyHead.objects.get(pk=pk)
+    head = FamilyHead.objects.get(id=pk)
+    hobbies = Hobby.objects.filter(family_head=pk)
+    members = FamilyMember.objects.filter(family_head=pk)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
-    response['Content-Disposition'] = 'attachment; filename="' + 'Countries GDP List' +'.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="' + 'family' +'.xlsx"'
     workbook = Workbook()
 
     worksheet = workbook.active
 
-    worksheet.merge_cells('A1:D1')
-    worksheet.merge_cells('A2:D2')
+    worksheet.merge_cells('A1:L1')
+    worksheet.merge_cells('A2:L2')
     first_cell = worksheet['A1']
     first_cell.value = "Family Report"
     first_cell.fill = PatternFill("solid", fgColor="246ba1")
     first_cell.font  = Font(bold=True, color="F7F6FA")
     first_cell.alignment = Alignment(horizontal="center", vertical="center")
 
-    # second_cell = worksheet['A2']
-    # second_cell.value = head.surname
-    # second_cell.font  = Font(bold=True, color="246ba1")
-    # second_cell.alignment = Alignment(horizontal="center", vertical="center")
+    worksheet.merge_cells('A3:L3')
+    second_cell = worksheet['A3']
+    second_cell.value = "Head Details"
+    second_cell.font  = Font(bold=True, color="246ba1")
+    second_cell.alignment = Alignment(horizontal="center", vertical="center")
 
-    worksheet.title = 'Family Reprt'
-    worksheet.append(['Name','Surname','DOB', 'Mobile No'])
-    # Define the titles for columns
-    columns = ['Name','Surname','DOB', 'Mobile No']
-    row_num = 3
+    worksheet.title = 'Family Report'
+    
+    columns = ['Name', 'Surname', 'Birth Date', 'Mobile No', 'Address', 'State', 'City', 'Pincode', 'Marital Status', 'Wedding Date', 'Photo', 'Hobbies']
+    worksheet.append(columns)
 
-    # Assign the titles for each cell of the header
-    for col_num, column_title in enumerate(columns, 1):
-        cell = worksheet.cell(row=row_num, column=col_num)
-        cell.value = column_title
-        cell.fill = PatternFill("solid", fgColor="50C878")
-        cell.font  = Font(bold=True, color="F7F6FA")
-        third_cell = worksheet['D3']
-        third_cell.alignment = Alignment(horizontal="right")
+    hobby_list = []
+    for hobby in hobbies:
+        hobby_list.append(hobby.hobby)
+    separator = ", "
+    hobby_string = separator.join(hobby_list)
 
-    # for head in heads:
-    #     row_num += 1
+    worksheet.append([head.name, head.surname, str(head.dob), head.mobno, head.address, head.state.state_name, head.city.city_name, head.pincode, head.marital_status, str(head.wedding_date), str(head.photo), hobby_string])
 
-        # Define the data for each cell in the row
-    row = [head.name, head.surname, head.dob, head.mobno]
+    worksheet.merge_cells('A6:L6')
+    worksheet.merge_cells('A7:G7')
+    member_cell = worksheet['A7']
+    member_cell.value = "Member Details"
+    member_cell.font  = Font(bold=True, color="246ba1")
+    member_cell.alignment = Alignment(horizontal="center", vertical="center")
 
-    # Assign the data for each cell of the row
-    for col_num, cell_value in enumerate(row, 1):
-        cell = worksheet.cell(row=row_num, column=col_num)
-        cell.value = cell_value
-        if isinstance(cell_value, decimal.Decimal):
-            cell.number_format = numbers.FORMAT_NUMBER_COMMA_SEPARATED1
+    member_columns = ['Sr. No.', 'Name', 'Birth Date', 'Marital Status', 'Wedding Date', 'Education', 'Photo']
+    worksheet.append(member_columns)
+    count = 1
+    for member in members:
+        worksheet.append([count, member.member_name, str(member.member_dob), member.member_marital, str(member.member_wedDate), member.education, str(member.member_photo)])
+        count += 1
 
     workbook.save(response)
     return response

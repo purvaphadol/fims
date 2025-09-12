@@ -5,7 +5,7 @@ from .forms import StateForm, CityForm
 # Create your views here.
 
 def state_list(request):
-    states = State.objects.all()
+    states = State.objects.all().exclude(status=statusChoice.DELETE)
     if request.GET.get('search'):
         states = states.filter(state_name__icontains=request.GET.get('search'))
 
@@ -52,7 +52,7 @@ def delete_state(request, pk):
     return render(request, 'delete_state.html', context)
 
 def city_list(request):
-    cities = City.objects.all()
+    cities = City.objects.all().exclude(status=statusChoice.DELETE)
     if request.GET.get('search'):
         city = cities.filter(city_name__icontains=request.GET.get('search'))
         state = cities.filter(state__state_name__icontains=request.GET.get('search'))

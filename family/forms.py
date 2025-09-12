@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, inlineformset_factory, BaseInlineFormSet
-from .models import FamilyHead, City, Hobby, FamilyMember
+from .models import *
 import re
 from datetime import datetime, date
 
@@ -110,12 +110,12 @@ class FamilyHeadForm(ModelForm):
         self.fields['marital_status'].required = False
         self.fields['wedding_date'].required = False
         self.fields['photo'].required = False
-
+        self.fields['state'].queryset = State.objects.filter(status=statusChoice.ACTIVE)
         self.fields['city'].queryset = City.objects.none()
         if 'state' in self.data:
             try:
                 state_id = int(self.data.get('state'))
-                self.fields['city'].queryset = City.objects.filter(state_id=state_id)
+                self.fields['city'].queryset = City.objects.filter(state_id=state_id).filter(status=statusChoice.ACTIVE)
             except (ValueError, TypeError):
                 pass 
         elif self.instance.pk:
