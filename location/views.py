@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from family.models import State, City, statusChoice
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import StateForm, CityForm
-# Create your views here.
 
+@login_required(login_url='login_page')
 def state_list(request):
     states = State.objects.all().exclude(status=statusChoice.DELETE)
     if request.GET.get('search'):
@@ -20,6 +21,7 @@ def state_list(request):
     }
     return render(request, 'state_list.html', context)
 
+@login_required(login_url='login_page')
 def create_state(request):
     state_form = StateForm()
     if request.method == 'POST':
@@ -30,6 +32,7 @@ def create_state(request):
     context = {'state_form': state_form }
     return render(request, 'create_state.html', context)
 
+@login_required(login_url='login_page')
 def update_state(request, pk):
     state = State.objects.get(id=pk)
     state_form = StateForm(instance=state)
@@ -41,6 +44,7 @@ def update_state(request, pk):
     context = {'state_form': state_form }
     return render(request, 'update_state.html', context)
 
+@login_required(login_url='login_page')
 def delete_state(request, pk):
     state = State.objects.get(id=pk)
     state.status = statusChoice.DELETE
@@ -48,7 +52,7 @@ def delete_state(request, pk):
     City.objects.filter(state_id=state).update(status = statusChoice.DELETE)
     return redirect('state_list')
 
-
+@login_required(login_url='login_page')
 def city_list(request):
     cities = City.objects.all().exclude(status=statusChoice.DELETE)
     if request.GET.get('search'):
@@ -67,6 +71,7 @@ def city_list(request):
     }
     return render(request, 'city_list.html', context)
 
+@login_required(login_url='login_page')
 def create_city(request):
     city_form = CityForm()
     if request.method == 'POST':
@@ -77,6 +82,7 @@ def create_city(request):
     context = {'city_form': city_form }
     return render(request, 'create_city.html', context)
 
+@login_required(login_url='login_page')
 def update_city(request, pk):
     city = City.objects.get(id=pk)
     city_form = CityForm(instance=city)
@@ -87,7 +93,8 @@ def update_city(request, pk):
             return redirect('city_list')
     context = {'city_form': city_form }
     return render(request, 'update_city.html', context)
-    
+
+@login_required(login_url='login_page')
 def delete_city(request, pk):
     city = City.objects.get(id=pk)
     city.status = statusChoice.DELETE

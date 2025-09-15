@@ -133,7 +133,16 @@ class HobbyInlineFormSet(BaseInlineFormSet):
             hobby = form.cleaned_data.get('hobby')
             if not hobby:
                 form.add_error('hobby','Hobby is required.')
-    
+    def save(self, commit=True):
+        instances = super().save(commit=False)
+        for obj in self.deleted_objects:
+            obj.status = 9
+            if commit:
+                obj.save()
+        for instance in instances:
+            if commit:
+                instance.save()
+        return instances
 HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=1, formset=HobbyInlineFormSet)
 
 
@@ -191,5 +200,16 @@ class MemberInlineFormSet(BaseInlineFormSet):
                     member_photo.seek(0)
                     if size_kb > 2:
                         form.add_error('member_photo', 'Photo size must be less than 2 MB.')
+                        
+    def save(self, commit=True):
+        instances = super().save(commit=False)
 
+        for obj in self.deleted_objects:
+            obj.status = 9
+            if commit:
+                obj.save()
+        for instance in instances:
+            if commit:
+                instance.save()
+        return instances
 MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=1, formset=MemberInlineFormSet)

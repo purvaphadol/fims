@@ -58,8 +58,8 @@ def family_form(request):
 
 def family_pdf(request, pk):
     head = FamilyHead.objects.get(pk=pk)
-    members = FamilyMember.objects.filter(family_head=head)
-    hobbies = Hobby.objects.filter(family_head=head)
+    members = FamilyMember.objects.filter(family_head=head).filter(status=statusChoice.ACTIVE)
+    hobbies = Hobby.objects.filter(family_head=head).filter(status=statusChoice.ACTIVE)
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{head.name}_family.pdf"'
@@ -140,8 +140,8 @@ def family_pdf(request, pk):
 
 def family_excel(request, pk):
     head = FamilyHead.objects.get(id=pk)
-    hobbies = Hobby.objects.filter(family_head=pk)
-    members = FamilyMember.objects.filter(family_head=pk)
+    hobbies = Hobby.objects.filter(family_head=pk).filter(status=statusChoice.ACTIVE)
+    members = FamilyMember.objects.filter(family_head=pk).filter(status=statusChoice.ACTIVE)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename="' + 'family' +'.xlsx"'
