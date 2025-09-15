@@ -1,33 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Add html2pdf library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
-</head>
-<body>
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Dashboard {% endblock %}
+{% block content %}
+
+<section class="state-list">
     <h1>City List</h1>
-    <div class="search-container">
-        <form action="">
-            <div class="search-bar">
-                <label for="search">Search Here</label>
-                <input name="search" id="search" type="text">
-            </div>
-            <button type="submit" class="search-btn">Search</button>
-        </form>
+    <div class="header">
+        <div class="add-family">
+            <p>Want to Add New City?
+                <a href="{% url 'create_city' %}">Click Here</a>
+            </p>
+        </div>
+        <div class="search-container">
+            <form action="">
+                <div class="search-bar">
+                    <input name="search" id="search" type="text" placeholder="Search Here">
+                    <img src="{% static 'images/search.png' %}" alt="">
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
+
+    <div class="search-result">
         {% if not page_obj.object_list %}
-            <p>Not result found</p>
+        <p>No result found</p>
         {% endif %}
     </div>
-    <hr>
-    <a href="{% url 'create_city' %}">Create city</a>
     
-    <hr>
-    <div class="city-container">
+    <section class="table-section">
         <table>
             <thead>
                 <tr>
@@ -45,38 +45,32 @@
                     <td>{{ city.city_name }}</td>
                     <td>{{ city.state }}</td>
                     <td>{{ city.status }}</td>
-                    <td><a href="{% url 'update_city' city.id %}">Edit</a></td>
-                    <td><a href="{% url 'delete_city' city.id %}">Delete</a></td>
+                    <td>
+                        <a href="{% url 'update_city' city.id %}"><img src="{% static 'images/edit.png' %}"
+                                alt="Edit"></a>
+                        <a href="{% url 'delete_city' city.id %}" onclick="return confirm('Are you sure you want to Delete {{city}}?')"><img src="{% static 'images/delete.png' %}"
+                                alt="Delete"></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <button class="btn btn-danger  generate-pdf-btn" onclick="generatePDF()">Generate PDF</button>
-    </div>
-    <div>
-        {%if page_obj.has_previous %} 
-            <button type="button"><a href="city_list?page=1">First</a></button> 
-            <button type="button"><a href="?page={{page_obj.previous_page_number}}"> Previous</a></button>
+    </section>
+    
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" class="page-link">First</a>
+        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
         {% endif %}
 
-        <button type="button">{{page_obj.number}}</button>
-        <!-- {% for n in totalPagelist %}
-            <button type="button"><a href="city_list?page={{n}}">{{n}}</a></button>
-        {% endfor %} -->
-      
-        {%if page_obj.has_next %} 
-            <button type="button"><a href="?page={{page_obj.next_page_number}}">Next</a></button>
-            <button type="button"><a href="?page={{ lastPage }}">Last</a></button>
+        <a href="?page={{page_obj.number}}" class="page-link active">{{page_obj.number}}</a>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
+        <a href="?page={{ lastPage }}" class="page-link">Last</a>
         {% endif %}
     </div>
 
-    <script>
-        function generatePDF() {
-            var element = document.querySelector('.city-container');
-            html2pdf(element);
-        }
-    </script>
+</section>
 
-   <br>
-</body>
-</html>
+{% endblock %}

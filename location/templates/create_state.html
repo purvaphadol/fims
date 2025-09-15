@@ -1,22 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Create State</h1>
-    <form method="post">
-      {% csrf_token %}
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Create State {%endblock %}
+{% block content %}
+<section class="form-container">
+  <form method="post" class="add-form">
+    {% csrf_token %}
+    <h1 class="form-heading">Create State</h1>
+    <div>
       {{ state_form.state_name.label_tag }}
       {{ state_form.state_name }}
-      {{ state_form.state_name.errors }}
-      <br>
-      
-      <button type="submit" class="submitBtn">Submit</button>
-      <!-- {{ state_form.non_field_errors }} -->
-    </form>
-    
-</body>
-</html>
+      <span class="errorMsg">{{ state_form.state_name.errors }}</span>
+    </div>
+    <button type="submit" class="submitBtn">Submit</button>
+    <!-- {{ state_form.non_field_errors }} -->
+  </form>
+</section>
+{% endblock %}

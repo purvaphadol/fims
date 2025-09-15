@@ -112,12 +112,20 @@ body {
     transform: scale(1.2);
 }
 .family-list {
-    /* min-height: 80vh; */
     max-width: 90%;
     margin: 1rem auto;
     padding: 1rem 3rem;
 }
 .family-list h1 {
+    text-align: left;
+    color: #2f3640;
+}
+.state-list {
+    max-width: 70%;
+    margin: 1rem auto;
+    padding: 1rem 3rem;
+}
+.state-list h1 {
     text-align: left;
     color: #2f3640;
 }
@@ -155,7 +163,6 @@ body {
     font-size: 1.2rem;
     font-weight: 500;
 }
-
 .table-section {
     margin: 2rem auto;
     overflow-x: auto;
@@ -326,13 +333,17 @@ input[type="text"],
 input[type="date"],
 input[type="number"],
 input[type="file"],
-select  {
+select,
+textarea {
     width: 100%;
     border: 1px solid #dcdde1;
     padding: 0.5rem 1rem;
     box-sizing: border-box;
     background-color: white;
     border-radius: 0.4rem;
+}
+textarea {
+    height: 4rem;
 }
 .submitBtn {
     background-color: #00896b;
@@ -383,6 +394,7 @@ select  {
     box-shadow: 1px 2px 4px rgba(0,0,0,0.5);
     background-color: #f8f9fa;
 }
+
 #addHobby, #addMember {
     background-color: #00896b;
     color: #fff;

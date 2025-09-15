@@ -43,13 +43,11 @@ def update_state(request, pk):
 
 def delete_state(request, pk):
     state = State.objects.get(id=pk)
-    if request.method == 'POST':
-        state.status = statusChoice.DELETE
-        state.save()
-        City.objects.filter(state_id=state).update(status = statusChoice.DELETE)
-        return redirect('state_list')
-    context = {'state':state}
-    return render(request, 'delete_state.html', context)
+    state.status = statusChoice.DELETE
+    state.save()
+    City.objects.filter(state_id=state).update(status = statusChoice.DELETE)
+    return redirect('state_list')
+
 
 def city_list(request):
     cities = City.objects.all().exclude(status=statusChoice.DELETE)
@@ -92,9 +90,17 @@ def update_city(request, pk):
     
 def delete_city(request, pk):
     city = City.objects.get(id=pk)
-    if request.method == 'POST':
-        city.status = statusChoice.DELETE
-        city.save()
-        return redirect('city_list')
-    context = {'city':city}
-    return render(request, 'delete_city.html', context)
+    city.status = statusChoice.DELETE
+    city.save()
+    return render(redirect, 'city_list')
+
+
+# def delete_state(request, pk):
+#     state = State.objects.get(id=pk)
+#     if request.method == 'POST':
+#         state.status = statusChoice.DELETE
+#         state.save()
+#         City.objects.filter(state_id=state).update(status = statusChoice.DELETE)
+#         return redirect('state_list')
+#     context = {'state':state}
+#     return render(request, 'delete_state.html', context)

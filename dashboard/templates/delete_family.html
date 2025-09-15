@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Delete Head {%endblock %}
+{% block content %}
+
+<section class="form-container">
     <form action="" method="post">
         {% csrf_token %}
         <p>Are you sure you want to Delete "{{head}}" ?</p>
@@ -13,5 +11,6 @@
         <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
         <input type="submit" value="Comfirm">
     </form>
-</body>
-</html>
+</section>
+
+{% endblock %}

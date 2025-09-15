@@ -1,70 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Dashboard {% endblock %}
+{% block content %}
+
+<section class="state-list">
     <h1>State List</h1>
-    <div class="search-container">
-        <form action="">
-            <div class="search-bar">
-                <label for="search">Search Here</label>
-                <input name="search" id="search" type="text">
-            </div>
-            <button type="submit" class="search-btn">Search</button>
-        </form>
+    <div class="header">
+        <div class="add-family">
+            <p>Want to Add New State?
+                <a href="{% url 'create_state' %}">Click Here</a>
+            </p>
+        </div>
+        <div class="search-container">
+            <form action="">
+                <div class="search-bar">
+                    <input name="search" id="search" type="text" placeholder="Search Here">
+                    <img src="{% static 'images/search.png' %}" alt="">
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
+
+    <div class="search-result">
         {% if not page_obj.object_list %}
-            <p>Not result found</p>
+        <p>No result found</p>
         {% endif %}
     </div>
-    <a href="{% url 'create_state' %}">Create State</a>
-    <hr>
-    <div>
+
+    <section class="table-section">
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th colspan="2">Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for state in page_obj.object_list %}
                 <tr>
-                    <td>{{ state.id }}</td>
+                    <td>{{ forloop.counter }}</td>
                     <td>{{ state.state_name }}</td>
                     <td>{{ state.status }}</td>
-                    <td><a href="{% url 'update_state' state.id %}">Edit</a></td>
-                    <td><a href="{% url 'delete_state' state.id %}">Delete</a></td>
+                    <td>
+                        <a href="{% url 'update_state' state.id %}"><img src="{% static 'images/edit.png' %}"
+                                alt="Edit"></a>
+                        <a href="{% url 'delete_state' state.id %}" onclick="return confirm('Are you sure you want to Delete {{state}} ? Cities within {{state}} will also get deleted.')"><img src="{% static 'images/delete.png' %}"
+                                alt="Delete"></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    </section>
     
-    <div>
-        {%if page_obj.has_previous %} 
-            <button type="button"><a href="state_list?page=1">First</a></button> 
-            <button type="button"><a href="?page={{page_obj.previous_page_number}}"> Previous</a></button>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" class="page-link">First</a>
+        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
         {% endif %}
 
-        <button type="button">{{page_obj.number}}</button>
-        <!-- {% for n in totalPagelist %}
-            <button type="button"><a href="state_list?page={{n}}">{{n}}</a></button>
-        {% endfor %} -->
-      
-        {%if page_obj.has_next %} 
-            <button type="button"><a href="?page={{page_obj.next_page_number}}">Next</a></button>
-            <button type="button"><a href="?page={{ lastPage }}">Last</a></button>
+        {% for n in totalPagelist %}
+        <a href="?page={{n}}" class="page-link {% if page_obj.number == n %}active{% endif %}">{{n}}</a>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
+        <a href="?page={{ lastPage }}" class="page-link">Last</a>
         {% endif %}
     </div>
 
-   <br>
-   <br><br>
-</body>
-</html>
+</section>
+
+{% endblock %}

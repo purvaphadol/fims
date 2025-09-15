@@ -36,7 +36,7 @@ def family_list(request):
     # if heads.count() == 0:
     #     messages.warning(request, "No result found.")
 
-    p = Paginator(heads, 5)  
+    p = Paginator(heads, 10)  
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
     totalPages = page_obj.paginator.num_pages
