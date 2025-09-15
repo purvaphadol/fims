@@ -1,19 +1,13 @@
+{% extends 'main.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block title %} Add Hobby {%endblock %}
+{% block content %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-
-<body>
-  <form method="post">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<section class="form-container">
+  <form method="post" class="add-form">
     {% csrf_token %}
-    <h2>head: {{ head.name }}</h2>
-    <h3>Add Hobby</h3>
+    <h2 class="form-heading">Add Hobby for Head: {{ head.name }}</h2>
     {{ hobby_formset.management_form }}
 
     <div id="hobby-container">
@@ -27,9 +21,9 @@
     </div>
     <button type="button" id="addHobby">+ Add Hobby</button>
 
-    <button type="submit">Save</button>
+    <button type="submit" class="submitBtn">Save</button>
   </form>
-  <script src="{% static 'js/form.js' %}"></script>
+</section>
+<script src="{% static 'js/form.js' %}"></script>
 
-</body>
-</html>
+{% endblock %}

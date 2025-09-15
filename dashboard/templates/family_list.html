@@ -1,60 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Dashboard {% endblock %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
+<section class="family-list">
     <h1>Family List</h1>
-    <a href="{% url 'family_form' %}">Create Family</a>
-    <hr>
-    <div class="search-container">
-        <form action="">
-            <div class="search-bar">
-                <label for="search">Search Here</label>
-                <input name="search" id="search" type="text">
-            </div>
-            <button type="submit" class="search-btn">Search</button>
-        </form>
-    </div>
-    <div>
-        {% if not page_obj.object_list %}
-            <p>Not result found</p>
-        {% endif %}
-    </div>
-    <div>
-        {% for head in page_obj.object_list %}
-        <div>
-            <a href="{% url 'view_family' head.id %}">View</a>
-            <p>{{ head.id }} -- {{ head.name }} </p>
-            <a href="{% url 'delete_family' head.id %}">Delete</a>
-            <hr>
+    <div class="header">
+        <div class="add-family">
+            <p>Want to Add New Family?
+                <a href="{% url 'family_form' %}">Click Here</a>
+            </p>
         </div>
-        {% endfor %}
+        <div class="search-container">
+            <form action="">
+                <div class="search-bar">
+                    <input name="search" id="search" type="text" placeholder="Search Here">
+                    <img src="{% static 'images/search.png' %}" alt="">
+                </div>
+                <!-- <button type="submit" class="search-btn">Search</button> -->
+            </form>
+        </div>
     </div>
-    <div>
-        {%if page_obj.has_previous %}
-        <button type="button"><a href="family_list?page=1">First</a></button>
-        <button type="button"><a href="?page={{page_obj.previous_page_number}}"> Previous</a></button>
+
+    <div class="search-result">
+        {% if not page_obj.object_list %}
+        <p>No result found</p>
+        {% endif %}
+    </div>
+
+    <section class="table-section">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Mobile No.</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Members</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for head in page_obj.object_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ head.name }}</td>
+                    <td>{{ head.surname }}</td>
+                    <td>{{ head.mobno }}</td>
+                    <td>{{ head.state }}</td>
+                    <td>{{ head.city.city_name }}</td>
+                    <td>{{ head.members.count }}</td>
+                    <td>
+                        <a href="{% url 'view_family' head.id %}"><img src="{% static 'images/visibility.png' %}"
+                                alt="View"></a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_family' head.id %}"><img src="{% static 'images/delete.png' %}"
+                                alt="Delete"></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" class="page-link">First</a>
+        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
         {% endif %}
 
-        <!-- <span>{{page_obj.number}}</span> -->
         {% for n in totalPagelist %}
-        <button type="button"><a href="family_list?page={{n}}">{{n}}</a></button>
-
+        <a href="?page={{n}}" class="page-link {% if page_obj.number == n %}active{% endif %}">{{n}}</a>
         {% endfor %}
 
-        {%if page_obj.has_next %}
-        <button type="button"><a href="?page={{page_obj.next_page_number}}">Next</a></button>
-        <button type="button"><a href="?page={{ lastPage }}">Last</a></button>
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
+        <a href="?page={{ lastPage }}" class="page-link">Last</a>
         {% endif %}
     </div>
 
-    <br>
-    <br><br>
-</body>
+</section>
 
-</html>
+{% endblock %}

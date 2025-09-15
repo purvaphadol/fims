@@ -1,20 +1,13 @@
+{% extends 'main.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block title %} Add Member {%endblock %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-</head>
-
-<body>
-    <form action="" method="post">
-        <h2>head: {{ head.name }}</h2>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<section class="form-container">
+    <form action="" method="post" class="add-form" enctype="multipart/form-data">
+        <h2 class="form-heading">Add Member for Head: {{ head.name }}</h2>
         {% csrf_token %}
-        <h3>Members</h3>
         {{ member_formset.management_form }}
         <div id="member-container">
             {% for form in member_formset %}
@@ -53,8 +46,8 @@
 
         <button type="submit" class="submitBtn">Submit</button>
     </form>
-  <script src="{% static 'js/form.js' %}"></script>
+</section>
 
-</body>
+<script src="{% static 'js/form.js' %}"></script>
 
-</html>
+{% endblock %}

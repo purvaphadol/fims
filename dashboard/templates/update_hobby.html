@@ -1,21 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} Update Member {%endblock %}
+{% block content %}
 
-<body>
-  <form method="post">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<section class="form-container">
+  <form method="post" class="update-form">
     {% csrf_token %}
-    <h2>head: {{ head.name }}</h2>
-    <h3>Hobbies:</h3>
+    <h2 class="form-heading">Update Hobby for Head: {{ head.name }}</h2>
     {{ hobby_formset.management_form }}
     {% for form in hobby_formset %}
+    <div class="member-row">
       {{ form.as_p }}
+    </div>
     {% endfor %}
-    <button type="submit">Save</button>
+    <button type="submit" class="submitBtn">Save</button>
   </form>
-</body>
-</html>
+</section>
+
+<script src="{% static 'js/form.js' %}"></script>
+
+{% endblock %}
