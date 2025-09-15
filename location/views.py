@@ -4,6 +4,9 @@ from django.contrib import messages
 from family.models import State, City, statusChoice
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import StateForm, CityForm
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import *
 
 @login_required(login_url='login_page')
 def state_list(request):
@@ -107,6 +110,66 @@ def delete_city(request, pk):
     city.save()
     messages.success(request, 'City Deleted Successfully!')
     return redirect('city_list')
+
+def city_excel(request):
+    cities = City.objects.all()
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
+    response['Content-Disposition'] = 'attachment; filename="' + 'city' +'.xlsx"'
+    workbook = Workbook()
+
+    worksheet = workbook.active
+
+    worksheet.merge_cells('A1:D1')
+    worksheet.merge_cells('A2:D2')
+    first_cell = worksheet['A1']
+    first_cell.value = "City List"
+    first_cell.fill = PatternFill("solid", fgColor="246ba1")
+    first_cell.font  = Font(bold=True, color="F7F6FA")
+    first_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    worksheet.title = 'City'
+    
+    columns = ['ID', 'Name', 'State', 'Status']
+    worksheet.append(columns)
+
+    count = 1
+    for city in cities:
+        worksheet.append([count, city.city_name, city.state.state_name, city.status])
+        count += 1
+
+    workbook.save(response)
+    return response
+
+def state_excel(request):
+    states = State.objects.all()
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
+    response['Content-Disposition'] = 'attachment; filename="' + 'state' +'.xlsx"'
+    workbook = Workbook()
+
+    worksheet = workbook.active
+
+    worksheet.merge_cells('A1:C1')
+    worksheet.merge_cells('A2:C2')
+    first_cell = worksheet['A1']
+    first_cell.value = "State List"
+    first_cell.fill = PatternFill("solid", fgColor="246ba1")
+    first_cell.font  = Font(bold=True, color="F7F6FA")
+    first_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    worksheet.title = 'State'
+    
+    columns = ['ID', 'Name', 'Status']
+    worksheet.append(columns)
+
+    count = 1
+    for state in states:
+        worksheet.append([count, state.state_name, state.status])
+        count += 1
+
+    workbook.save(response)
+    return response
 
 
 # def delete_state(request, pk):
