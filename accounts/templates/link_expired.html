@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %} Link Expired {% endblock %}
 {% block content %}
 
 <div class="textbox">
@@ -8,8 +9,8 @@
  
   <h4>Please request a new link if you still need to access this resource.</h4>
 
-  <button class="btn">
-    <a href="{% url 'forgot_password' %}" class="linkBtnText">Request a new reset link.</a>
+  <button class="linkBtn">
+    <a href="{% url 'forgot_password' %}">Request a new reset link.</a>
   </button>
 </div>
 

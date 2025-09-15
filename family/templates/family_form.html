@@ -5,10 +5,16 @@
 <head>
   <title>Family Form</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="{% static 'css/familystyle.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 </head>
 
 <body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="{% static 'images/logo.png' %}" alt="Logo">
+    </div>
+  </nav>
+
   <h1>Registration Form</h1>
   <div class="form-container">
 
@@ -60,13 +66,13 @@
           {{ head_form.photo.label_tag }} {{ head_form.photo }}
           <span class="errorMsg"></span>
         </div>
-         
+
         <!-- <h3>Hobbies</h3> -->
         {{ hobby_formset.management_form }}
         <div id="hobby-container">
           {% for form in hobby_formset %}
           <div class="hobby-row">
-            {{ form.hobby.label_tag }} {{ form.hobby }} 
+            {{ form.hobby.label_tag }} {{ form.hobby }}
             <span class="errorMsg"></span>
             <button type="button" class="removeHobby">Remove</button>
           </div>
@@ -74,12 +80,8 @@
         </div>
         <button type="button" id="addHobby">+ Add Hobby</button>
       </div>
-<!--       
-        {% for error in hobby_formset.errors %}
-        {{ error }}<br/>
-    {% endfor %} -->
-
-      <h3>Members</h3>
+    
+      <h2>Members</h2>
       {{ member_formset.management_form }}
       <div id="member-container">
         {% for form in member_formset %}
@@ -105,7 +107,7 @@
             <span class="errorMsg"></span>
           </div>
           <div class="mem_photDiv">
-              {{ form.member_photo.label_tag }} {{ form.member_photo }}
+            {{ form.member_photo.label_tag }} {{ form.member_photo }}
             <span class="errorMsg"></span>
           </div>
           <button type="button" class="removeMember">Remove</button>
@@ -114,18 +116,16 @@
       </div>
       <button type="button" id="addMember">+ Add Member</button>
 
-      {{ head_form.non_field_errors }}
-      {{ hobby_formset.non_form_errors }}
-      {{ hobby_formset.non_field_errors }}
-
-      {{ member_formset.non_field_errors }}
-      <!--{% for hidden in head_form.hidden_files %}
-      {{ hidden }}
-      {% endfor %} -->
 
       <button type="submit" class="submitBtn">Submit</button>
     </form>
+
   </div>
+  <footer>
+    <div class="footer__bar">
+      Copyright © 2025 FamTree. All rights reserved.
+    </div>
+  </footer>
   <script src="{% static 'js/form.js' %}"></script>
   <script src="{% static 'js/statecity.js' %}"></script>
   <script src="{% static 'js/formValidation.js' %}"></script>
