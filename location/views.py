@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from family.models import State, City, statusChoice
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import StateForm, CityForm
@@ -28,6 +29,7 @@ def create_state(request):
         state_form = StateForm(request.POST)
         if state_form.is_valid():
             state_form.save()
+            messages.success(request, 'State Created Successfully!')
             return redirect('state_list')
     context = {'state_form': state_form }
     return render(request, 'create_state.html', context)
@@ -40,6 +42,7 @@ def update_state(request, pk):
         state_form = StateForm(request.POST, instance=state)
         if state_form.is_valid():
             state_form.save()
+            messages.success(request, 'State Updated Successfully!')
             return redirect('state_list')
     context = {'state_form': state_form }
     return render(request, 'update_state.html', context)
@@ -50,6 +53,7 @@ def delete_state(request, pk):
     state.status = statusChoice.DELETE
     state.save()
     City.objects.filter(state_id=state).update(status = statusChoice.DELETE)
+    messages.success(request, 'State Deleted Successfully!')
     return redirect('state_list')
 
 @login_required(login_url='login_page')
@@ -78,6 +82,7 @@ def create_city(request):
         city_form = CityForm(request.POST)
         if city_form.is_valid():
             city_form.save()
+            messages.success(request, 'City Created Successfully!')
             return redirect('city_list')
     context = {'city_form': city_form }
     return render(request, 'create_city.html', context)
@@ -90,6 +95,7 @@ def update_city(request, pk):
         city_form = CityForm(request.POST, instance=city)
         if city_form.is_valid():
             city_form.save()
+            messages.success(request, 'City Updated Successfully!')
             return redirect('city_list')
     context = {'city_form': city_form }
     return render(request, 'update_city.html', context)
@@ -99,7 +105,8 @@ def delete_city(request, pk):
     city = City.objects.get(id=pk)
     city.status = statusChoice.DELETE
     city.save()
-    return render(redirect, 'city_list')
+    messages.success(request, 'City Deleted Successfully!')
+    return redirect('city_list')
 
 
 # def delete_state(request, pk):

@@ -10,9 +10,9 @@
         <h2 class="form-heading">Update Member for Head: {{ head.name }}</h2>
         {{ member_formset.management_form }}
         {% for form in member_formset %}
-        <div class="member-row">
-            {{ form.as_p }}
-        </div>
+            <div class="member-row">
+                {{ form.as_p }}
+            </div>
         {% endfor %}
         <button type="submit" class="submitBtn">Save</button>
     </form>
@@ -21,7 +21,6 @@
 <script src="{% static 'js/form.js' %}"></script>
 
 <script>
-    // $('#id_member_wedDate').hide();
     $('input[type="radio"][name$="member_marital"]').on('change', function () {
         if ($(this).val().toLowerCase() === "married") {
             $('input[name$="member_wedDate"]').show();

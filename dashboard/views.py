@@ -151,12 +151,12 @@ def update_member(request, pk):
         if member_formset.is_valid():
             member_formset.save()
             return redirect('view_family', pk=pk)
-        else:
-            print(member_formset.errors)
-            return JsonResponse({
-                "success": False,
-                "member_formset": member_formset.errors,
-            })
+        # else:
+        #     print(member_formset.errors)
+        #     return JsonResponse({
+        #         "success": False,
+        #         "member_formset": member_formset.errors,
+        #     })
     context = {
         'head': head,
         'member_formset': member_formset
@@ -177,16 +177,19 @@ def delete_family(request, pk):
 
 def update_family(request,pk):
     head = FamilyHead.objects.get(id=pk)
+    hHobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True)
+    MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True)
+
     head_form = FamilyHeadForm(instance=head)
-    hobby_formset = HobbyFormSet(instance=head,prefix="hobbies")
-    member_formset = MemberFormset(instance=head,prefix="members")
+    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies")
+    member_formset = MemberFormset(instance=head, prefix="members")
     if request.method == 'POST':
-        head_form = FamilyHeadForm(request.POST, request.FILES)
+        head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
         member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
+
         if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
-            head_form.save()
-            
+            family_head = head_form.save()
             hobby_formset.save()
             member_formset.save()
             return JsonResponse({"success": True})
@@ -197,11 +200,12 @@ def update_family(request,pk):
                 "hobby_errors": hobby_formset.errors,
                 "member_errors": member_formset.errors,
             }, status=400)
-    # Only render HTML for GET requests
+
     context = {
         'head_form': head_form,
         'hobby_formset': hobby_formset,
-        'member_formset': member_formset
+        'member_formset': member_formset,
+        'head': head
     }
     return render(request, 'update_family.html', context)
 

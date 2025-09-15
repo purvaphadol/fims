@@ -5,6 +5,8 @@ urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
     path('family_list', family_list, name='family_list'),
     path('view_family/<int:pk>', view_family, name='view_family'),
+    path('update_family/<int:pk>', update_family, name='update_family'),
+
     path('update_head/<int:pk>', update_head, name='update_head'),
     
     path('add_member/<int:pk>', add_member, name="add_member"),

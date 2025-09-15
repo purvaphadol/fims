@@ -33,7 +33,6 @@ def logout_page(request):
     logout(request)
     return redirect('login_page')
 
-
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get('email')
@@ -68,7 +67,6 @@ def password_reset_sent(request, reset_id):
     if PasswordReset.objects.filter(reset_id=reset_id).exists():
         return render(request, 'password_reset_sent.html')
     else:
-        # messages.error(request, 'Invalid reset id')
         return redirect('forgot_password')
 
 def reset_password(request, reset_id):
@@ -79,7 +77,6 @@ def reset_password(request, reset_id):
         # print(timezone.now())
         if timezone.now() > expiration_time:
             passwords_have_error = True
-            # messages.error(request, 'Reset link has expired')
             password_reset_id.delete()
             return redirect('link_expired')
 
@@ -117,7 +114,6 @@ def reset_password(request, reset_id):
                 return redirect('reset_password', reset_id=reset_id)
 
     except PasswordReset.DoesNotExist:
-        # messages.error(request, 'Invalid reset id')
         return redirect('link_expired')
 
     return render(request, 'reset_password.html')
