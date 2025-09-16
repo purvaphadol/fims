@@ -12,8 +12,9 @@
   <h1>Update Family</h1>
   <div class="form-container">
 
-    <form id="familyForm" method="post" enctype="multipart/form-data">
+    <form id="updateForm" method="post" enctype="multipart/form-data" action="{% url 'update_family' head.id %}">
       {% csrf_token %}
+      <input type="hidden" name="pk" id="pk" value="{{head.id}}">
       <h2>Family Head</h2>
       <div class="head-container">
         
@@ -71,6 +72,7 @@
             {{ form.id }} 
             {{ form.hobby.label_tag }} {{ form.hobby }}
             <span class="errorMsg"></span>
+              {{ form.DELETE.label_tag }}   {{ form.DELETE }}
             <button type="button" class="removeHobby">Remove</button>
           </div>
           {% endfor %}
@@ -118,8 +120,10 @@
             {{ form.member_photo.label_tag }} {{ form.member_photo }}
             <span class="errorMsg"></span>
           </div>
+            {{ form.DELETE.label_tag }}   {{ form.DELETE }}
           <button type="button" class="removeMember">Remove</button>
         </div>
+
         {% endfor %}
       </div>
       <!-- <div id="member-container">

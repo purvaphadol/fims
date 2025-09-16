@@ -33,7 +33,6 @@
             <div class="head-photo">
                 <h5>Photo: </h5>
                 <img src="/media/{{head.photo}}" alt="{{head.photo}}" height="100px">
-                <a href="{% url 'update_head' head.id %}">Edit Head</a>
             </div>
         </div>
         <div class="head-hobby">
@@ -43,16 +42,11 @@
                 <h5>{{ forloop.counter }}. {{ hobby.hobby }}</h5>
                 {% endfor %}
             </div>
-            <a href="{% url 'add_hobby' head.id %}">Add Hobby</a>
-            <a href="{% url 'update_hobby' head.id %}">Update Hobby</a>
         </div>
     </div>
 
     <div class="card">
         <h3>Member Details</h3>
-        <a href="{% url 'add_member' head.id %}">Add Member</a>
-        <a href="{% url 'update_member' head.id %}">Update Member</a>
-
         {% for member in members %}
         <div class="member-card">
             <div class="member-details">

@@ -59,123 +59,7 @@ def view_family(request, pk):
     return render(request, 'view_family.html', context)
 
 @login_required(login_url='login_page')
-def update_head(request, pk):
-    head = FamilyHead.objects.get(id=pk)
-    head_form = FamilyHeadForm(instance=head)
-    if request.method == 'POST':
-        head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
-        if head_form.is_valid():
-            head_form.save()
-            return redirect('view_family', pk=pk)
-        else:
-            print(head_form.errors)
-            return JsonResponse({
-                "success": False,
-                "head_errors": head_form.errors,
-            })
-    context = {
-        'head': head,
-        'head_form': head_form
-    }
-    return render(request, 'update_head.html', context)
-
-@login_required(login_url='login_page')
-def add_hobby(request, pk):
-    head = FamilyHead.objects.get(id=pk)
-    HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=1, formset=HobbyInlineFormSet)
-    hobby_formset = HobbyFormSet(prefix="hobbies")
-    if request.method == 'POST':
-        hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
-        if hobby_formset.is_valid():
-            hobby_formset.save()
-            return redirect('view_family', pk=pk)
-        # else:
-        #     print(hobby_formset.errors)
-        #     return JsonResponse({
-        #         "success": False,
-        #         "hobby_formset": hobby_formset.errors,
-        #     })
-    context = {
-        'head': head,
-        'hobby_formset': hobby_formset
-    }
-    return render(request, 'add_hobby.html', context)
-
-@login_required(login_url='login_page')
-def update_hobby(request, pk):
-    head = FamilyHead.objects.get(id=pk)
-    HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, formset=HobbyInlineFormSet)
-    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies",  queryset=Hobby.objects.exclude(status=statusChoice.DELETE))
-    if request.method == 'POST':
-        hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
-        if hobby_formset.is_valid():
-            # for form in formset.deleted_forms:
-
-            hobby_formset.save()
-            return redirect('view_family', pk=pk)
-    context = {
-        'head': head,
-        'hobby_formset': hobby_formset
-    }
-    return render(request, 'update_hobby.html', context)
-
-@login_required(login_url='login_page')
-def add_member(request, pk):
-    head = FamilyHead.objects.get(id=pk)
-    MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=1, formset=MemberInlineFormSet)
-    member_formset = MemberFormset(prefix="members")
-    if request.method == 'POST':
-        member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
-        if member_formset.is_valid():
-            member_formset.save()
-            return redirect('view_family', pk=pk)
-        # else:
-        #     print(member_formset.errors)
-        #     return JsonResponse({
-        #         "success": False,
-        #         "member_formset": member_formset.errors,
-        #     })
-    context = {
-        'head': head,
-        'member_formset': member_formset
-    }
-    return render(request, 'add_member.html', context)
-
-@login_required(login_url='login_page')
-def update_member(request, pk):
-    head = FamilyHead.objects.get(id=pk)
-    MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, formset=MemberInlineFormSet)
-    member_formset = MemberFormset(instance=head, prefix="members",  queryset=FamilyMember.objects.exclude(status=statusChoice.DELETE))
-    if request.method == 'POST':
-        member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
-        if member_formset.is_valid():
-            member_formset.save()
-            return redirect('view_family', pk=pk)
-        # else:
-        #     print(member_formset.errors)
-        #     return JsonResponse({
-        #         "success": False,
-        #         "member_formset": member_formset.errors,
-        #     })
-    context = {
-        'head': head,
-        'member_formset': member_formset
-    }
-    return render(request, 'update_member.html', context)
-
-@login_required(login_url='login_page')
-def delete_family(request, pk):
-    head = FamilyHead.objects.get(id=pk)
-    if request.method == 'POST':
-        head.status = statusChoice.DELETE
-        head.save()
-        FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
-        return redirect('family_list')
-    context = {'head':head}
-    return render(request, 'delete_family.html', context)
-
-
-def update_family(request,pk):
+def update_family(request, pk):
     head = FamilyHead.objects.get(id=pk)
     HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True)
     MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True)
@@ -192,7 +76,6 @@ def update_family(request,pk):
             family_head = head_form.save()
             hobby_formset.save()
             member_formset.save()
-            # return redirect('view_family', pk=pk)
             return JsonResponse({"success": True})
         else:
             return JsonResponse({
@@ -209,6 +92,120 @@ def update_family(request,pk):
         'head': head
     }
     return render(request, 'update_family.html', context)
+
+@login_required(login_url='login_page')
+def delete_family(request, pk):
+    head = FamilyHead.objects.get(id=pk)
+    if request.method == 'POST':
+        head.status = statusChoice.DELETE
+        head.save()
+        FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
+        return redirect('family_list')
+    context = {'head':head}
+    return render(request, 'delete_family.html', context)
+
+# @login_required(login_url='login_page')
+# def update_head(request, pk):
+#     head = FamilyHead.objects.get(id=pk)
+#     head_form = FamilyHeadForm(instance=head)
+#     if request.method == 'POST':
+#         head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
+#         if head_form.is_valid():
+#             head_form.save()
+#             return redirect('view_family', pk=pk)
+#         else:
+#             print(head_form.errors)
+#             return JsonResponse({
+#                 "success": False,
+#                 "head_errors": head_form.errors,
+#             })
+#     context = {
+#         'head': head,
+#         'head_form': head_form
+#     }
+#     return render(request, 'update_head.html', context)
+
+# @login_required(login_url='login_page')
+# def add_hobby(request, pk):
+#     head = FamilyHead.objects.get(id=pk)
+#     HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=1, formset=HobbyInlineFormSet)
+#     hobby_formset = HobbyFormSet(prefix="hobbies")
+#     if request.method == 'POST':
+#         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
+#         if hobby_formset.is_valid():
+#             hobby_formset.save()
+#             return redirect('view_family', pk=pk)
+#         # else:
+#         #     print(hobby_formset.errors)
+#         #     return JsonResponse({
+#         #         "success": False,
+#         #         "hobby_formset": hobby_formset.errors,
+#         #     })
+#     context = {
+#         'head': head,
+#         'hobby_formset': hobby_formset
+#     }
+#     return render(request, 'add_hobby.html', context)
+
+# @login_required(login_url='login_page')
+# def update_hobby(request, pk):
+#     head = FamilyHead.objects.get(id=pk)
+#     HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, formset=HobbyInlineFormSet)
+#     hobby_formset = HobbyFormSet(instance=head, prefix="hobbies",  queryset=Hobby.objects.exclude(status=statusChoice.DELETE))
+#     if request.method == 'POST':
+#         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
+#         if hobby_formset.is_valid():
+#             hobby_formset.save()
+#             return redirect('view_family', pk=pk)
+#     context = {
+#         'head': head,
+#         'hobby_formset': hobby_formset
+#     }
+#     return render(request, 'update_hobby.html', context)
+
+# @login_required(login_url='login_page')
+# def add_member(request, pk):
+#     head = FamilyHead.objects.get(id=pk)
+#     MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=1, formset=MemberInlineFormSet)
+#     member_formset = MemberFormset(prefix="members")
+#     if request.method == 'POST':
+#         member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
+#         if member_formset.is_valid():
+#             member_formset.save()
+#             return redirect('view_family', pk=pk)
+#         # else:
+#         #     print(member_formset.errors)
+#         #     return JsonResponse({
+#         #         "success": False,
+#         #         "member_formset": member_formset.errors,
+#         #     })
+#     context = {
+#         'head': head,
+#         'member_formset': member_formset
+#     }
+#     return render(request, 'add_member.html', context)
+
+# @login_required(login_url='login_page')
+# def update_member(request, pk):
+#     head = FamilyHead.objects.get(id=pk)
+#     MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, formset=MemberInlineFormSet)
+#     member_formset = MemberFormset(instance=head, prefix="members",  queryset=FamilyMember.objects.exclude(status=statusChoice.DELETE))
+#     if request.method == 'POST':
+#         member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
+#         if member_formset.is_valid():
+#             member_formset.save()
+#             return redirect('view_family', pk=pk)
+#         # else:
+#         #     print(member_formset.errors)
+#         #     return JsonResponse({
+#         #         "success": False,
+#         #         "member_formset": member_formset.errors,
+#         #     })
+#     context = {
+#         'head': head,
+#         'member_formset': member_formset
+#     }
+#     return render(request, 'update_member.html', context)
 
 # def update_member(request, pk):
 #     member = FamilyMember.objects.get(id=pk)

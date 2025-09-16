@@ -39,7 +39,7 @@
                     <th>State</th>
                     <th>City</th>
                     <th>Members</th>
-                    <th colspan="2">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,12 +55,11 @@
                     <td>
                         <a href="{% url 'view_family' head.id %}"><img src="{% static 'images/visibility.png' %}"
                                 alt="View"></a>
-                    </td>
-                    <td>
+                        <a href="{% url 'update_family' head.id %}"><img src="{% static 'images/edit.png' %}"
+                                alt="Edit"></a></a>
                         <a href="{% url 'delete_family' head.id %}"><img src="{% static 'images/delete.png' %}"
                                 alt="Delete"></a>
                     </td>
-                    <td><a href="{% url 'update_family' head.id %}">update_family</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

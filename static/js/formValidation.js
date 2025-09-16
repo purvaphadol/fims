@@ -79,7 +79,6 @@ form.addEventListener("submit", async (e) => {
 function setErrorMsg(input, errorMsg) {
   if (!input) return;
   let inputField = input.closest("div");
-  // For radio buttons,
   if (input.type === "radio") {
     while (inputField && !inputField.querySelector("span.errorMsg")) {
       inputField = inputField.parentElement;

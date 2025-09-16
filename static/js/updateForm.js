@@ -1,12 +1,15 @@
 const form = document.getElementById("updateForm");
 console.log(form)
 console.log("hiii")
-form.addEventListener("click", async() => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        console.log(formData)
+form.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  console.log(formData)
+  const pk = document.getElementById("pk").value;
+  console.log(pk.value)
+
   try {
-      const response = await fetch(`/update_family/${head}`, {
+    const response = await fetch(`/update_family/${pk}`, {
       method: "POST",
       body: formData,
     });
@@ -26,10 +29,36 @@ form.addEventListener("click", async() => {
           }
         }
       }
+      // Hobby formset errors
+      if (Array.isArray(result.hobby_errors)) {
+        result.hobby_errors.forEach((formErrors, i) => {
+          for (const field in formErrors) {
+            const input = document.querySelector(
+              `[name="hobbies-${i}-${field}"]`
+            );
+            if (input) {
+              setErrorMsg(input, formErrors[field][0]);
+            }
+          }
+        });
+      }
+      // Member formset errors
+      if (Array.isArray(result.member_errors)) {
+        result.member_errors.forEach((formErrors, i) => {
+          for (const field in formErrors) {
+            const input = document.querySelector(
+              `[name="members-${i}-${field}"]`
+            );
+            if (input) {
+              setErrorMsg(input, formErrors[field][0]);
+            }
+          }
+        });
+      }
     } else if (result.success === true) {
       console.log("true");
       // alert(result.message);
-      window.location.href = "/";
+      window.location.href = "/family_list/";
       // form.reset();
     } else {
       console.log("Something went wrong.", err);
@@ -40,24 +69,19 @@ form.addEventListener("click", async() => {
 });
 
 
-  //   const isValid = validateForm();
-  //   if (!isValid) return;
-  
-
 
 function setErrorMsg(input, errorMsg) {
   if (!input) return;
-    let inputField = input.closest("div");
-    // For radio buttons, 
-    if (input.type === "radio") {
-        while (inputField && !inputField.querySelector("span.errorMsg")) {
-            inputField = inputField.parentElement;
-        }
+  let inputField = input.closest("div"); 
+  if (input.type === "radio") {
+    while (inputField && !inputField.querySelector("span.errorMsg")) {
+      inputField = inputField.parentElement;
     }
-    if (!inputField) return;
-    const span = inputField.querySelector("span.errorMsg");
-    if (!span) return;
-  
+  }
+  if (!inputField) return;
+  const span = inputField.querySelector("span.errorMsg");
+  if (!span) return;
+
   span.classList.add("errorMsg");
   input.classList.add("errorInput");
   span.innerText = errorMsg;
