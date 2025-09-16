@@ -23,7 +23,7 @@ def dashboard(request):
 
 @login_required(login_url='login_page')
 def family_list(request):
-    heads = FamilyHead.objects.annotate(member_count= Count('members', filter=Q(status=1)))
+    heads = FamilyHead.objects.annotate(member_count=Count('members', filter=~Q(members__status=9)))
     members = FamilyMember.objects.all()
     
     if request.GET.get('search'):
@@ -177,12 +177,12 @@ def delete_family(request, pk):
 
 def update_family(request,pk):
     head = FamilyHead.objects.get(id=pk)
-    hHobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True)
+    HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True)
     MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True)
 
     head_form = FamilyHeadForm(instance=head)
-    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies")
-    member_formset = MemberFormset(instance=head, prefix="members")
+    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies",  queryset=Hobby.objects.exclude(status=statusChoice.DELETE))
+    member_formset = MemberFormset(instance=head, prefix="members", queryset=FamilyMember.objects.exclude(status=statusChoice.DELETE))
     if request.method == 'POST':
         head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")
@@ -192,6 +192,7 @@ def update_family(request,pk):
             family_head = head_form.save()
             hobby_formset.save()
             member_formset.save()
+            # return redirect('view_family', pk=pk)
             return JsonResponse({"success": True})
         else:
             return JsonResponse({
