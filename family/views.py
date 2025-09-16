@@ -40,15 +40,14 @@ def family_form(request):
             hobby_formset.save()
             member_formset.instance = head
             member_formset.save()
-            # return JsonResponse({"success": True})
-        # else:
-        #     return JsonResponse({
-        #         "success": False,
-        #         "head_errors": head_form.errors,
-        #         "hobby_errors": hobby_formset.errors,
-        #         "member_errors": member_formset.errors,
-        #     }, status=400)
-    # for GET requests
+            return JsonResponse({"success": True, "message": "Family Created Successfully."})
+        else:
+            return JsonResponse({
+                "success": False,
+                "head_errors": head_form.errors,
+                "hobby_errors": hobby_formset.errors,
+                "member_errors": member_formset.errors,
+            }, status=400)
     context = {
         'head_form': head_form,
         'hobby_formset': hobby_formset,

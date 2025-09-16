@@ -26,7 +26,7 @@ class FamilyHeadForm(ModelForm):
         }
 
     def clean(self):
-        cleaned_data = super().clean()
+        super().clean()
         # name
         name = self.cleaned_data.get('name')
         if not name:
@@ -128,11 +128,13 @@ class HobbyForm(ModelForm):
 
 class HobbyInlineFormSet(BaseInlineFormSet):
     def clean(self):
-        cleaned_data = super().clean()
+        super().clean()
         for form in self.forms:
-            hobby = form.cleaned_data.get('hobby')
+            first_form = self.forms[0]
+            hobby = first_form.cleaned_data.get('hobby')
             if not hobby:
-                form.add_error('hobby','Hobby is required.')
+                first_form.add_error('hobby', 'Hobby is required.')
+
     def save(self, commit=True):
         instances = super().save(commit=False)
         for obj in self.deleted_objects:
@@ -166,7 +168,7 @@ class FamilyMemberForm(ModelForm):
 
 class MemberInlineFormSet(BaseInlineFormSet):
     def clean(self):
-        cleaned_data = super().clean()
+        super().clean()
         for form in self.forms:
             # member_name
             member_name = form.cleaned_data.get('member_name')

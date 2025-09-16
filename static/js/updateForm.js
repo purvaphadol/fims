@@ -1,7 +1,6 @@
-const form = document.getElementById("updateForm");
-console.log(form)
-console.log("hiii")
-form.addEventListener("click", async (e) => {
+const submit = document.getElementById("updateSubmit");
+
+submit.addEventListener("click", async (e) => {
   e.preventDefault();
   const formData = new FormData(form);
   console.log(formData)
@@ -16,8 +15,8 @@ form.addEventListener("click", async (e) => {
 
     const result = await response.json();
     console.log(result);
-    document.querySelectorAll('.errorMsg').forEach(span => span.innerText = '');
-    document.querySelectorAll('.errorInput').forEach(input => input.classList.remove('errorInput'));
+    // document.querySelectorAll('.errorMsg').forEach(span => span.innerText = '');
+    // document.querySelectorAll('.errorInput').forEach(input => input.classList.remove('errorInput'));
 
     if (!result.success) {
       // Head form errors
@@ -58,7 +57,7 @@ form.addEventListener("click", async (e) => {
     } else if (result.success === true) {
       console.log("true");
       // alert(result.message);
-      window.location.href = "/family_list/";
+      // window.location.href = "/family_list/";
       // form.reset();
     } else {
       console.log("Something went wrong.", err);
@@ -67,8 +66,6 @@ form.addEventListener("click", async (e) => {
     console.log("Something went wrong.", err);
   }
 });
-
-
 
 function setErrorMsg(input, errorMsg) {
   if (!input) return;

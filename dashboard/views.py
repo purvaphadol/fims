@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Count, Q
 from family.models import FamilyMember, FamilyHead, State, City, statusChoice 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -23,7 +24,7 @@ def dashboard(request):
 
 @login_required(login_url='login_page')
 def family_list(request):
-    heads = FamilyHead.objects.annotate(member_count=Count('members', filter=~Q(members__status=9)))
+    heads = FamilyHead.objects.annotate(member_count=Count('members', filter=~Q(members__status=9))).exclude(status=statusChoice.DELETE)
     members = FamilyMember.objects.all()
     
     if request.GET.get('search'):
@@ -96,13 +97,12 @@ def update_family(request, pk):
 @login_required(login_url='login_page')
 def delete_family(request, pk):
     head = FamilyHead.objects.get(id=pk)
-    if request.method == 'POST':
-        head.status = statusChoice.DELETE
-        head.save()
-        FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
-        return redirect('family_list')
-    context = {'head':head}
-    return render(request, 'delete_family.html', context)
+    head.status = statusChoice.DELETE
+    head.save()
+    FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
+    messages.success(request, 'Family Deleted Successfully!')
+    return redirect('family_list')
+    
 
 # @login_required(login_url='login_page')
 # def update_head(request, pk):
