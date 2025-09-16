@@ -3,12 +3,18 @@
 <html>
 
 <head>
-  <title>Family Form</title>
+  <title>Update Family</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 </head>
 
 <body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="{% static 'images/logo.png' %}" alt="Logo">
+    </div>
+  </nav>
+
   <h1>Update Family</h1>
   <div class="form-container">
 
@@ -89,7 +95,6 @@
         <button type="button" id="addHobby">+ Add Hobby</button>
       </div>
 
-
       <h3>Members</h3>
       {{ member_formset.management_form }}
       <div id="member-container">
@@ -146,10 +151,16 @@
       <button type="submit" class="submitBtn">Submit</button>
     </form>
   </div>
+
+  <footer>
+    <div class="footer__bar">
+      Copyright © 2025 FamTree. All rights reserved.
+    </div>
+  </footer>
+
   <script src="{% static 'js/updateEvent.js' %}"></script>
   <script src="{% static 'js/statecity.js' %}"></script>
   <script src="{% static 'js/updateForm.js' %}"></script>
 
 </body>
-
 </html>

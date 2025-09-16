@@ -10,10 +10,10 @@ from family.forms import FamilyMemberForm
 
 @login_required(login_url='login_page')
 def dashboard(request):
-    heads = FamilyHead.objects.all()
-    members = FamilyMember.objects.all()
-    states = State.objects.all()
-    cities = City.objects.all()
+    heads = FamilyHead.objects.all().exclude(status=statusChoice.DELETE)
+    members = FamilyMember.objects.all().exclude(status=statusChoice.DELETE)
+    states = State.objects.all().exclude(status=statusChoice.DELETE)
+    cities = City.objects.all().exclude(status=statusChoice.DELETE)
     context = {
         'members': members,
         'heads': heads,
@@ -77,7 +77,7 @@ def update_family(request, pk):
             family_head = head_form.save()
             hobby_formset.save()
             member_formset.save()
-            return JsonResponse({"success": True})
+            return JsonResponse({"success": True, "message": "Family Updated Successfully."})
         else:
             return JsonResponse({
                 "success": False,

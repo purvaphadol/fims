@@ -208,12 +208,12 @@ function validateHead() {
   // Photo
   let photo = document.getElementById("id_photo");
   const photoPathVal = photo.value;
-  var allowedExtensions = /(\.jpg|\.png)$/i;
+  var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
   if (photoPathVal === "") {
     setErrorMsg(photo, "Photo is Required");
     isValid = false;
   } else if (!allowedExtensions.exec(photoPathVal)) {
-    setErrorMsg(photo, "Invalid file type. Only PNG, JPG are allowed");
+    setErrorMsg(photo, "Invalid file type. Only PNG, JPG, JPEG are allowed");
     isValid = false;
   } else {
     var photoSize = photo.files[0].size / 1000 / 1000;
@@ -275,10 +275,10 @@ function validateMember() {
     // Photo
     let m_photo = row.find('input[type="file"][name$="member_photo"]')[0];
     let photoVal = m_photo.value;
-    var allowedExtensions = /(\.jpg|\.png)$/i;
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
     if (photoVal) {
       if (!allowedExtensions.exec(photoVal)) {
-        setErrorMsg(m_photo, "Invalid file type. Only PNG, JPG are allowed");
+        setErrorMsg(m_photo, "Invalid file type. Only PNG, JPG, JPEG are allowed");
         isValid = false;
       } else {
         var photoSize = m_photo.files[0].size / 1000 / 1000;

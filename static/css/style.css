@@ -208,6 +208,33 @@ tbody td img {
 tbody td img:hover {
     transform: scale(1.2);
 }
+.family-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 92%;
+    margin-bottom: 1rem;
+}
+.downloadBtn {
+    display: flex;
+    align-items: center;
+    background: #00896b;
+    margin: 0 0.5rem 0 0;
+    padding: 0.4rem 0.7rem;
+    border-radius: 0.5rem;
+    gap: 0.3rem;
+}
+.family-header  a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    align-items: center;
+}
+.family-header a img {
+    height: 1.5rem;
+    width: auto;
+    padding: 0.1rem 0;
+}
 .family-section {
     min-width: 60%;
     padding: 1rem 2rem;
@@ -244,6 +271,7 @@ tbody td img:hover {
     margin: 0.4rem 0;
     font-weight: 500;
     color: #333;
+    font-size: 0.9rem;
 }
 .head-card {
     display: flex;
@@ -369,22 +397,7 @@ textarea {
     border-radius: 1.5rem;
     background-color: #e9f5f2;
 }
-.family-header {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 4rem;
-}
-.family-header a {
-    display: inline-block;
-    margin: 0.5rem 0.5rem 0 0;
-    padding: 0.4rem 1rem;
-    background: #00896b;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-}
+
 .update-form {
     min-width: 40vw;
     padding: 0 2rem;

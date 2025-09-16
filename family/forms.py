@@ -90,8 +90,8 @@ class FamilyHeadForm(ModelForm):
             self.add_error('photo', 'Photo is required.')
         else:
             filename = photo.name
-            if not re.search(r'\.(jpg|png)$', filename, re.IGNORECASE):
-                self.add_error('photo', 'Only JPG, PNG allowed.')
+            if not re.search(r'\.(jpg|png|jpeg)$', filename, re.IGNORECASE):
+                self.add_error('photo', 'Only JPG, JPEG, PNG allowed.')
             else:
                 photo.seek(0, 2)
                 size_kb = photo.tell() / 1000 / 1000
@@ -194,8 +194,8 @@ class MemberInlineFormSet(BaseInlineFormSet):
             member_photo = form.cleaned_data.get('member_photo')
             if member_photo:
                 filename = member_photo.name
-                if not re.search(r'\.(jpg|png)$', filename, re.IGNORECASE):
-                    form.add_error('member_photo', 'Only JPG, PNG allowed.')
+                if not re.search(r'\.(jpg|png|jpeg)$', filename, re.IGNORECASE):
+                    form.add_error('member_photo', 'Only JPG, JPEG, PNG allowed.')
                 else:
                     member_photo.seek(0, 2)
                     size_kb = member_photo.tell() / 1000 / 1000

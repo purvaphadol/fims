@@ -7,8 +7,14 @@
 </div>
 
 <div class="family-header">
-    <a href="{% url 'family_pdf' head.id %}">Download PDF</a>
-    <a href="{% url 'family_excel' head.id %}">Download Excel</a>
+    <div class="downloadBtn">
+        <img src="{% static 'images/download.png' %}" alt="Download">
+        <a href="{% url 'family_pdf' head.id %}"> PDF</a>
+    </div>
+    <div class="downloadBtn">
+        <img src="{% static 'images/download.png' %}" alt="Download">
+        <a href="{% url 'family_excel' head.id %}"> Excel</a>
+    </div>
 </div>
 
 <section class="family-section">

@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .forms import FamilyHeadForm, HobbyFormSet, MemberFormset
 from .models import FamilyHead, FamilyMember, Hobby, City, statusChoice
-
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
@@ -16,7 +15,6 @@ from openpyxl import Workbook
 from openpyxl.styles import *
 import decimal
 
-# Create your views here.
 def home(request):
     return render(request, 'index.html')
 
