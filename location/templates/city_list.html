@@ -4,7 +4,13 @@
 {% block content %}
 
 <section class="state-list">
-    <h1>City List</h1>
+    <div class="state-header">
+        <h1>City List</h1>
+        <div class="statedownloadBtn">
+            <img src="{% static 'images/download.png' %}" alt="Download">
+            <a href="{% url 'city_excel' %}"> Excel</a>
+        </div>
+    </div>
     <div class="header">
         <div class="add-family">
             <p>Want to Add New City?
@@ -56,7 +62,7 @@
             </tbody>
         </table>
     </section>
-    <a href="{% url 'city_excel' %}">Download Excel</a>
+    
     
     <div class="pagination">
         {% if page_obj.has_previous %}

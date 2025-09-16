@@ -58,6 +58,8 @@ class FamilyHeadForm(ModelForm):
             self.add_error('mobno', 'Mobile No. is required.')
         elif not re.match(r"^[0-9]{10}$", mobno):
             self.add_error('mobno', 'Mobile number must be exactly 10 digits.')
+        elif FamilyHead.objects.exclude(status=statusChoice.DELETE).filter(mobno=mobno).exclude(pk=self.instance.pk).exists():
+            self.add_error('mobno','Mobile number already exists.')
         # address
         address = self.cleaned_data.get('address')
         if not address:

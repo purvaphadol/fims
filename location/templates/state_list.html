@@ -4,7 +4,13 @@
 {% block content %}
 
 <section class="state-list">
-    <h1>State List</h1>
+    <div class="state-header">
+        <h1>State List</h1>
+        <div class="statedownloadBtn">
+            <img src="{% static 'images/download.png' %}" alt="Download">
+            <a href="{% url 'state_excel' %}"> Excel</a>
+        </div>
+    </div>
     <div class="header">
         <div class="add-family">
             <p>Want to Add New State?
@@ -20,6 +26,7 @@
             </form>
         </div>
     </div>
+
 
     <div class="search-result">
         {% if not page_obj.object_list %}
@@ -46,17 +53,18 @@
                     <td>
                         <a href="{% url 'update_state' state.id %}"><img src="{% static 'images/edit.png' %}"
                                 alt="Edit"></a>
-                        <a href="{% url 'delete_state' state.id %}" onclick="return confirm('Are you sure you want to Delete {{state}} ? Cities within {{state}} will also get deleted.')"><img src="{% static 'images/delete.png' %}"
-                                alt="Delete"></a>
+                        <a href="{% url 'delete_state' state.id %}"
+                            onclick="return confirm('Are you sure you want to Delete {{state}} ? Cities within {{state}} will also get deleted.')"><img
+                                src="{% static 'images/delete.png' %}" alt="Delete"></a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
-    <a href="{% url 'state_excel' %}">Download Excel</a>
-    
-    
+
+
+
     <div class="pagination">
         {% if page_obj.has_previous %}
         <a href="?page=1" class="page-link">First</a>
@@ -75,11 +83,11 @@
 
 </section>
 {% if messages %}
-    {% for message in messages %}
-    <script>
-        alert("{{ message }}");
-    </script>
-    {% endfor %}
+{% for message in messages %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endfor %}
 {% endif %}
 
 {% endblock %}
