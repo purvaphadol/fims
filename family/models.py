@@ -1,4 +1,5 @@
 from django.db import models
+from auditlog.registry import auditlog
 
 class statusChoice(models.IntegerChoices):
     ACTIVE = 1
@@ -22,6 +23,8 @@ class State(models.Model):
     def __str__(self):
         return self.state_name
     
+auditlog.register(State)
+
 
 class City(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
@@ -35,6 +38,8 @@ class City(models.Model):
 
     def __str__(self):
         return self.city_name
+
+auditlog.register(City)
 
 
 class FamilyHead(models.Model):
@@ -58,8 +63,10 @@ class FamilyHead(models.Model):
 
     def __str__(self):
         return self.name
-    
 
+auditlog.register(FamilyHead)
+
+    
 class Hobby(models.Model):
     hobby = models.CharField(max_length=50)
     family_head = models.ForeignKey(FamilyHead, on_delete=models.CASCADE, related_name="hobbies")
@@ -72,6 +79,9 @@ class Hobby(models.Model):
 
     def __str__(self):
         return self.hobby
+
+auditlog.register(Hobby)
+
 
 class FamilyMember(models.Model):
     family_head = models.ForeignKey(FamilyHead, on_delete=models.CASCADE, related_name="members")
@@ -90,5 +100,8 @@ class FamilyMember(models.Model):
 
     def __str__(self):
         return self.member_name
+
+auditlog.register(FamilyMember)
+
     
     
