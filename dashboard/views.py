@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from family.forms import *
 from django.http import JsonResponse
 from family.forms import FamilyMemberForm
+import json
 
 @login_required(login_url='login_page')
 def dashboard(request):
@@ -14,11 +15,16 @@ def dashboard(request):
     members = FamilyMember.objects.all().exclude(status=statusChoice.DELETE)
     states = State.objects.all().exclude(status=statusChoice.DELETE)
     cities = City.objects.all().exclude(status=statusChoice.DELETE)
+    family_count = State.objects.annotate(total=Count("familyhead")).order_by("-total")[:5]
+    data = list(family_count.values('state_name', 'total'))
+    json_data = json.dumps(data)
+
     context = {
         'members': members,
         'heads': heads,
         'states': states,
         'cities': cities,
+        'json_data': json_data,
     }
     return render(request, 'dashboard.html', context)
 
