@@ -2,9 +2,14 @@
 {% load static %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-
 <section class="family-list">
-    <h1>Family List</h1>
+    <div class="state-header">
+        <h1>Family List</h1>
+        <div class="statedownloadBtn">
+            <img src="{% static 'images/download.png' %}" alt="Download">
+            <a href="{% url 'head_excel' %}"> Excel</a>
+        </div>
+    </div>
     <div class="header">
         <div class="add-family">
             <p>Want to Add New Family?

@@ -112,7 +112,7 @@ def delete_city(request, pk):
     return redirect('city_list')
 
 def city_excel(request):
-    cities = City.objects.all()
+    cities = City.objects.all().exclude(status=statusChoice.DELETE)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename="' + 'city' +'.xlsx"'
@@ -142,7 +142,7 @@ def city_excel(request):
     return response
 
 def state_excel(request):
-    states = State.objects.all()
+    states = State.objects.all().exclude(status=statusChoice.DELETE)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename="' + 'state' +'.xlsx"'

@@ -200,3 +200,40 @@ def family_excel(request, pk):
 
     workbook.save(response)
     return response
+
+def head_excel(request):
+    heads = FamilyHead.objects.all().exclude(status=statusChoice.DELETE)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
+    response['Content-Disposition'] = 'attachment; filename="' + 'all_family' +'.xlsx"'
+    workbook = Workbook()
+
+    worksheet = workbook.active
+
+    worksheet.merge_cells('A1:M1')
+    worksheet.merge_cells('A2:M2')
+    first_cell = worksheet['A1']
+    first_cell.value = "All Family Head Report"
+    first_cell.fill = PatternFill("solid", fgColor="246ba1")
+    first_cell.font  = Font(bold=True, color="F7F6FA")
+    first_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    worksheet.title = 'All Family Head Report'
+    
+    columns = ['Sr. No.', 'Name', 'Surname', 'Birth Date', 'Mobile No', 'Address', 'State', 'City', 'Pincode', 'Marital Status', 'Wedding Date', 'Photo', 'Hobbies']
+    worksheet.append(columns)
+
+    count = 1
+    for head in heads:
+        hobbies = Hobby.objects.filter(family_head=head.id).filter(status=statusChoice.ACTIVE)
+        hobby_list = []
+        for hobby in hobbies:
+            hobby_list.append(hobby.hobby)
+        separator = ", "
+        hobby_string = separator.join(hobby_list)
+        worksheet.append([count, head.name, head.surname, str(head.dob), head.mobno, head.address, head.state.state_name, head.city.city_name, head.pincode, head.marital_status, str(head.wedding_date), str(head.photo), hobby_string])
+        count += 1
+
+    workbook.save(response)
+    return response
+
