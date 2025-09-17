@@ -22,7 +22,6 @@ class FamilyHeadForm(ModelForm):
             "dob": "Date of Birth",
             "mobno": "Mobile Number",
             "marital_status": "Marital Status",
-            
         }
 
     def clean(self):

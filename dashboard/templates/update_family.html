@@ -68,12 +68,14 @@
           {{ head_form.marital_status.label_tag }} {{ head_form.marital_status }}
           <span class="errorMsg"></span>
         </div>
-        <div id="wedding_date">
+        <div id="wedding_date" {% if head_form.marital_status.value != "Married" %} style="display:none" {% endif %}>
           {{ head_form.wedding_date.label_tag }} {{ head_form.wedding_date }}
           <span class="errorMsg"></span>
         </div>
         <div class="photoDiv">
-          {{ head_form.photo.label_tag }} {{ head_form.photo }}
+          {{ head_form.photo.label_tag }} 
+          <!-- {% if head_form.instance.photo %} <img src="{{ head_form.instance.photo.url }}" alt="" height="100px">  {%endif%} -->
+          {{ head_form.photo }}
           <span class="errorMsg"></span>
         </div>
 
@@ -124,7 +126,7 @@
             {{ form.member_marital.label_tag }} {{ form.member_marital }}
             <span class="errorMsg"></span>
           </div>
-          <div class="member-wed" style="display:none">
+          <div class="member-wed" {% if form.member_marital.value != "Married" %} style="display:none" {% endif %}>
             {{ form.member_wedDate.label_tag }} {{ form.member_wedDate }}
             <span class="errorMsg"></span>
           </div>

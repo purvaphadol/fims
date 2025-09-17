@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // toggle head wedding date 
-    $('#wedding_date').hide();
+    // $('#wedding_date').hide();
     $('input[name="marital_status"]').on('change', function () {
         if ($(this).val().toLowerCase() === "married") {
             $('#wedding_date').show();
@@ -13,9 +13,12 @@ $(document).ready(function () {
     // toggle member wedding date 
     $('#member-container').on('change', 'input[type="radio"][name$="member_marital"]', function () {
         let memberRow = $(this).closest('.member-row');
-        memberRow.find('.member-wed').hide();
+        // memberRow.find('.member-wed').hide();
         if ($(this).is(':checked') && $(this).val().toLowerCase() === "married") {
             memberRow.find('.member-wed').show();
+            // memberRow.find('input[name$="member_wedDate"]').val('');
+        } else {
+            memberRow.find('.member-wed').hide();
             memberRow.find('input[name$="member_wedDate"]').val('');
         }
     });
@@ -79,6 +82,10 @@ $(document).ready(function () {
                 $(this).val('');
             }
         });
+        newRow.find('input[type="checkbox"][name$="member_photo-clear"]').remove();
+        newRow.find('a').remove();
+        newRow.find('label[for$="member_photo-clear_id"]').remove();
+        newRow.find('input[type="file"][name$="member_photo"]').val('')
         newRow.find('.removeMember').show();
         $('#member-container').append(newRow);
         newRow.find('.member-wed').hide();

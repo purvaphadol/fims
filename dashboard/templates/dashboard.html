@@ -31,7 +31,10 @@
             <a href="{% url 'city_list' %}"><img src="{% static 'images/arrow_outward.png' %}" alt="family"></a>
         </div>
     </div>
-    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+</section>
+<section class="chart-section">
+    <div class="chart"><canvas id="myChart"></canvas></div>
+    <div class="chart"><canvas id="Chart2"></canvas></div>
 </section>
 
 
@@ -56,6 +59,32 @@
             title: {
                 display: true,
                 text: "Total Families Per State"
+            }
+        }
+    });
+
+    var active_states = JSON.parse('{{ active_states | safe }}');
+    var inactive_states = JSON.parse('{{ inactive_states | safe }}');
+    var x = ['active_states', 'inactive_states'];
+    var y = [active_states, inactive_states];
+    console.log(y)
+    var Colors = ["#e8c3b9", "#b91d47"];
+
+    console.log(active_states);
+
+    new Chart("Chart2", {
+        type: "doughnut",
+        data: {
+            labels: x,
+            datasets: [{
+                backgroundColor: Colors,
+                data: y
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "Active and Inactive State"
             }
         }
     });

@@ -15,9 +15,13 @@ def dashboard(request):
     members = FamilyMember.objects.all().exclude(status=statusChoice.DELETE)
     states = State.objects.all().exclude(status=statusChoice.DELETE)
     cities = City.objects.all().exclude(status=statusChoice.DELETE)
+
     family_count = State.objects.annotate(total=Count("familyhead")).order_by("-total")[:5]
     data = list(family_count.values('state_name', 'total'))
     json_data = json.dumps(data)
+
+    active_states = State.objects.all().filter(status=statusChoice.ACTIVE).count()
+    inactive_states = State.objects.all().filter(status=statusChoice.INACTIVE).count()
 
     context = {
         'members': members,
@@ -25,6 +29,9 @@ def dashboard(request):
         'states': states,
         'cities': cities,
         'json_data': json_data,
+        'active_states': active_states,
+        'inactive_states': inactive_states,
+
     }
     return render(request, 'dashboard.html', context)
 

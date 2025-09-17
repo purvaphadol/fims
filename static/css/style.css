@@ -64,13 +64,25 @@ body {
     background: #006f56;
 }
 .dash-section {
-    min-height: 80vh;
+    /* min-height: 80vh; */
     margin: 3rem auto;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 4rem;
+}
+.chart-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-height: 60vh;
+    max-width: 100%;
+    margin-bottom: 2rem;
+}
+.chart {
+    width: 45%;
 }
 .dash-section > div {
     padding: 1rem;

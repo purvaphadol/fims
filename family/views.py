@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from .forms import FamilyHeadForm, HobbyFormSet, MemberFormset
 from .models import FamilyHead, FamilyMember, Hobby, City, statusChoice
 from django.http import FileResponse
-import io
+import io, os
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
@@ -92,13 +92,24 @@ def family_pdf(request, pk):
     elements.append(Paragraph(f"Wedding Date: {head.wedding_date}", styles['Normal']))
     elements.append(Spacer(1, 4))
 
-    img_path = f"home/dev82/Documents/Project/fims/static/pictures/{head.photo}"
-    try:
-        img = Image(img_path, width=4*inch, height=3*inch) # Adjust width and height as needed
-        elements.append(Paragraph(f"Photo:", styles['Normal']))
-        elements.append(img)
-    except Exception as e:
-        elements.append(Paragraph(f"Photo: {head.photo}", styles['Normal']))
+    # Head Photo
+    if head.photo and hasattr(head.photo, 'path') and os.path.exists(head.photo.path):
+        # print(head.photo.path)
+        try:
+            img = Image(head.photo.path, width=120, height=150)
+            img.hAlign = 'CENTER'
+            elements.append(img)
+            elements.append(Spacer(1, 12))
+        except Exception:
+            elements.append(Paragraph(f"Photo: {head.photo}", styles['Normal']))
+
+    # img_path = f"home/dev82/Documents/Project/fims/static/pictures/{head.photo}"
+    # try:
+    #     img = Image(img_path, width=4*inch, height=3*inch) # Adjust width and height as needed
+    #     elements.append(Paragraph(f"Photo:", styles['Normal']))
+    #     elements.append(img)
+    # except Exception as e:
+    #     elements.append(Paragraph(f"Photo: {head.photo}", styles['Normal']))
     elements.append(Spacer(1, 12))
 
     # Hobbies
