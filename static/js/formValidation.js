@@ -86,15 +86,14 @@ $(document).on("input", 'input[type="text"], input[type="date"], input[type="fil
   function () {
     let span = $(this).parent().find(".errorMsg");
     span.text("");
-    $(this).removeClass("errorInput");
+    // $(this).removeClass("errorInput");
   }
 );
 
-// $(document).on('change', 'input[type="radio"]', function() {
-//     let span = $(this).parent().parent().find('.errorMsg');
-//     span.text('');
-//     container.find('input[type="radio"]').removeClass('errorInput');
-// });
+$(document).on("change", 'input[type="radio"]', function () {
+  $(this).closest(".maritalDiv, .mem_msDiv")
+    .find(".errorMsg").text("");
+});
 
 const validateForm = () => {
   const headValid = validateHead();

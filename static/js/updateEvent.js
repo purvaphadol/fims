@@ -82,10 +82,14 @@ $(document).ready(function () {
                 $(this).val('');
             }
         });
-        newRow.find('input[type="checkbox"][name$="member_photo-clear"]').remove();
-        newRow.find('a').remove();
-        newRow.find('label[for$="member_photo-clear_id"]').remove();
-        newRow.find('input[type="file"][name$="member_photo"]').val('')
+        newRow.find('.mem_photDiv').html(`
+        <label for="id_members-${memberIdx}-member_photo">Photo:</label>
+        <input type="file" name="members-${memberIdx}-member_photo" accept="image/*" id="id_members-${memberIdx}-member_photo">
+        <span class="errorMsg"></span>`);
+        // newRow.find('input[type="checkbox"][name$="member_photo-clear"]').remove();
+        // newRow.find('a').remove();
+        // newRow.find('label[for$="member_photo-clear_id"]').remove();
+        // newRow.find('input[type="file"][name$="member_photo"]').val('')
         newRow.find('.removeMember').show();
         $('#member-container').append(newRow);
         newRow.find('.member-wed').hide();

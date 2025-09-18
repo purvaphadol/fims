@@ -90,16 +90,13 @@ function setErrorMsg(input, errorMsg) {
 $(document).on("input", 'input[type="text"], input[type="date"], input[type="file"], select, textarea', function () {
   let span = $(this).parent().find(".errorMsg");
   span.text("");
-  $(this).removeClass("errorInput");
+  // $(this).removeClass("errorInput");
 });
 
-// $(document).on('change', 'input[type="radio"]', function() {
-//     // Find the container with the errorMsg span
-//     let container = $(this).closest('div').parent(); // adjust if needed
-//     let span = container.find('.errorMsg');
-//     span.text('');
-//     container.find('input[type="radio"]').removeClass('errorInput');
-// });
+$(document).on("change", 'input[type="radio"]', function () {
+  $(this).closest(".maritalDiv, .mem_msDiv")
+    .find(".errorMsg").text("");
+});
 
 const validateForm = () => {
   const headValid = validateHead();
