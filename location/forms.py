@@ -51,6 +51,6 @@ class CityForm(ModelForm):
         city_name = self.cleaned_data.get('city_name')
         if not city_name: 
             self.add_error('city_name','City is required.')
-        elif City.objects.exclude(status=statusChoice.DELETE).filter(city_name=city_name).exclude(pk=self.instance.pk).exists():
+        elif City.objects.exclude(status=statusChoice.DELETE).filter(state=state).filter(city_name=city_name).exclude(pk=self.instance.pk).exists():
             self.add_error('city_name','City already exists.')
         
