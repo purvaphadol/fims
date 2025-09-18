@@ -78,6 +78,10 @@ function setErrorMsg(input, errorMsg) {
       inputField = inputField.parentElement;
     }
   }
+  inputField.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
   if (!inputField) return;
   const span = inputField.querySelector("span.errorMsg");
   if (!span) return;
