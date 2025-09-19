@@ -65,7 +65,7 @@ $(document).ready(function () {
             return; 
         }
         let newRow = lastRow.clone();
-        newRow.find('input,select,textarea').each(function () {
+        newRow.find('input,label').each(function () {
             let name = $(this).attr('name');
             if (name) {
                 name = name.replace(/-\d+-/, '-' + memberIdx + '-');
@@ -75,6 +75,11 @@ $(document).ready(function () {
             if (id) {
                 id = id.replace(/-\d+-/, '-' + memberIdx + '-');
                 $(this).attr('id', id);
+            }
+            let labelfor = $(this).attr('for');
+            if (labelfor) {
+                labelfor = labelfor.replace(/-\d+-/, '-' + memberIdx + '-');
+                $(this).attr('for', labelfor);
             }
             if ($(this).is(':radio') || $(this).is(':checkbox')) {
                 $(this).prop('checked', false);
