@@ -65,8 +65,8 @@ function setErrorMsg(input, errorMsg) {
     span.classList.add("errorMsg");
     input.classList.add("errorInput");
     span.innerText = errorMsg;
-
 }
+
 function clearError(input) {
     const inputField = input.parentElement;
     const span = inputField.querySelector("span");
