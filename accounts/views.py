@@ -57,12 +57,12 @@ def forgot_password(request):
             email_message.send()
             redirectURL = reverse('password_reset_sent', kwargs={'reset_id': new_password_reset.reset_id})
             return JsonResponse({"success": True, "redirectURL": redirectURL})
-            return redirect('password_reset_sent', reset_id=new_password_reset.reset_id)
+            # return redirect('password_reset_sent', reset_id=new_password_reset.reset_id)
 
         except CustomUser.DoesNotExist:
             return JsonResponse({"field": 'email', "success": False, "errorMessage": f"No user with email '{email}' found."})
-            messages.error(request, f"No user with email '{email}' found.")
-            return redirect('forgot_password')
+            # messages.error(request, f"No user with email '{email}' found.")
+            # return redirect('forgot_password')
 
     return render(request, 'forgot_password.html')
 
@@ -76,8 +76,7 @@ def reset_password(request, reset_id):
     try:
         password_reset_id = PasswordReset.objects.get(reset_id=reset_id)
         expiration_time = password_reset_id.created_at + timezone.timedelta(minutes=10)
-        # print(expiration_time)
-        # print(timezone.now())
+        
         if timezone.now() > expiration_time:
             passwords_have_error = True
             password_reset_id.delete()
@@ -92,34 +91,33 @@ def reset_password(request, reset_id):
 
             if not password:
                 passwords_have_error = True
-                messages.error(request, "Password is required.")
+                return JsonResponse({"field": 'password', "success": False, "errorMessage": "Password is required."})
 
             if not confirm_password:
                 passwords_have_error = True
-                messages.error(request, "Confirm Password is required.")
+                return JsonResponse({"field": 'confirm_password', "success": False, "errorMessage": "Confirm Password is required."})
 
             elif not re.match(pass_regex, password):
                 passwords_have_error = True
-                messages.error(request, "Password must have 8+ chars, 1 Uppercase, 1 Number, 1 Special Char.")
+                return JsonResponse({"field": 'password', "success": False, "errorMessage": "Password must have 8+ chars, 1 Uppercase, 1 Number, 1 Special Char."})
 
             elif password != confirm_password:
                 passwords_have_error = True
-                messages.error(request, 'Passwords do not match')
+                return JsonResponse({"field": 'confirm_password', "success": False, "errorMessage": "Passwords do not match."})
                 
             if not passwords_have_error:
                 user = password_reset_id.user
                 user.set_password(password)
                 user.save()
                 password_reset_id.delete()
-                messages.success(request, 'Password reset. Proceed to login')
-                return redirect('login_page')
+                return JsonResponse({"success": True, "message": "Password reset. Proceed to Login"})
             else:
                 return redirect('reset_password', reset_id=reset_id)
 
     except PasswordReset.DoesNotExist:
         return redirect('link_expired')
-
-    return render(request, 'reset_password.html')
+    context= {"reset_id": reset_id}
+    return render(request, 'reset_password.html', context)
 
 def link_expired(request):
     return render(request, 'link_expired.html')
