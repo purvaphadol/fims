@@ -7,6 +7,8 @@ from .forms import StateForm, CityForm
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.styles import *
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 @login_required(login_url='login_page')
 def state_list(request):
@@ -23,6 +25,9 @@ def state_list(request):
         'lastPage': totalPages,
         'totalPagelist': [n+1 for n in range(totalPages)],
     }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        state_html = render_to_string('state_list_template.html', context, request=request)
+        return JsonResponse({'state_html': state_html})
     return render(request, 'state_list.html', context)
 
 @login_required(login_url='login_page')
@@ -76,6 +81,9 @@ def city_list(request):
         'lastPage': totalPages,
         'totalPagelist': [n+1 for n in range(totalPages)],
     }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        city_html = render_to_string('city_list_template.html', context, request=request)
+        return JsonResponse({'city_html': city_html})
     return render(request, 'city_list.html', context)
 
 @login_required(login_url='login_page')

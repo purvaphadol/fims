@@ -1,4 +1,5 @@
 {% load static %}
+
 <section class="table-section">
     <table>
         <thead>
@@ -36,7 +37,7 @@
 
 <div class="search-result">
     {% if not page_obj.object_list %}
-        <p>No Result Found</p>
+        <p>No Result Found.</p>
     {% endif %}
 </div>
 
@@ -55,3 +56,4 @@
         <a href="?page={{ lastPage }}" class="page-link">Last</a>
     {% endif %}
 </div>
+

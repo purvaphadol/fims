@@ -11,6 +11,7 @@
             <a href="{% url 'city_excel' %}"> Excel</a>
         </div>
     </div>
+
     <div class="header">
         <div class="add-family">
             <p>Want to Add New City?
@@ -18,7 +19,7 @@
             </p>
         </div>
         <div class="search-container">
-            <form action="">
+            <form action="" id="search-form">
                 <div class="search-bar">
                     <input name="search" id="search" type="text" placeholder="Search Here">
                     <img src="{% static 'images/search.png' %}" alt="">
@@ -27,64 +28,52 @@
         </div>
     </div>
 
-    <div class="search-result">
-        {% if not page_obj.object_list %}
-        <p>No result found</p>
-        {% endif %}
-    </div>
-    
-    <section class="table-section">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>State</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for city in page_obj.object_list %}
-                <tr>
-                    <td>{{ city.id }}</td>
-                    <td>{{ city.city_name }}</td>
-                    <td>{{ city.state }}</td>
-                    <td>{{ city.status }}</td>
-                    <td>
-                        <a href="{% url 'update_city' city.id %}"><img src="{% static 'images/edit.png' %}"
-                                alt="Edit"></a>
-                        <a href="{% url 'delete_city' city.id %}" onclick="return confirm('Are you sure you want to Delete {{city}}?')"><img src="{% static 'images/delete.png' %}"
-                                alt="Delete"></a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-    
-    
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-        <a href="?page=1" class="page-link">First</a>
-        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
-        {% endif %}
-
-        <a href="?page={{page_obj.number}}" class="page-link active">{{page_obj.number}}</a>
-
-        {% if page_obj.has_next %}
-        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
-        <a href="?page={{ lastPage }}" class="page-link">Last</a>
-        {% endif %}
+    <div id="ajax-table">
+        {% include 'city_list_template.html' %}
     </div>
 
 </section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function loadPage(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (data) {
+                    $('#ajax-table').html(data.city_html);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                }
+            });
+        }
+
+        $(document).on('click', '.pagination a.page-link', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            loadPage(url);
+        });
+        
+        $("#search-form").on('submit', function (e) {
+            e.preventDefault();
+            const search = $("#search").val();
+            const url = `?search=${search}&page=1`;
+            loadPage(url);
+        });
+    });
+</script>
+
 {% if messages %}
-{% for message in messages %}
-  <script>
-    alert("{{ message }}");
-  </script>
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
     {% endfor %}
 {% endif %}
 
 {% endblock %}
+

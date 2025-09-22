@@ -40,10 +40,9 @@
             $.ajax({
                 url: url,
                 type: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }, // Identify as AJAX request
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 success: function (data) {
                     $('#ajax-table').html(data.family_html);
-                    console.log(data);
                 },
                 error: function (xhr, status, error) {
                     console.error("AJAX Error:", error);
@@ -67,11 +66,12 @@
 </script>
 
 {% if messages %}
-{% for message in messages %}
-<script>
-    alert("{{ message }}");
-</script>
-{% endfor %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
 {% endif %}
 
 {% endblock %}
+

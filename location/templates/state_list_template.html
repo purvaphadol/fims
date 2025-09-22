@@ -1,0 +1,48 @@
+{% load static %}
+<section class="table-section">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for state in page_obj.object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ state.state_name }}</td>
+                <td>{{ state.status }}</td>
+                <td>
+                    <a href="{% url 'update_state' state.id %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a>
+                    <a href="{% url 'delete_state' state.id %}" onclick="return confirm('Are you sure you want to Delete {{state}} ? Cities within {{state}} will also get deleted.')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<div class="search-result">
+    {% if not page_obj.object_list %}
+        <p>No Result Found.</p>
+    {% endif %}
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page=1" class="page-link">First</a>
+    <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
+    {% endif %}
+
+    {% for n in totalPagelist %}
+    <a href="?page={{n}}" class="page-link {% if page_obj.number == n %}active{% endif %}">{{n}}</a>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
+    <a href="?page={{ lastPage }}" class="page-link">Last</a>
+    {% endif %}
+</div>
