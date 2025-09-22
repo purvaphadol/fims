@@ -55,9 +55,12 @@ def forgot_password(request):
             )
             email_message.fail_silently = True
             email_message.send()
+            redirectURL = reverse('password_reset_sent', kwargs={'reset_id': new_password_reset.reset_id})
+            return JsonResponse({"success": True, "redirectURL": redirectURL})
             return redirect('password_reset_sent', reset_id=new_password_reset.reset_id)
 
         except CustomUser.DoesNotExist:
+            return JsonResponse({"field": 'email', "success": False, "errorMessage": f"No user with email '{email}' found."})
             messages.error(request, f"No user with email '{email}' found.")
             return redirect('forgot_password')
 
