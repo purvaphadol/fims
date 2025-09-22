@@ -8,6 +8,7 @@ from family.forms import *
 from django.http import JsonResponse
 from family.forms import FamilyMemberForm
 import json
+from django.template.loader import render_to_string
 
 @login_required(login_url='login_page')
 def dashboard(request):
@@ -51,12 +52,18 @@ def family_list(request):
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
     totalPages = page_obj.paginator.num_pages
+
     context = {
         'members': members,
         'page_obj': page_obj,
         'lastPage': totalPages,
         'totalPagelist': [n+1 for n in range(totalPages)],
     }
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        family_html = render_to_string('list_template.html', context, request=request)
+        return JsonResponse({'family_html': family_html})
+
     return render(request, 'family_list.html', context)
 
 @login_required(login_url='login_page')
@@ -115,7 +122,7 @@ def delete_family(request, pk):
     FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
     messages.success(request, 'Family Deleted Successfully!')
     return redirect('family_list')
-    
+
 
 # @login_required(login_url='login_page')
 # def update_head(request, pk):

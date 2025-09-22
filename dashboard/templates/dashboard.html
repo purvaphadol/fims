@@ -32,20 +32,19 @@
         </div>
     </div>
 </section>
+
 <section class="chart-section">
     <div class="chart"><canvas id="myChart"></canvas></div>
     <div class="chart"><canvas id="Chart2"></canvas></div>
 </section>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 <script>
     var data = JSON.parse('{{ json_data | safe }}');
-    // console.log(data)
     var xValues = data.map(item => item.state_name);
     var yValues = data.map(item => item.total);
     var barColors = ["#b91d47", "#00aba9","#2b5797", "#e8c3b9", "#1e7145"];
-
     new Chart("myChart", {
         type: "pie",
         data: {
@@ -67,11 +66,7 @@
     var inactive_states = JSON.parse('{{ inactive_states | safe }}');
     var x = ['active_states', 'inactive_states'];
     var y = [active_states, inactive_states];
-    // console.log(y)
     var Colors = ["#e8c3b9", "#b91d47"];
-
-    // console.log(active_states);
-
     new Chart("Chart2", {
         type: "doughnut",
         data: {

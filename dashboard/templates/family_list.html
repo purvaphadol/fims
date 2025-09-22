@@ -10,6 +10,7 @@
             <a href="{% url 'head_excel' %}"> Excel</a>
         </div>
     </div>
+
     <div class="header">
         <div class="add-family">
             <p>Want to Add New Family?
@@ -17,7 +18,7 @@
             </p>
         </div>
         <div class="search-container">
-            <form action="">
+            <form action="" id="search-form">
                 <div class="search-bar">
                     <input name="search" id="search" type="text" placeholder="Search Here">
                     <img src="{% static 'images/search.png' %}" alt="">
@@ -26,73 +27,51 @@
         </div>
     </div>
 
-    <div class="search-result">
-        {% if not page_obj.object_list %}
-        <p>No result found</p>
-        {% endif %}
+    <div id="ajax-table">
+        {% include 'list_template.html' %}
     </div>
-
-    <section class="table-section">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Mobile No.</th>
-                    <th>State</th>
-                    <th>City</th>
-                    <th>Members</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for head in page_obj.object_list %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ head.name }}</td>
-                    <td>{{ head.surname }}</td>
-                    <td>{{ head.mobno }}</td>
-                    <td>{{ head.state }}</td>
-                    <td>{{ head.city.city_name }}</td>
-                    <td>{{ head.member_count }}</td>
-                    <td>
-                        <a href="{% url 'view_family' head.id %}"><img src="{% static 'images/visibility.png' %}"
-                                alt="View"></a>
-                        <a href="{% url 'update_family' head.id %}"><img src="{% static 'images/edit.png' %}"
-                                alt="Edit"></a></a>
-                        <a href="{% url 'delete_family' head.id %}" onclick="return confirm('Are you sure you want to Delete {{head.surname}} Family ? Members within family will also get deleted.')"><img src="{% static 'images/delete.png' %}"
-                                alt="Delete"></a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-        <a href="?page=1" class="page-link">First</a>
-        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
-        {% endif %}
-
-        {% for n in totalPagelist %}
-        <a href="?page={{n}}" class="page-link {% if page_obj.number == n %}active{% endif %}">{{n}}</a>
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
-        <a href="?page={{ lastPage }}" class="page-link">Last</a>
-        {% endif %}
-    </div>
-
 </section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function loadPage(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }, // Identify as AJAX request
+                success: function (data) {
+                    $('#ajax-table').html(data.family_html);
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                }
+            });
+        }
+
+        $(document).on('click', '.pagination a.page-link', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            loadPage(url);
+        });
+        
+        $("#search-form").on('submit', function (e) {
+            e.preventDefault();
+            const search = $("#search").val();
+            const url = `?search=${search}&page=1`;
+            loadPage(url);
+        });
+    });
+</script>
+
 {% if messages %}
 {% for message in messages %}
-  <script>
+<script>
     alert("{{ message }}");
-  </script>
-    {% endfor %}
+</script>
+{% endfor %}
 {% endif %}
 
 {% endblock %}
