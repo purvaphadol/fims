@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from family.models import State, City, statusChoice
+import re
 
 class StateForm(ModelForm):
     class Meta:
@@ -22,6 +23,8 @@ class StateForm(ModelForm):
         state_name = self.cleaned_data.get('state_name')
         if not state_name: 
             self.add_error('state_name','State is required.')
+        elif re.search(r'\d', state_name):
+            self.add_error('state_name', 'State name cannot contain digits.')
         elif State.objects.exclude(status=statusChoice.DELETE).filter(state_name=state_name).exclude(pk=self.instance.pk).exists():
             self.add_error('state_name','State already exists.')
 
@@ -51,6 +54,8 @@ class CityForm(ModelForm):
         city_name = self.cleaned_data.get('city_name')
         if not city_name: 
             self.add_error('city_name','City is required.')
+        elif re.search(r'\d', city_name):
+            self.add_error('city_name', 'City name cannot contain digits.')
         elif City.objects.exclude(status=statusChoice.DELETE).filter(state=state).filter(city_name=city_name).exclude(pk=self.instance.pk).exists():
             self.add_error('city_name','City already exists.')
         

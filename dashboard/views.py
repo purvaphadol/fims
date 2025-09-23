@@ -38,7 +38,7 @@ def dashboard(request):
 
 @login_required(login_url='login_page')
 def family_list(request):
-    heads = FamilyHead.objects.annotate(member_count=Count('members', filter=~Q(members__status=9))).exclude(status=statusChoice.DELETE)
+    heads = FamilyHead.objects.annotate(member_count=Count('members', filter=~Q(members__status=9))).exclude(status=statusChoice.DELETE).order_by('-created_at')
     members = FamilyMember.objects.all()
     
     if request.GET.get('search'):

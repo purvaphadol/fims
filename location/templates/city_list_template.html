@@ -15,7 +15,7 @@
         <tbody>
             {% for city in page_obj.object_list %}
             <tr>
-                <td>{{ city.id }}</td>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ city.city_name }}</td>
                 <td>{{ city.state }}</td>
                 <td>{{ city.status }}</td>

@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 
 @login_required(login_url='login_page')
 def state_list(request):
-    states = State.objects.all().exclude(status=statusChoice.DELETE)
+    states = State.objects.all().exclude(status=statusChoice.DELETE).order_by('-created_at')
     if request.GET.get('search'):
         states = states.filter(state_name__icontains=request.GET.get('search'))
 
@@ -66,7 +66,7 @@ def delete_state(request, pk):
 
 @login_required(login_url='login_page')
 def city_list(request):
-    cities = City.objects.all().exclude(status=statusChoice.DELETE)
+    cities = City.objects.all().exclude(status=statusChoice.DELETE).order_by('-created_at')
     if request.GET.get('search'):
         city = cities.filter(city_name__icontains=request.GET.get('search'))
         state = cities.filter(state__state_name__icontains=request.GET.get('search'))
