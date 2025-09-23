@@ -217,8 +217,8 @@ def head_excel(request):
 
     worksheet = workbook.active
 
-    worksheet.merge_cells('A1:M1')
-    worksheet.merge_cells('A2:M2')
+    worksheet.merge_cells('A1:P1')
+    worksheet.merge_cells('A2:P2')
     first_cell = worksheet['A1']
     first_cell.value = "All Family Head Report"
     first_cell.fill = PatternFill("solid", fgColor="246ba1")

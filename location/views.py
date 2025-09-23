@@ -122,6 +122,11 @@ def delete_city(request, pk):
 def city_excel(request):
     cities = City.objects.all().exclude(status=statusChoice.DELETE)
 
+    if request.GET.get('search'):
+        city = cities.filter(city_name__icontains=request.GET.get('search'))
+        state = cities.filter(state__state_name__icontains=request.GET.get('search'))
+        cities = city.union(state)
+    
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename="' + 'city' +'.xlsx"'
     workbook = Workbook()
@@ -151,6 +156,9 @@ def city_excel(request):
 
 def state_excel(request):
     states = State.objects.all().exclude(status=statusChoice.DELETE)
+
+    if request.GET.get('search'):
+        states = states.filter(state_name__icontains=request.GET.get('search'))
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename="' + 'state' +'.xlsx"'

@@ -38,15 +38,17 @@
 
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="?page=1" class="page-link">First</a>
-        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
+        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page=1{% else %}?page=1{% endif %}" class="page-link">First</a>
+        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.previous_page_number}}{% else %}?page={{page_obj.previous_page_number}}{% endif %}" class="page-link">Previous</a>
     {% endif %}
 
-    <a href="?page={{page_obj.number}}" class="page-link active">{{page_obj.number}}</a>
+    {% for n in totalPagelist %}
+        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{n}}{% else %}?page={{n}}{% endif %}" class="page-link {% if page_obj.number == n %}active{% endif %}">{{n}}</a>
+    {% endfor %}
 
     {% if page_obj.has_next %}
-        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
-        <a href="?page={{ lastPage }}" class="page-link">Last</a>
+        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.next_page_number}}{% else %}?page={{page_obj.next_page_number}}{% endif %}" class="page-link">Next</a>
+        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{ lastPage }}{% else %}?page={{ lastPage }}{% endif %}" class="page-link">Last</a>
     {% endif %}
 </div>
 
