@@ -204,6 +204,13 @@ def family_excel(request, pk):
 def head_excel(request):
     heads = FamilyHead.objects.all().exclude(status=statusChoice.DELETE)
 
+    if request.GET.get('search'):
+        name = heads.filter(name__icontains=request.GET.get('search'))
+        mobno = heads.filter(mobno__icontains=request.GET.get('search'))
+        state = heads.filter(state__state_name__icontains=request.GET.get('search'))
+        city = heads.filter(city__city_name__icontains=request.GET.get('search'))
+        heads = name.union(mobno, state, city)
+
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename="' + 'all_family' +'.xlsx"'
     workbook = Workbook()

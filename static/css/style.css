@@ -249,7 +249,7 @@ tbody td img:hover {
   justify-content: space-between;
   margin-bottom: 1rem;
 }
-.statedownloadBtn {
+/* .statedownloadBtn {
   display: flex;
   align-items: center;
   background: #00896b;
@@ -257,12 +257,20 @@ tbody td img:hover {
   padding: 0.4rem 0.6rem;
   border-radius: 0.5rem;
   gap: 0.3rem;
-}
+} */
 .statedownloadBtn a {
+  background: #00896b;
+  margin: 0 0.4rem 0 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
   color: #fff;
   text-decoration: none;
   font-size: 1rem;
+  display: flex;
   align-items: center;
+}
+.statedownloadBtn img {
+  height: 1.5rem;
 }
 .family-header a {
   color: #fff;
