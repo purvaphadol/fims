@@ -54,13 +54,26 @@ $(document).ready(function () {
     let memberIdx = $('#id_members-TOTAL_FORMS').val(); 
 
     $('#addMember').click(function() {
-        let lastRow = $('#member-container .member-row:last');
-        let nameInput = lastRow.find('input[type="text"][name$="member_name"]');
-        if (nameInput.val().trim() === "") { 
-            alert("Please fill the current member before adding a new one."); 
-            nameInput.focus(); 
-            return; 
+        console.log(memberIdx)
+        let firstRow = $('#member-container .member-row :first')
+        console.log(firstRow);
+        console.log(firstRow.length)
+        if (memberIdx == 0) {
+            // console.log(firstRow.length)
+            firstRow.removeClass('display-member');
+            memberIdx++;       
+            $('#id_members-TOTAL_FORMS').val(memberIdx);
+            return;
         }
+        
+        let lastRow = $('#member-container .member-row:last');
+        console.log(lastRow)
+        // let nameInput = lastRow.find('input[type="text"][name$="member_name"]');
+        // if (nameInput.val().trim() === "") { 
+        //     alert("Please fill the current member before adding a new one."); 
+        //     nameInput.focus(); 
+        //     return; 
+        // }
         let newRow = lastRow.clone();
         newRow.find('input,label,div').each(function () {
             let name = $(this).attr('name');

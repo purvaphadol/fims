@@ -85,7 +85,7 @@
       {{ member_formset.management_form }}
       <div id="member-container">
         {% for form in member_formset %}
-        <div class="member-row">
+        <div class="member-row display-member">
           <div class="memnameDiv">
             {{ form.member_name.label_tag }} {{ form.member_name }}
             <span class="errorMsg"></span>
