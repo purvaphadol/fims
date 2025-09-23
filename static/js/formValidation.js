@@ -113,13 +113,13 @@ function validateHead() {
   let name = $('input[type="text"][name="name"]')[0];
   const nameVal = name.value.trim();
   if (nameVal === "") {
-    setErrorMsg(name, "Name is Required");
+    setErrorMsg(name, "Name is Required.");
     isValid = false;
   } else if (nameVal.length < 3) {
-    setErrorMsg(name, "Name should have minimum 3 charaters");
+    setErrorMsg(name, "Name should have minimum 3 charaters.");
     isValid = false;
   } else if (/\d/.test(nameVal)) {
-    setErrorMsg(name, "Name should not contain digits");
+    setErrorMsg(name, "Name should not contain digits.");
     isValid = false;
   }
 
@@ -127,13 +127,13 @@ function validateHead() {
   let surname = $('input[type="text"][name="surname"]')[0];
   const surnameVal = surname.value.trim();
   if (surnameVal === "") {
-    setErrorMsg(surname, "Surname is Required");
+    setErrorMsg(surname, "Surname is Required.");
     isValid = false;
   } else if (surnameVal.length < 3) {
-    setErrorMsg(surname, "Surname should have minimum 3 charaters");
+    setErrorMsg(surname, "Surname should have minimum 3 charaters.");
     isValid = false;
   } else if (/\d/.test(surnameVal)) {
-    setErrorMsg(surname, "Surname should not contain digits");
+    setErrorMsg(surname, "Surname should not contain digits.");
     isValid = false;
   }
 
@@ -145,7 +145,7 @@ function validateHead() {
   const age = today.getFullYear() - bDate.getFullYear();
   const month = today.getMonth() - bDate.getMonth();
   if (dobVal === "") {
-    setErrorMsg(dob, "Date of Birth is Required");
+    setErrorMsg(dob, "Birth Date is Required.");
     isValid = false;
   } else if (age < 21 || (age === 10 && month < 0)) {
     setErrorMsg(dob, "Age must be at least 21 years old.");
@@ -156,7 +156,7 @@ function validateHead() {
   let mobno = $('input[type="text"][name="mobno"]')[0];
   const mobnoVal = mobno.value.trim();
   if (mobnoVal === "") {
-    setErrorMsg(mobno, "Mobile No. is Required");
+    setErrorMsg(mobno, "Mobile No. is Required.");
     isValid = false;
   } else if (!/^\d{10}$/.test(mobnoVal)) {
     setErrorMsg(mobno, "Mobile No. should have 10 Digits.");
@@ -167,7 +167,7 @@ function validateHead() {
   let address = $('[name="address"]')[0];
   const addressVal = address.value.trim();
   if (addressVal === "") {
-    setErrorMsg(address, "Address is Required");
+    setErrorMsg(address, "Address is Required.");
     isValid = false;
   }
 
@@ -175,27 +175,27 @@ function validateHead() {
   let state = $('[name="state"]')[0];
   const stateVal = state.value.trim();
   if (!stateVal) {
-    setErrorMsg(state, "State is Required");
+    setErrorMsg(state, "State is Required.");
   }
 
   // City
   let city = $('[name="city"]')[0];
   const cityVal = city.value.trim();
   if (!cityVal) {
-    setErrorMsg(city, "City is Required");
+    setErrorMsg(city, "City is Required.");
   }
 
   // Pincode
   let pincode = $('input[type="text"][name="pincode"]')[0];
   const pincodeVal = pincode.value.trim();
   if (pincodeVal === "") {
-    setErrorMsg(pincode, "Pincode is Required");
+    setErrorMsg(pincode, "Pincode is Required.");
   }
 
   // Marital Status
   let marital = document.getElementsByName("marital_status");
   if (!(marital[0].checked || marital[1].checked)) {
-    setErrorMsg(marital[0], "Please Select Marital Status");
+    setErrorMsg(marital[0], "Please Select Marital Status.");
     isValid = false;
   }
 
@@ -213,16 +213,16 @@ function validateHead() {
   const photoPathVal = photo.value;
   var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
   if (photoPathVal === "") {
-    setErrorMsg(photo, "Photo is Required");
+    setErrorMsg(photo, "Photo is Required.");
     isValid = false;
   } else if (!allowedExtensions.exec(photoPathVal)) {
-    setErrorMsg(photo, "Invalid file type. Only PNG, JPG, JPEG are allowed");
+    setErrorMsg(photo, "Invalid file type. Only PNG, JPG, JPEG are allowed.");
     isValid = false;
   } else {
     var photoSize = photo.files[0].size / 1000 / 1000;
     // console.log(photoSize);
     if (photoSize > 2) {
-      setErrorMsg(photo, "Photo Size should be less than 2MB");
+      setErrorMsg(photo, "Photo Size should be less than 2MB.");
       isValid = false;
     }
   }
@@ -250,6 +250,9 @@ function validateMember() {
     if (!m_name.value.trim()) {
       setErrorMsg(m_name, "Name is required.");
       isValid = false;
+    } else if (/\d/.test(m_name.value.trim())) {
+      setErrorMsg(m_name, "Name should not contain digits.");
+      isValid = false;
     }
 
     // DOB
@@ -262,7 +265,7 @@ function validateMember() {
     // Marital status
     let m_marital = row.find('input[type="radio"][name$="member_marital"]');
     if (!(m_marital[0].checked || m_marital[1].checked)) {
-      setErrorMsg(m_marital[0], "Please Select Marital Status");
+      setErrorMsg(m_marital[0], "Please Select Marital Status.");
       isValid = false;
     }
 
@@ -275,18 +278,28 @@ function validateMember() {
       }
     }
 
+    // Relation
+    let relation = row.find('input[type="text"][name$="relation"]')[0];
+    if (!relation.value.trim()) {
+      setErrorMsg(relation, "Relation is required.");
+      isValid = false;
+    } else if (/\d/.test(relation.value.trim())) {
+      setErrorMsg(relation, "Relation should not contain digits.");
+      isValid = false;
+    }
+
     // Photo
     let m_photo = row.find('input[type="file"][name$="member_photo"]')[0];
     let photoVal = m_photo.value;
     var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
     if (photoVal) {
       if (!allowedExtensions.exec(photoVal)) {
-        setErrorMsg(m_photo, "Invalid file type. Only PNG, JPG, JPEG are allowed");
+        setErrorMsg(m_photo, "Invalid file type. Only PNG, JPG, JPEG are allowed.");
         isValid = false;
       } else {
         var photoSize = m_photo.files[0].size / 1000 / 1000;
         if (photoSize > 2) {
-          setErrorMsg(m_photo, "Photo Size should be less than 2MB");
+          setErrorMsg(m_photo, "Photo Size should be less than 2MB.");
           isValid = false;
         }
       }

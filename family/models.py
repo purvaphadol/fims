@@ -91,6 +91,7 @@ class FamilyMember(models.Model):
     member_wedDate = models.DateField(null=True, blank=True)
     education = models.CharField(max_length=10, null=True, blank=True)
     member_photo = models.ImageField(upload_to="pictures", null=True, blank=True)
+    relation = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices = statusChoice.choices, default=statusChoice.ACTIVE.value)

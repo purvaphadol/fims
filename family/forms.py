@@ -152,7 +152,7 @@ HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=1,
 class FamilyMemberForm(ModelForm):
     class Meta:
         model = FamilyMember
-        fields = ['member_name', 'member_dob', 'member_marital', 'member_wedDate', 'education', 'member_photo']
+        fields = ['member_name', 'member_dob', 'member_marital', 'member_wedDate', 'education', 'relation', 'member_photo']
         widgets = {
             "member_dob": forms.DateInput(attrs={"type": "date"}),
             "member_marital": forms.RadioSelect(),
@@ -164,8 +164,8 @@ class FamilyMemberForm(ModelForm):
             "member_marital": "Marital Status",
             "member_wedDate": "Wedding Date",
             "member_photo": "Photo",
+            "relation": "Relation with Head",
         }
-
 
 class MemberInlineFormSet(BaseInlineFormSet):
     def clean(self):
@@ -191,6 +191,12 @@ class MemberInlineFormSet(BaseInlineFormSet):
             member_wedDate = form.cleaned_data.get('member_wedDate')
             if member_marital == 'Married' and not member_wedDate:
                 form.add_error('member_wedDate', 'Wedding date is required if married.')
+            # relation
+            relation = form.cleaned_data.get('relation')
+            if not relation:
+                form.add_error('relation', 'Relation is Required.')
+            elif re.search(r'\d', relation):
+                form.add_error('relation', 'Relation cannot contain numbers.')
             # photo
             member_photo = form.cleaned_data.get('member_photo')
             if member_photo:

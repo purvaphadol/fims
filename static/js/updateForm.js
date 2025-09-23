@@ -278,6 +278,16 @@ function validateMember() {
       }
     }
 
+    // Relation
+    let relation = row.find('input[type="text"][name$="relation"]')[0];
+    if (!relation.value.trim()) {
+      setErrorMsg(relation, "Relation is required.");
+      isValid = false;
+    } else if (/\d/.test(relation.value.trim())) {
+      setErrorMsg(relation, "Relation should not contain digits.");
+      isValid = false;
+    }
+
     // Photo
     let m_photo = row.find('input[type="file"][name$="member_photo"]')[0];
     let photoVal = m_photo.value;

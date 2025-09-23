@@ -220,7 +220,7 @@ def head_excel(request):
 
     worksheet.title = 'All Family Head Report'
     
-    columns = ['Sr. No.', 'Name', 'Surname', 'Birth Date', 'Mobile No', 'Address', 'State', 'City', 'Pincode', 'Marital Status', 'Wedding Date', 'Photo', 'Hobbies']
+    columns = ['Sr. No.', 'Member ID', 'Name', 'Surname', 'Birth Date', 'Mobile No', 'Address', 'State', 'City', 'Pincode', 'Marital Status', 'Wedding Date', 'Education', 'Photo', 'Hobbies', 'Head ID',]
     worksheet.append(columns)
 
     count = 1
@@ -231,7 +231,12 @@ def head_excel(request):
             hobby_list.append(hobby.hobby)
         separator = ", "
         hobby_string = separator.join(hobby_list)
-        worksheet.append([count, head.name, head.surname, str(head.dob), head.mobno, head.address, head.state.state_name, head.city.city_name, head.pincode, head.marital_status, str(head.wedding_date), str(head.photo), hobby_string])
+        worksheet.append([count, "", head.name, head.surname, str(head.dob), head.mobno, head.address, head.state.state_name, head.city.city_name, head.pincode, head.marital_status, str(head.wedding_date), "", str(head.photo), hobby_string, head.id])
+        members = FamilyMember.objects.filter(family_head=head.id).filter(status=statusChoice.ACTIVE)
+        idx = 1
+        for member in members:
+            worksheet.append(["", idx, member.member_name, "", str(member.member_dob), "-", "", "", "", "", member.member_marital, str(member.member_wedDate), member.education, str(member.member_photo), "", member.family_head.id])
+            idx += 1
         count += 1
 
     workbook.save(response)
