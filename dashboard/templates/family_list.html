@@ -59,7 +59,7 @@
         $("#search-form").on('submit', function (e) {
             e.preventDefault();
             const search = $("#search").val();
-            const url = `?search=${search}&page=1`;
+            const url = `?search=${search}`;
             loadPage(url);
         });
     });

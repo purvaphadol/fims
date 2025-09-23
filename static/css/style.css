@@ -183,13 +183,13 @@ body {
   font-weight: 500;
 }
 .table-section {
-  margin: 2rem auto;
+  margin: 1rem auto;
   overflow-x: auto;
 }
 table {
   width: 100%;
   border-collapse: collapse;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   overflow: hidden;
   padding: 0.2rem;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
@@ -201,7 +201,7 @@ thead {
   text-align: center;
 }
 thead th {
-  padding: 1.5rem;
+  padding: 1rem 0.3rem;
   font-size: 1rem;
   text-transform: uppercase;
 }
@@ -213,7 +213,7 @@ tbody tr:hover {
 }
 tbody td {
   text-align: center;
-  padding: 1rem 1rem;
+  padding: 0.7rem 0.3rem;
   font-size: 1rem;
   font-weight: 500;
   color: #2f3640;

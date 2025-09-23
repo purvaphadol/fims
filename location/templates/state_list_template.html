@@ -6,7 +6,8 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Status</th>
-                <th colspan="2">Action</th>
+                <th>Action</th>
+                <th>Created At</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,7 @@
                     <a href="{% url 'update_state' state.id %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a>
                     <a href="{% url 'delete_state' state.id %}" onclick="return confirm('Are you sure you want to Delete {{state}} ? Cities within {{state}} will also get deleted.')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
                 </td>
+                <td>{{ state.created_at }}</td>
             </tr>
             {% endfor %}
         </tbody>

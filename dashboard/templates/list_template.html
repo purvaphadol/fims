@@ -12,6 +12,8 @@
                 <th>City</th>
                 <th>Members</th>
                 <th>Actions</th>
+                <th>Created At</th>
+                <!-- <th>Updated At</th> -->
             </tr>
         </thead>
         <tbody>
@@ -29,6 +31,8 @@
                     <a href="{% url 'update_family' head.id %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a></a>
                     <a href="{% url 'delete_family' head.id %}" onclick="return confirm('Are you sure you want to Delete {{head.surname}} Family ? Members within family will also get deleted.')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
                 </td>
+                <td>{{ head.created_at }}</td>
+                <!-- <td>{{ head.updated_at }}</td> -->
             </tr>
             {% endfor %}
         </tbody>
