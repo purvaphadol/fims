@@ -8,9 +8,10 @@ import io, os
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
 from openpyxl import Workbook
 from openpyxl.styles import *
 import decimal
@@ -88,29 +89,19 @@ def family_pdf(request, pk):
     elements.append(Spacer(1, 4))
     elements.append(Paragraph(f"Marital Status: {head.marital_status}", styles['Normal']))
     elements.append(Spacer(1, 4))
-
     elements.append(Paragraph(f"Wedding Date: {head.wedding_date}", styles['Normal']))
     elements.append(Spacer(1, 4))
 
     # Head Photo
     if head.photo and hasattr(head.photo, 'path') and os.path.exists(head.photo.path):
-        # print(head.photo.path)
         try:
-            img = Image(head.photo.path, width=120, height=150)
+            img = Image(head.photo.path, width=1.5*inch, height=2*inch)
             img.hAlign = 'CENTER'
+            elements.append(Paragraph(f"Photo: ", styles['Normal']))
             elements.append(img)
             elements.append(Spacer(1, 12))
-        except Exception:
-            elements.append(Paragraph(f"Photo: {head.photo}", styles['Normal']))
-
-    # img_path = f"home/dev82/Documents/Project/fims/static/pictures/{head.photo}"
-    # try:
-    #     img = Image(img_path, width=4*inch, height=3*inch) # Adjust width and height as needed
-    #     elements.append(Paragraph(f"Photo:", styles['Normal']))
-    #     elements.append(img)
-    # except Exception as e:
-    #     elements.append(Paragraph(f"Photo: {head.photo}", styles['Normal']))
-    elements.append(Spacer(1, 12))
+        except Exception as e:
+            elements.append(Paragraph(f"Photo: {head.photo.path}", styles['Normal']))
 
     # Hobbies
     elements.append(Paragraph("Hobbies", styles['Heading3']))
@@ -138,7 +129,19 @@ def family_pdf(request, pk):
         elements.append(Spacer(1, 4))
         elements.append(Paragraph(f"Education: {m.education}", styles['Normal']))
         elements.append(Spacer(1, 4))
-        elements.append(Paragraph(f"Photo: {m.member_photo}", styles['Normal']))
+        elements.append(Paragraph(f"Relation: {m.relation}", styles['Normal']))
+        elements.append(Spacer(1, 4))
+
+        # Member Photo
+        if m.member_photo and hasattr(m.member_photo, 'path') and os.path.exists(m.member_photo.path):
+            try:
+                img = Image(m.member_photo.path, width=1.5*inch, height=2*inch)
+                img.hAlign = 'CENTER'
+                elements.append(Paragraph(f"Photo: ", styles['Normal']))
+                elements.append(img)
+                elements.append(Spacer(1, 12))
+            except Exception as e:
+                elements.append(Paragraph(f"Photo: {m.member_photo}", styles['Normal']))
   
         elements.append(Spacer(1, 12))
         count += 1
