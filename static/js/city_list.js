@@ -33,6 +33,11 @@ $(document).ready(function () {
         const url = `?search=${search}`;
         const newURL = exurl + url;
         $("#excelURL").attr('href', newURL);
+
+        if (search === "") {
+            const url = $(this).attr('href');
+            loadPage(url);
+        }
     });
 });
 

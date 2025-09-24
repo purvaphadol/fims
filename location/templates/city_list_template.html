@@ -42,9 +42,7 @@
         <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.previous_page_number}}{% else %}?page={{page_obj.previous_page_number}}{% endif %}" class="page-link">Previous</a>
     {% endif %}
 
-    {% for n in totalPagelist %}
-        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{n}}{% else %}?page={{n}}{% endif %}" class="page-link {% if page_obj.number == n %}active{% endif %}">{{n}}</a>
-    {% endfor %}
+    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.number}} {% else %} ?page={{page_obj.number}} {% endif %}" class="page-link {% if page_obj.number == page_obj.number %}active{% endif %}">{{page_obj.number}}</a>
 
     {% if page_obj.has_next %}
         <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.next_page_number}}{% else %}?page={{page_obj.next_page_number}}{% endif %}" class="page-link">Next</a>
