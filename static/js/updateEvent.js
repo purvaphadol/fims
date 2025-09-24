@@ -58,27 +58,29 @@ $(document).ready(function () {
 
     $('#addMember').click(function() {
         let lastRow = $('#member-container .member-row:last');
-        let nameInput = lastRow.find('input[type="text"][name$="member_name"]');
-        if (nameInput.val().trim() === "") { 
-            alert("Please fill the current member before adding a new one."); 
-            nameInput.focus(); 
-            return; 
+        if (lastRow.length) {
+            let nameInput = lastRow.find('input[type="text"][name$="member_name"]');
+            if (nameInput.val().trim() === "") {
+                alert("Please fill the current member before adding a new one.");
+                nameInput.focus();
+                return;
+            }
         }
-        let newRow = lastRow.clone();
-        newRow.find('input,label').each(function () {
+        let newRow = $('#member-template .member-row').clone();
+        newRow.find('input,label,div').each(function () {
             let name = $(this).attr('name');
             if (name) {
-                name = name.replace(/-\d+-/, '-' + memberIdx + '-');
+                name = name.replace(/__prefix__/, memberIdx);
                 $(this).attr('name', name);
             }
             let id = $(this).attr('id');
             if (id) {
-                id = id.replace(/-\d+-/, '-' + memberIdx + '-');
+                id = id.replace(/__prefix__/, memberIdx);
                 $(this).attr('id', id);
             }
             let labelfor = $(this).attr('for');
             if (labelfor) {
-                labelfor = labelfor.replace(/-\d+-/, '-' + memberIdx + '-');
+                labelfor = labelfor.replace(/__prefix__/, memberIdx);
                 $(this).attr('for', labelfor);
             }
             if ($(this).is(':radio') || $(this).is(':checkbox')) {
@@ -91,23 +93,51 @@ $(document).ready(function () {
         <label for="id_members-${memberIdx}-member_photo">Photo:</label>
         <input type="file" name="members-${memberIdx}-member_photo" accept="image/*" id="id_members-${memberIdx}-member_photo">
         <span class="errorMsg"></span>`);
+        $('#member-container').append(newRow);
+        newRow.find('.member-wed').hide();
+        memberIdx++;
+        $('#id_members-TOTAL_FORMS').val(memberIdx);
+        
         // newRow.find('input[type="checkbox"][name$="member_photo-clear"]').remove();
         // newRow.find('a').remove();
         // newRow.find('label[for$="member_photo-clear_id"]').remove();
         // newRow.find('input[type="file"][name$="member_photo"]').val('')
-        newRow.find('.removeMember').show();
-        $('#member-container').append(newRow);
-        newRow.find('.member-wed').hide();
-        memberIdx++;       
-        $('#id_members-TOTAL_FORMS').val(memberIdx);
+
+        // newRow.find('.removeMember').show();
+        // $('#member-container').append(newRow);
+        // newRow.find('.member-wed').hide();
+        // memberIdx++;       
+        // $('#id_members-TOTAL_FORMS').val(memberIdx);
     });
 
-    $('#member-container').on('click', '.removeMember', function() {
+    function reindexMembers() {
+        let rows = $('#member-container .member-row');
+        rows.each(function (i, row) {
+            $(row).find('input, select, textarea, label').each(function () {
+                let name = $(this).attr('name');
+                if (name) {
+                    $(this).attr('name', name.replace(/members-\d+-/, 'members-' + i + '-'));
+                }
+                let id = $(this).attr('id');
+                if (id) {
+                    $(this).attr('id', id.replace(/members-\d+-/, 'members-' + i + '-'));
+                }
+                let labelfor = $(this).attr('for');
+                if (labelfor) {
+                    $(this).attr('for', labelfor.replace(/members-\d+-/, 'members-' + i + '-'));
+                }
+            });
+        });
+        $('#id_members-TOTAL_FORMS').val(rows.length);
+    }
+
+    // remove member
+    $('#member-container').on('click', '.removeMember', function () {
         $(this).closest('.member-row').remove();
+        reindexMembers(); 
         memberIdx--; 
         $('#id_members-TOTAL_FORMS').val(memberIdx);
     });
-    $('.removeMember').hide();
     
 });
 
