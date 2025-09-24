@@ -83,42 +83,49 @@
     
       <h2>Members</h2>
       {{ member_formset.management_form }}
-      <div id="member-container">
-        {% for form in member_formset %}
-        <div class="member-row display-member">
+      <div id="member-container"></div>
+      <button type="button" id="addMember">+ Add Member</button>
+
+      <div id="member-template" style="display: none;">
+        <div class="member-row">
           <div class="memnameDiv">
-            {{ form.member_name.label_tag }} {{ form.member_name }}
+            {{ member_formset.empty_form.member_name.label_tag }} 
+            {{ member_formset.empty_form.member_name }}
             <span class="errorMsg"></span>
           </div>
           <div class="mem_dodDiv">
-            {{ form.member_dob.label_tag }} {{ form.member_dob }}
+            {{ member_formset.empty_form.member_dob.label_tag }} 
+            {{ member_formset.empty_form.member_dob }}
             <span class="errorMsg"></span>
           </div>
           <div class="mem_msDiv">
-            {{ form.member_marital.label_tag }} {{ form.member_marital }}
+            {{ member_formset.empty_form.member_marital.label_tag }} 
+            {{ member_formset.empty_form.member_marital }}
             <span class="errorMsg"></span>
           </div>
           <div class="member-wed" style="display:none">
-            {{ form.member_wedDate.label_tag }} {{ form.member_wedDate }}
+            {{ member_formset.empty_form.member_wedDate.label_tag }} 
+            {{ member_formset.empty_form.member_wedDate }}
             <span class="errorMsg"></span>
           </div>
           <div class="educationDiv">
-            {{ form.education.label_tag }} {{ form.education }}
+            {{ member_formset.empty_form.education.label_tag }} 
+            {{ member_formset.empty_form.education }}
             <span class="errorMsg"></span>
           </div>
           <div class="relationDiv">
-            {{ form.relation.label_tag }} {{ form.relation }}
+            {{ member_formset.empty_form.relation.label_tag }} 
+            {{ member_formset.empty_form.relation }}
             <span class="errorMsg"></span>
           </div>
           <div class="mem_photDiv">
-            {{ form.member_photo.label_tag }} {{ form.member_photo }}
+            {{ member_formset.empty_form.member_photo.label_tag }} 
+            {{ member_formset.empty_form.member_photo }}
             <span class="errorMsg"></span>
           </div>
           <button type="button" class="removeMember">Remove</button>
         </div>
-        {% endfor %}
       </div>
-      <button type="button" id="addMember">+ Add Member</button>
 
       <button type="submit" class="submitBtn" id="submitBtn">Submit</button>
     </form>
