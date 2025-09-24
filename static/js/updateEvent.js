@@ -102,12 +102,6 @@ $(document).ready(function () {
         // newRow.find('a').remove();
         // newRow.find('label[for$="member_photo-clear_id"]').remove();
         // newRow.find('input[type="file"][name$="member_photo"]').val('')
-
-        // newRow.find('.removeMember').show();
-        // $('#member-container').append(newRow);
-        // newRow.find('.member-wed').hide();
-        // memberIdx++;       
-        // $('#id_members-TOTAL_FORMS').val(memberIdx);
     });
 
     function reindexMembers() {
