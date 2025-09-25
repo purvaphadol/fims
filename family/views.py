@@ -15,6 +15,7 @@ from reportlab.lib.utils import ImageReader
 from openpyxl import Workbook
 from openpyxl.styles import *
 import decimal
+from openpyxl.drawing.image import Image as ExcelImage
 
 def home(request):
     return render(request, 'index.html')
@@ -186,6 +187,15 @@ def family_excel(request, pk):
     hobby_string = separator.join(hobby_list)
 
     worksheet.append([head.name, head.surname, str(head.dob), head.mobno, head.address, head.state.state_name, head.city.city_name, head.pincode, head.marital_status, str(head.wedding_date), str(head.photo), hobby_string])
+    if head.photo and hasattr(head.photo, 'path') and os.path.exists(head.photo.path):
+        try:
+            img = ExcelImage(head.photo.path)
+            img.width = 50
+            img.height = 50
+            worksheet.add_image(img, 'K5') 
+            worksheet.append(img)
+        except Exception as e:
+            pass
 
     worksheet.merge_cells('A6:L6')
     worksheet.merge_cells('A7:G7')
@@ -199,6 +209,15 @@ def family_excel(request, pk):
     count = 1
     for member in members:
         worksheet.append([count, member.member_name, str(member.member_dob), member.member_marital, str(member.member_wedDate), member.education, str(member.member_photo)])
+        if member.member_photo and hasattr(member.member_photo, 'path') and os.path.exists(member.member_photo.path):
+            try:
+                img = ExcelImage(member.member_photo.path)
+                img.width = 50
+                img.height = 50
+                worksheet.add_image(img, f'G{worksheet.max_row}') 
+                worksheet.append(img)
+            except Exception as e:
+                pass
         count += 1
 
     workbook.save(response)
@@ -220,8 +239,8 @@ def head_excel(request):
 
     worksheet = workbook.active
 
-    worksheet.merge_cells('A1:P1')
-    worksheet.merge_cells('A2:P2')
+    worksheet.merge_cells('A1:Q1')
+    worksheet.merge_cells('A2:Q2')
     first_cell = worksheet['A1']
     first_cell.value = "All Family Head Report"
     first_cell.fill = PatternFill("solid", fgColor="246ba1")
@@ -242,10 +261,29 @@ def head_excel(request):
         separator = ", "
         hobby_string = separator.join(hobby_list)
         worksheet.append([count, "", head.name, head.surname, str(head.dob), head.mobno, head.address, head.state.state_name, head.city.city_name, head.pincode, head.marital_status, str(head.wedding_date), "", "Head", str(head.photo), hobby_string, head.id])
+        if head.photo and hasattr(head.photo, 'path') and os.path.exists(head.photo.path):
+            try:
+                img = ExcelImage(head.photo.path)
+                img.width = 30
+                img.height = 30
+                worksheet.add_image(img, f'O{worksheet.max_row}') 
+                worksheet.append(img)
+            except Exception as e:
+                pass
+
         members = FamilyMember.objects.filter(family_head=head.id).filter(status=statusChoice.ACTIVE)
         idx = 1
         for member in members:
             worksheet.append(["", idx, member.member_name, "", str(member.member_dob), "-", "", "", "", "", member.member_marital, str(member.member_wedDate), member.education, member.relation, str(member.member_photo), "", member.family_head.id])
+            if member.member_photo and hasattr(member.member_photo, 'path') and os.path.exists(member.member_photo.path):
+                try:
+                    img = ExcelImage(member.member_photo.path)
+                    img.width = 30
+                    img.height = 30
+                    worksheet.add_image(img, f'O{worksheet.max_row}') 
+                    worksheet.append(img)
+                except Exception as e:
+                    pass
             idx += 1
         count += 1
 
