@@ -82,11 +82,11 @@ def view_family(request, pk):
 @login_required(login_url='login_page')
 def update_family(request, pk):
     head = FamilyHead.objects.get(id=pk)
-    HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True)
-    MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True)
+    HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True, formset=HobbyInlineFormSet)
+    MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True, formset=MemberInlineFormSet)
 
     head_form = FamilyHeadForm(instance=head)
-    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies",  queryset=Hobby.objects.exclude(status=statusChoice.DELETE))
+    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies", queryset=Hobby.objects.exclude(status=statusChoice.DELETE))
     member_formset = MemberFormset(instance=head, prefix="members", queryset=FamilyMember.objects.exclude(status=statusChoice.DELETE))
     if request.method == 'POST':
         head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)

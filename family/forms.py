@@ -171,6 +171,10 @@ class MemberInlineFormSet(BaseInlineFormSet):
     def clean(self):
         super().clean()
         for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                continue
+            if not form.cleaned_data:
+                continue
             # member_name
             member_name = form.cleaned_data.get('member_name')
             if not member_name:

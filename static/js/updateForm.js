@@ -1,15 +1,13 @@
 const form = document.getElementById("updateForm");
-console.log(form)
-console.log("hiii")
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const isValid = validateForm();
-  console.log(isValid)
+  console.log(isValid);
   if (!isValid) return;
   const formData = new FormData(form);
   // console.log(formData)
   const pk = document.getElementById("pk").value;
-  console.log(pk.value)
   try {
     const response = await fetch(`/update_family/${pk}`, {
       method: "POST",
@@ -208,6 +206,7 @@ function validateHead() {
     const wed_dateVal = wed_date.value.trim();
     if (wed_dateVal === "") {
       setErrorMsg(wed_date, "Wedding date is required if married.")
+      isValid = false;
     }
   }
 
@@ -272,9 +271,9 @@ function validateMember() {
     // Wedding date 
     if (m_marital[0].checked) {
       let m_wed_date = row.find('input[type="date"][name$="member_wedDate"]')[0];
-      let m_wed_dateVal = m_wed_date.value.trim();
-      if (m_wed_dateVal === "") {
-        setErrorMsg(m_wed_date, "Wedding date is required if married.")
+      if (!m_wed_date.value.trim()) {
+        setErrorMsg(m_wed_date, "Wedding date is required if married.");
+        isValid = false;
       }
     }
 
