@@ -16,7 +16,6 @@ $(document).ready(function () {
         // memberRow.find('.member-wed').hide();
         if ($(this).is(':checked') && $(this).val().toLowerCase() === "married") {
             memberRow.find('.member-wed').show();
-            // memberRow.find('input[name$="member_wedDate"]').val('');
         } else {
             memberRow.find('.member-wed').hide();
             memberRow.find('input[name$="member_wedDate"]').val('');

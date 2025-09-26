@@ -10,7 +10,28 @@ class MaritalStatus(models.TextChoices):
     MARRIED = "Married"
     UNMARRIED = "Unmarried"
 
-class State(models.Model):
+class BaseModel(models.Model):
+    status = models.IntegerField(
+        choices = statusChoice.choices,
+        default = statusChoice.ACTIVE.value,
+    )
+
+    class Meta:
+        abstract = True
+
+    def soft_delete(self):
+        self.status = statusChoice.DELETE
+        self.save(update_fields=['status'])
+
+    def delete(self, *args, **kwargs):
+        self.soft_delete()
+
+    def set_status(self, new_status):
+        self.status = new_status
+        self.save(update_fields=['status'])
+
+    
+class State(BaseModel):
     state_name = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -22,11 +43,34 @@ class State(models.Model):
 
     def __str__(self):
         return self.state_name
+
+    def soft_delete(self):
+        super().soft_delete()
+        self.city_set.update(status=statusChoice.DELETE)
+        heads = self.familyhead_set.all()
+        heads.update(status=statusChoice.INACTIVE)
+        FamilyMember.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+        Hobby.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
     
+    def set_status(self, new_status):
+        super().set_status(new_status)
+        if new_status == statusChoice.ACTIVE:
+            self.city_set.update(status=statusChoice.ACTIVE)
+            heads = self.familyhead_set.all()
+            heads.update(status=statusChoice.ACTIVE)
+            FamilyMember.objects.filter(family_head__in=heads).update(status=statusChoice.ACTIVE)
+            Hobby.objects.filter(family_head__in=heads).update(status=statusChoice.ACTIVE)
+        elif new_status == statusChoice.INACTIVE:
+            self.city_set.update(status=statusChoice.INACTIVE)
+            heads = self.familyhead_set.all()
+            heads.update(status=statusChoice.INACTIVE)
+            FamilyMember.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+            Hobby.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+
 auditlog.register(State)
 
 
-class City(models.Model):
+class City(BaseModel):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     city_name = models.CharField(max_length=40)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -39,10 +83,30 @@ class City(models.Model):
     def __str__(self):
         return self.city_name
 
+    def soft_delete(self):
+        super().soft_delete()
+        heads = self.familyhead_set.all()
+        heads.update(status=statusChoice.INACTIVE)
+        FamilyMember.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+        Hobby.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+
+    def set_status(self, new_status):
+        super().set_status(new_status)
+        if new_status == statusChoice.ACTIVE:
+            heads = self.familyhead_set.all()
+            heads.update(status=statusChoice.ACTIVE)
+            FamilyMember.objects.filter(family_head__in=heads).update(status=statusChoice.ACTIVE)
+            Hobby.objects.filter(family_head__in=heads).update(status=statusChoice.ACTIVE)
+        elif new_status == statusChoice.INACTIVE:
+            heads = self.familyhead_set.all()
+            heads.update(status=statusChoice.INACTIVE)
+            FamilyMember.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+            Hobby.objects.filter(family_head__in=heads).update(status=statusChoice.INACTIVE)
+
 auditlog.register(City)
 
 
-class FamilyHead(models.Model):
+class FamilyHead(BaseModel):
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     dob = models.DateField()
@@ -63,6 +127,20 @@ class FamilyHead(models.Model):
 
     def __str__(self):
         return self.name
+
+    def soft_delete(self):
+        super().soft_delete()
+        self.members.update(status=statusChoice.DELETE)
+        self.hobbies.update(status=statusChoice.DELETE)
+
+    # def set_status(self, new_status):
+    #     super().set_status(new_status)
+    #     if new_status == statusChoice.ACTIVE:
+    #         self.members.update(status=statusChoice.ACTIVE)
+    #         self.hobbies.update(status=statusChoice.ACTIVE)
+    #     elif new_status == statusChoice.INACTIVE:
+    #         self.members.update(status=statusChoice.INACTIVE)
+    #         self.hobbies.update(status=statusChoice.INACTIVE)
 
 auditlog.register(FamilyHead)
 

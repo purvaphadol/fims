@@ -117,12 +117,9 @@ def update_family(request, pk):
 @login_required(login_url='login_page')
 def delete_family(request, pk):
     head = FamilyHead.objects.get(id=pk)
-    head.status = statusChoice.DELETE
-    head.save()
-    FamilyMember.objects.filter(family_head_id=head).update(status = statusChoice.DELETE)
+    head.soft_delete()
     messages.success(request, 'Family Deleted Successfully!')
     return redirect('family_list')
-
 
 # @login_required(login_url='login_page')
 # def update_head(request, pk):

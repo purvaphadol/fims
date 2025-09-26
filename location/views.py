@@ -49,7 +49,9 @@ def update_state(request, pk):
     if request.method == 'POST':
         state_form = StateForm(request.POST, instance=state)
         if state_form.is_valid():
-            state_form.save()
+            state = state_form.save(commit=False)
+            new_status = state.status
+            state.set_status(new_status)
             messages.success(request, 'State Updated Successfully!')
             return redirect('state_list')
     context = {'state_form': state_form }
@@ -58,9 +60,7 @@ def update_state(request, pk):
 @login_required(login_url='login_page')
 def delete_state(request, pk):
     state = State.objects.get(id=pk)
-    state.status = statusChoice.DELETE
-    state.save()
-    City.objects.filter(state_id=state).update(status = statusChoice.DELETE)
+    state.soft_delete()
     messages.success(request, 'State Deleted Successfully!')
     return redirect('state_list')
 
@@ -105,7 +105,9 @@ def update_city(request, pk):
     if request.method == 'POST':
         city_form = CityForm(request.POST, instance=city)
         if city_form.is_valid():
-            city_form.save()
+            city = city_form.save(commit=False)
+            new_status = city.status
+            city.set_status(new_status)
             messages.success(request, 'City Updated Successfully!')
             return redirect('city_list')
     context = {'city_form': city_form }
@@ -114,8 +116,7 @@ def update_city(request, pk):
 @login_required(login_url='login_page')
 def delete_city(request, pk):
     city = City.objects.get(id=pk)
-    city.status = statusChoice.DELETE
-    city.save()
+    city.soft_delete()
     messages.success(request, 'City Deleted Successfully!')
     return redirect('city_list')
 
