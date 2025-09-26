@@ -70,7 +70,7 @@ form.addEventListener("submit", async (e) => {
 
 function setErrorMsg(input, errorMsg) {
   if (!input) return;
-  let inputField = input.closest("div"); 
+  let inputField = input.closest("div");
   if (input.type === "radio") {
     while (inputField && !inputField.querySelector("span.errorMsg")) {
       inputField = inputField.parentElement;
@@ -234,11 +234,14 @@ function validateHead() {
 function validateHobby() {
   let isValid = true;
   // First hobby
-  let firstHobby = $('#hobby-container .hobby-row:first input[type="text"]')[0];
-  $('#hobby-container .hobby-row:first .errorMsg').text('');
-  if (!firstHobby.value.trim()) {
-    setErrorMsg(firstHobby, 'At least one hobby is required.');
-    isValid = false;
+  let firstRow = $('#hobby-container .hobby-row:first')
+  if (firstRow.length) {
+    let firstHobby = $('#hobby-container .hobby-row:first input[type="text"]')[0];
+    $('#hobby-container .hobby-row:first .errorMsg').text('');
+    if (!firstHobby.value.trim()) {
+      setErrorMsg(firstHobby, 'At least one hobby is required.');
+      isValid = false;
+    }
   }
   return isValid;
 }
