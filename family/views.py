@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .forms import FamilyHeadForm, HobbyFormSet, MemberFormset
 from .models import FamilyHead, FamilyMember, Hobby, City, statusChoice
+from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
 import io, os
 from reportlab.pdfgen import canvas
@@ -55,6 +56,7 @@ def family_form(request):
     }
     return render(request, 'family_form.html', context)
 
+@login_required(login_url='login_page')
 def family_pdf(request, pk):
     head = FamilyHead.objects.get(pk=pk)
     members = FamilyMember.objects.filter(family_head=head).filter(status=statusChoice.ACTIVE)
@@ -150,6 +152,7 @@ def family_pdf(request, pk):
     doc.build(elements)
     return response
 
+@login_required(login_url='login_page')
 def family_excel(request, pk):
     head = FamilyHead.objects.get(id=pk)
     hobbies = Hobby.objects.filter(family_head=pk).filter(status=statusChoice.ACTIVE)
@@ -223,6 +226,7 @@ def family_excel(request, pk):
     workbook.save(response)
     return response
 
+@login_required(login_url='login_page')
 def head_excel(request):
     heads = FamilyHead.objects.all().exclude(status=statusChoice.DELETE)
 

@@ -120,6 +120,7 @@ def delete_city(request, pk):
     messages.success(request, 'City Deleted Successfully!')
     return redirect('city_list')
 
+@login_required(login_url='login_page')
 def city_excel(request):
     cities = City.objects.all().exclude(status=statusChoice.DELETE)
 
@@ -155,6 +156,7 @@ def city_excel(request):
     workbook.save(response)
     return response
 
+@login_required(login_url='login_page')
 def state_excel(request):
     states = State.objects.all().exclude(status=statusChoice.DELETE)
 
