@@ -34,9 +34,10 @@
                 <h5>Marital Status: {{ head.marital_status }}</h5>
                 {% if head.marital_status == "Married" %}
                 <h5>Wedding Date: {{ head.wedding_date }}</h5>
+                {% endif %}
+                <h5>Status: {{ head.status }}</h5>
                 <h5>Created At: {{ head.created_at }}</h5>
                 <h5>Updated At: {{ head.updated_at }}</h5>
-                {% endif %}
             </div>
             <div class="head-photo">
                 <h5>Photo: </h5>
@@ -68,6 +69,7 @@
                 {% endif %}
                 <h5>Education: {{ member.education }}</h5>
                 <h5>Relation: {{ member.relation }}</h5>
+                <h5>Status: {{ member.status }}</h5>
                 <h5>Created At: {{ member.created_at }}</h5>
                 <h5>Updated At: {{ member.updated_at }}</h5>
             </div>

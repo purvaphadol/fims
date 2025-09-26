@@ -26,31 +26,39 @@ $(document).ready(function () {
     // let formIdx = {{ formset.total_form_count|add:"-1" }};
     let formIdx = $('#id_hobbies-TOTAL_FORMS').val(); 
     $('#addHobby').click(function() {
-        let lastInput = $('#hobby-container .hobby-row:last input[type="text"]'); 
-        if (lastInput.val().trim() === "") { 
-            alert("Please fill the current hobby before adding a new one."); 
-            lastInput.focus(); 
-            return; 
+        let lastRow = $('#hobby-container .hobby-row:last');
+        if (lastRow.length) {
+            let nameInput = lastRow.find('input[type="text"]');;
+            if (nameInput.val().trim() === "") {
+                alert("Please fill the current member before adding a new one.");
+                nameInput.focus();
+                return;
+            }
         }
-        $('#hobby-container').append($('#hobby-container .hobby-row:last').clone().find('input').each(function() {
-            let name = $(this).attr('name').replace(/-\d+-/, '-' + formIdx + '-');
-            let id = $(this).attr('id').replace(/-\d+-/, '-' + formIdx + '-');	
-            $(this).attr('name', name);  
-            $(this).attr('id', id);
-            $(this).val('');
-            }).end().find('input[name$=-id]').val('').end().find('.removeHobby').show().end());
-
+        let newRow = $('#hobby-template .hobby-row').clone();
+        newRow.find('input,div').each(function () {
+            let name = $(this).attr('name');
+            if (name) {
+                name = name.replace(/__prefix__/, formIdx);
+                $(this).attr('name', name);
+            }
+            let id = $(this).attr('id');
+            if (id) {
+                id = id.replace(/__prefix__/, formIdx);
+                $(this).attr('id', id);
+            }
+        });
+        $('#hobby-container').append(newRow);
         formIdx++;       
         $('#id_hobbies-TOTAL_FORMS').val(formIdx);
     });
-    
-
+    // Remove Hobby
     $('#hobby-container').on('click', '.removeHobby', function() {
         $(this).closest('.hobby-row').remove();
         formIdx--; 
         $('#id_form-TOTAL_FORMS').val(formIdx);
     });
-    $('.removeHobby').hide();
+    // $('.removeHobby').hide();
 
     // Add Member 
     let memberIdx = $('#id_members-TOTAL_FORMS').val(); 
@@ -96,7 +104,6 @@ $(document).ready(function () {
         newRow.find('.member-wed').hide();
         memberIdx++;
         $('#id_members-TOTAL_FORMS').val(memberIdx);
-        
         // newRow.find('input[type="checkbox"][name$="member_photo-clear"]').remove();
         // newRow.find('a').remove();
         // newRow.find('label[for$="member_photo-clear_id"]').remove();
@@ -123,7 +130,6 @@ $(document).ready(function () {
         });
         $('#id_members-TOTAL_FORMS').val(rows.length);
     }
-
     // remove member
     $('#member-container').on('click', '.removeMember', function () {
         $(this).closest('.member-row').remove();
@@ -131,7 +137,6 @@ $(document).ready(function () {
         memberIdx--; 
         $('#id_members-TOTAL_FORMS').val(memberIdx);
     });
-    
 });
 
 // const memberrow = document.querySelectorAll('.member-row')
