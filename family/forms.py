@@ -130,11 +130,24 @@ class HobbyForm(ModelForm):
 class HobbyInlineFormSet(BaseInlineFormSet):
     def clean(self):
         super().clean()
+        hobbies = []
+        has_valid_hobby = False
+
         for form in self.forms:
-            first_form = self.forms[0]
-            hobby = first_form.cleaned_data.get('hobby')
-            if not hobby:
-                first_form.add_error('hobby', 'Hobby is required.')
+            if self.can_delete and self._should_delete_form(form):
+                continue
+            if not form.cleaned_data:
+                continue
+
+            hobby = form.cleaned_data.get('hobby')
+            if hobby:
+                has_valid_hobby = True
+                if hobby in hobbies:
+                    form.add_error('hobby', 'Duplicate hobbies are not allowed.')
+                hobbies.append(hobby)
+
+        if not has_valid_hobby:
+            raise forms.ValidationError("At least one hobby is required.")
 
     def save(self, commit=True):
         instances = super().save(commit=False)
