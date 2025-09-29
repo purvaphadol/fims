@@ -121,6 +121,9 @@ function validateHead() {
   } else if (/\d/.test(nameVal)) {
     setErrorMsg(name, "Name should not contain digits.");
     isValid = false;
+  } else if (/\s/.test(nameVal)) {
+    setErrorMsg(name, "Only First Name allowed (no spaces).");
+    isValid = false;
   }
 
   // Surname
@@ -134,6 +137,9 @@ function validateHead() {
     isValid = false;
   } else if (/\d/.test(surnameVal)) {
     setErrorMsg(surname, "Surname should not contain digits.");
+    isValid = false;
+  } else if (/\s/.test(surnameVal)) {
+    setErrorMsg(surname, "Only Surname allowed (no spaces).");
     isValid = false;
   }
 
@@ -252,6 +258,9 @@ function validateMember() {
       isValid = false;
     } else if (/\d/.test(m_name.value.trim())) {
       setErrorMsg(m_name, "Name should not contain digits.");
+      isValid = false;
+    } else if (/\s/.test(m_name.value.trim())) {
+      setErrorMsg(m_name, "Only First Name allowed (no spaces).");
       isValid = false;
     }
 

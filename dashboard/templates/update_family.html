@@ -30,7 +30,7 @@
   <h1>Update Family</h1>
   <div class="form-container">
 
-    <form id="updateForm" method="post" enctype="multipart/form-data" action="{% url 'update_family' head.id %}">
+    <form id="updateForm" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <input type="hidden" name="pk" id="pk" value="{{head.id}}">
       <h2>Family Head</h2>
