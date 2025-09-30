@@ -9,11 +9,11 @@
 <div class="family-header">
     <div class="downloadBtn">
         <img src="{% static 'images/download.png' %}" alt="Download">
-        <a href="{% url 'family_pdf' head.id %}"> PDF</a>
+        <a href="{% url 'family_pdf' hashid=head.hashid %}"> PDF</a>
     </div>
     <div class="downloadBtn">
         <img src="{% static 'images/download.png' %}" alt="Download">
-        <a href="{% url 'family_excel' head.id %}"> Excel</a>
+        <a href="{% url 'family_excel' hashid=head.hashid %}"> Excel</a>
     </div>
 </div>
 

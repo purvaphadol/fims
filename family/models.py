@@ -1,5 +1,7 @@
 from django.db import models
 from auditlog.registry import auditlog
+import uuid
+from .utils import encode_id
 
 class statusChoice(models.IntegerChoices):
     ACTIVE = 1
@@ -125,6 +127,10 @@ class FamilyHead(BaseModel):
     class Meta:
         db_table = "family_head" 
 
+    @property
+    def hashid(self):
+        return encode_id(self.pk)
+
     def __str__(self):
         return self.name
 
@@ -155,6 +161,10 @@ class Hobby(models.Model):
     class Meta:
         db_table = "hobby"
 
+    @property
+    def hashid(self):
+        return encode_id(self.pk)
+
     def __str__(self):
         return self.hobby
 
@@ -176,6 +186,10 @@ class FamilyMember(models.Model):
 
     class Meta:
         db_table = "family_member"
+    
+    @property
+    def hashid(self):
+        return encode_id(self.pk)
 
     def __str__(self):
         return self.member_name

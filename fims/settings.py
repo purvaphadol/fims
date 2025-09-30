@@ -159,3 +159,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "purvaphadol.datagrid@gmail.com"
 EMAIL_HOST_PASSWORD = "saes hwdc cazm yojs"
+
+
+HASHIDS_SALT = "a-very-private-and-random-string"
+

@@ -17,13 +17,15 @@ from openpyxl import Workbook
 from openpyxl.styles import *
 import decimal
 from openpyxl.drawing.image import Image as ExcelImage
+from .utils import decode_id
 
 def home(request):
     return render(request, 'index.html')
 
-def get_cities(request, state_id):
+def get_cities(request, hashid):
     # state_id = request.GET.get('state_id')
-    cities = City.objects.filter(state_id=state_id).filter(status=statusChoice.ACTIVE).all()
+    pk = decode_id(hashid)
+    cities = City.objects.filter(state_id=pk).filter(status=statusChoice.ACTIVE).all()
     data = list(cities.values('id', 'city_name'))
     return JsonResponse(data, safe=False)
 
@@ -57,7 +59,8 @@ def family_form(request):
     return render(request, 'family_form.html', context)
 
 @login_required(login_url='login_page')
-def family_pdf(request, pk):
+def family_pdf(request, hashid):
+    pk = decode_id(hashid)
     head = FamilyHead.objects.get(pk=pk)
     members = FamilyMember.objects.filter(family_head=head).filter(status=statusChoice.ACTIVE)
     hobbies = Hobby.objects.filter(family_head=head).filter(status=statusChoice.ACTIVE)
@@ -153,7 +156,8 @@ def family_pdf(request, pk):
     return response
 
 @login_required(login_url='login_page')
-def family_excel(request, pk):
+def family_excel(request, hashid):
+    pk = decode_id(hashid)
     head = FamilyHead.objects.get(id=pk)
     hobbies = Hobby.objects.filter(family_head=pk).filter(status=statusChoice.ACTIVE)
     members = FamilyMember.objects.filter(family_head=pk).filter(status=statusChoice.ACTIVE)

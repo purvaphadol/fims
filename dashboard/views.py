@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from family.forms import FamilyMemberForm
 import json
 from django.template.loader import render_to_string
+from family.utils import decode_id
 
 @login_required(login_url='login_page')
 def dashboard(request):
@@ -67,7 +68,8 @@ def family_list(request):
     return render(request, 'family_list.html', context)
 
 @login_required(login_url='login_page')
-def view_family(request, pk):
+def view_family(request, hashid):
+    pk = decode_id(hashid)
     head = FamilyHead.objects.get(id=pk)
     members = FamilyMember.objects.filter(family_head_id=pk).exclude(status=statusChoice.DELETE).all()
     hobbies = Hobby.objects.filter(family_head_id=pk).exclude(status=statusChoice.DELETE).all()
@@ -80,7 +82,8 @@ def view_family(request, pk):
     return render(request, 'view_family.html', context)
 
 @login_required(login_url='login_page')
-def update_family(request, pk):
+def update_family(request, hashid):
+    pk = decode_id(hashid)
     head = FamilyHead.objects.get(id=pk)
     HobbyFormSet = inlineformset_factory(FamilyHead, Hobby, form=HobbyForm, extra=0, can_delete=True, formset=HobbyInlineFormSet)
     MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True, formset=MemberInlineFormSet)
@@ -115,7 +118,8 @@ def update_family(request, pk):
     return render(request, 'update_family.html', context)
 
 @login_required(login_url='login_page')
-def delete_family(request, pk):
+def delete_family(request, hashid):
+    pk = decode_id(hashid)
     head = FamilyHead.objects.get(id=pk)
     head.soft_delete()
     messages.success(request, 'Family Deleted Successfully!')
