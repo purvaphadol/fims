@@ -43,6 +43,10 @@ class State(BaseModel):
         db_table = "state"
         ordering = ["state_name"]
 
+    @property
+    def hashid(self):
+        return encode_id(self.pk)
+
     def __str__(self):
         return self.state_name
 
@@ -81,6 +85,10 @@ class City(BaseModel):
 
     class Meta:
         db_table = "city"
+    
+    @property
+    def hashid(self):
+        return encode_id(self.pk)
 
     def __str__(self):
         return self.city_name

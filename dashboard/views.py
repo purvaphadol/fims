@@ -89,8 +89,8 @@ def update_family(request, hashid):
     MemberFormset = inlineformset_factory(FamilyHead, FamilyMember, form=FamilyMemberForm, extra=0, can_delete=True, formset=MemberInlineFormSet)
 
     head_form = FamilyHeadForm(instance=head)
-    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies", queryset=Hobby.objects.exclude(status=statusChoice.DELETE))
-    member_formset = MemberFormset(instance=head, prefix="members", queryset=FamilyMember.objects.exclude(status=statusChoice.DELETE))
+    hobby_formset = HobbyFormSet(instance=head, prefix="hobbies", queryset=head.hobbies.exclude(status=statusChoice.DELETE))
+    member_formset = MemberFormset(instance=head, prefix="members", queryset=head.members.exclude(status=statusChoice.DELETE))
     if request.method == 'POST':
         head_form = FamilyHeadForm(request.POST, request.FILES, instance=head)
         hobby_formset = HobbyFormSet(request.POST, instance=head, prefix="hobbies")

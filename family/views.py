@@ -22,9 +22,9 @@ from .utils import decode_id
 def home(request):
     return render(request, 'index.html')
 
-def get_cities(request, hashid):
+def get_cities(request, pk):
     # state_id = request.GET.get('state_id')
-    pk = decode_id(hashid)
+    # pk = decode_id(hashid)
     cities = City.objects.filter(state_id=pk).filter(status=statusChoice.ACTIVE).all()
     data = list(cities.values('id', 'city_name'))
     return JsonResponse(data, safe=False)

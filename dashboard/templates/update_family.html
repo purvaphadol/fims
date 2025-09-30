@@ -32,7 +32,7 @@
 
     <form id="updateForm" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <input type="hidden" name="pk" id="pk" value="{{head.id}}">
+      <input type="hidden" name="pk" id="pk" value="{{head.hashid}}">
       <h2>Family Head</h2>
       <div class="head-container">
         <!-- {{ head_form.as_p }} -->

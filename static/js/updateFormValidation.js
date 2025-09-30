@@ -6,10 +6,8 @@ form.addEventListener("submit", async (e) => {
   console.log(isValid);
   if (!isValid) return;
   const formData = new FormData(form);
-  // console.log(formData)
   const pk = document.getElementById("pk").value;
-  console.log(pk);
-
+  // console.log(pk);
   try {
     const response = await fetch(`/update_family/${pk}`, {
       method: "POST",

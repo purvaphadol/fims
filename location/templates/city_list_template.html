@@ -20,8 +20,8 @@
                 <td>{{ city.state }}</td>
                 <td>{{ city.status }}</td>
                 <td>
-                    <a href="{% url 'update_city' city.id %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a>
-                    <a href="{% url 'delete_city' city.id %}" onclick="return confirm('Are you sure you want to Delete {{city}}?')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
+                    <a href="{% url 'update_city' hashid=city.hashid %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a>
+                    <a href="{% url 'delete_city' hashid=city.hashid %}" onclick="return confirm('Are you sure you want to Delete {{city}}?')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
                 </td>
                 <td>{{ city.created_at }}</td>
             </tr>

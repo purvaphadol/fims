@@ -9,6 +9,7 @@ from openpyxl import Workbook
 from openpyxl.styles import *
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from family.utils import decode_id
 
 @login_required(login_url='login_page')
 def state_list(request):
@@ -43,13 +44,16 @@ def create_state(request):
     return render(request, 'create_state.html', context)
 
 @login_required(login_url='login_page')
-def update_state(request, pk):
+def update_state(request, hashid):
+    print(hashid)
+    pk = decode_id(hashid)
+    print(pk)
     state = State.objects.get(id=pk)
     state_form = StateForm(instance=state)
     if request.method == 'POST':
         state_form = StateForm(request.POST, instance=state)
         if state_form.is_valid():
-            state = state_form.save(commit=False)
+            state = state_form.save()
             new_status = state.status
             state.set_status(new_status)
             messages.success(request, 'State Updated Successfully!')
@@ -58,7 +62,8 @@ def update_state(request, pk):
     return render(request, 'update_state.html', context)
 
 @login_required(login_url='login_page')
-def delete_state(request, pk):
+def delete_state(request, hashid):
+    pk = decode_id(hashid)
     state = State.objects.get(id=pk)
     state.soft_delete()
     messages.success(request, 'State Deleted Successfully!')
@@ -99,13 +104,14 @@ def create_city(request):
     return render(request, 'create_city.html', context)
 
 @login_required(login_url='login_page')
-def update_city(request, pk):
+def update_city(request, hashid):
+    pk = decode_id(hashid)
     city = City.objects.get(id=pk)
     city_form = CityForm(instance=city)
     if request.method == 'POST':
         city_form = CityForm(request.POST, instance=city)
         if city_form.is_valid():
-            city = city_form.save(commit=False)
+            city = city_form.save()
             new_status = city.status
             city.set_status(new_status)
             messages.success(request, 'City Updated Successfully!')
@@ -114,7 +120,8 @@ def update_city(request, pk):
     return render(request, 'update_city.html', context)
 
 @login_required(login_url='login_page')
-def delete_city(request, pk):
+def delete_city(request, hashid):
+    pk = decode_id(hashid)
     city = City.objects.get(id=pk)
     city.soft_delete()
     messages.success(request, 'City Deleted Successfully!')
