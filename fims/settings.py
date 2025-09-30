@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
     'accounts',
     'family',
     'dashboard',
@@ -162,4 +164,12 @@ EMAIL_HOST_PASSWORD = "saes hwdc cazm yojs"
 
 
 HASHIDS_SALT = "a-very-private-and-random-string"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
 

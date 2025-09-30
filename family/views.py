@@ -18,16 +18,19 @@ from openpyxl.styles import *
 import decimal
 from openpyxl.drawing.image import Image as ExcelImage
 from .utils import decode_id
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 
 def home(request):
     return render(request, 'index.html')
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
 def get_cities(request, pk):
-    # state_id = request.GET.get('state_id')
-    # pk = decode_id(hashid)
     cities = City.objects.filter(state_id=pk).filter(status=statusChoice.ACTIVE).all()
     data = list(cities.values('id', 'city_name'))
-    return JsonResponse(data, safe=False)
+    return Response(data)
 
 def family_form(request):
     head_form = FamilyHeadForm()
