@@ -147,14 +147,14 @@ class FamilyHead(BaseModel):
         self.members.update(status=statusChoice.DELETE)
         self.hobbies.update(status=statusChoice.DELETE)
 
-    # def set_status(self, new_status):
-    #     super().set_status(new_status)
-    #     if new_status == statusChoice.ACTIVE:
-    #         self.members.update(status=statusChoice.ACTIVE)
-    #         self.hobbies.update(status=statusChoice.ACTIVE)
-    #     elif new_status == statusChoice.INACTIVE:
-    #         self.members.update(status=statusChoice.INACTIVE)
-    #         self.hobbies.update(status=statusChoice.INACTIVE)
+    def set_status(self, new_status):
+        super().set_status(new_status)
+        if new_status == statusChoice.ACTIVE:
+            self.members.update(status=statusChoice.ACTIVE)
+            self.hobbies.update(status=statusChoice.ACTIVE)
+        elif new_status == statusChoice.INACTIVE:
+            self.members.update(status=statusChoice.INACTIVE)
+            self.hobbies.update(status=statusChoice.INACTIVE)
 
 auditlog.register(FamilyHead)
 

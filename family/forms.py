@@ -10,7 +10,7 @@ class FamilyHeadForm(ModelForm):
         fields = [
             "name", "surname", "dob", "mobno", "address",
             "state", "city", "pincode",
-            "marital_status", "wedding_date", "photo"
+            "marital_status", "wedding_date", "photo", "status"
         ]
         widgets = {
             "dob": forms.DateInput(attrs={"type": "date"}),
@@ -111,6 +111,11 @@ class FamilyHeadForm(ModelForm):
         self.fields['marital_status'].required = False
         self.fields['wedding_date'].required = False
         self.fields['photo'].required = False
+        self.fields['status'].required = False
+        self.fields['status'].choices = [
+            (statusChoice.ACTIVE, 'Active'),
+            (statusChoice.INACTIVE, 'Inactive'),
+        ]
         self.fields['state'].queryset = State.objects.filter(status=statusChoice.ACTIVE)
         self.fields['city'].queryset = City.objects.none()
         if 'state' in self.data:

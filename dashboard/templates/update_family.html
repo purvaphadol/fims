@@ -82,15 +82,17 @@
           {{ head_form.photo }}
           <span class="errorMsg"></span>
         </div>
+        <div>
+          {{ head_form.status.label_tag }}
+          {{ head_form.status }}
+          <span class="errorMsg"></span>
+        </div>
         {% if hobby_formset.non_form_errors %}
-          {% for error in hobby_formset.non_form_errors %}
-          <div>
-              <span class="errorMsg">{{error}}</span>
-
-          </div>
-          {% endfor %}
+        {% for error in hobby_formset.non_form_errors %}
+        <div><span class="errorMsg">{{error}}</span></div>
+        {% endfor %}
         {% endif %}
-        
+
         <h3>Hobbies</h3>
         {{ hobby_formset.management_form }}
         <div id="hobby-container">
