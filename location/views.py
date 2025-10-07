@@ -11,121 +11,180 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from family.utils import decode_id
 
+
 @login_required(login_url='login_page')
 def state_list(request):
-    states = State.objects.all().exclude(status=statusChoice.DELETE).order_by('-created_at')
-    if request.GET.get('search'):
-        states = states.filter(state_name__icontains=request.GET.get('search'))
+    try:
+        states = State.objects.all().exclude(status=statusChoice.DELETE).order_by('-created_at')
+        if request.GET.get('search'):
+            states = states.filter(state_name__icontains=request.GET.get('search'))
 
-    p = Paginator(states, 10)  
-    page_number = request.GET.get('page')
-    page_obj = p.get_page(page_number)
-    totalPages = page_obj.paginator.num_pages
-    context = {
-        'page_obj': page_obj,
-        'lastPage': totalPages,
-        'totalPagelist': [n+1 for n in range(totalPages)],
-    }
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        state_html = render_to_string('state_list_template.html', context, request=request)
-        return JsonResponse({'state_html': state_html})
-    return render(request, 'state_list.html', context)
+        p = Paginator(states, 10)  
+        page_number = request.GET.get('page')
+        page_obj = p.get_page(page_number)
+        totalPages = page_obj.paginator.num_pages
+
+        context = {
+            'page_obj': page_obj,
+            'lastPage': totalPages,
+            'totalPagelist': [n+1 for n in range(totalPages)],
+        }
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            state_html = render_to_string('state_list_template.html', context, request=request)
+            return JsonResponse({'state_html': state_html})
+
+        return render(request, 'state_list.html', context)
+    
+    except Exception:
+        return redirect('dashboard')
+
 
 @login_required(login_url='login_page')
 def create_state(request):
-    state_form = StateForm()
-    if request.method == 'POST':
-        state_form = StateForm(request.POST)
-        if state_form.is_valid():
-            state_form.save()
-            messages.success(request, 'State Created Successfully!')
-            return redirect('state_list')
-    context = {'state_form': state_form }
-    return render(request, 'create_state.html', context)
+    try:
+        state_form = StateForm()
+        if request.method == 'POST':
+            state_form = StateForm(request.POST)
+
+            if state_form.is_valid():
+                state_form.save()
+                messages.success(request, 'State Created Successfully!')
+                return redirect('state_list')
+
+        context = {'state_form': state_form }
+        return render(request, 'create_state.html', context)
+    
+    except Exception:
+        return redirect('state_list')
+
 
 @login_required(login_url='login_page')
 def update_state(request, hashid):
-    print(hashid)
-    pk = decode_id(hashid)
-    print(pk)
-    state = State.objects.get(id=pk)
-    state_form = StateForm(instance=state)
-    if request.method == 'POST':
-        state_form = StateForm(request.POST, instance=state)
-        if state_form.is_valid():
-            state = state_form.save()
-            new_status = state.status
-            state.set_status(new_status)
-            messages.success(request, 'State Updated Successfully!')
-            return redirect('state_list')
-    context = {'state_form': state_form }
-    return render(request, 'update_state.html', context)
+    try:
+        pk = decode_id(hashid)
+        state = State.objects.get(id=pk)
+        state_form = StateForm(instance=state)
+
+        if request.method == 'POST':
+            state_form = StateForm(request.POST, instance=state)
+
+            if state_form.is_valid():
+                state = state_form.save()
+                new_status = state.status
+                state.set_status(new_status)
+                messages.success(request, 'State Updated Successfully!')
+                return redirect('state_list')
+
+        context = {'state_form': state_form }
+        return render(request, 'update_state.html', context)
+
+    except State.DoesNotExist:
+        messages.error(request, 'State not found.')
+        return redirect('state_list')
+
 
 @login_required(login_url='login_page')
 def delete_state(request, hashid):
-    pk = decode_id(hashid)
-    state = State.objects.get(id=pk)
-    state.soft_delete()
-    messages.success(request, 'State Deleted Successfully!')
-    return redirect('state_list')
+    try:
+        pk = decode_id(hashid)
+        state = State.objects.get(id=pk)
+        state.soft_delete()
+        messages.success(request, 'State Deleted Successfully!')
+        return redirect('state_list')
+
+    except State.DoesNotExist:
+        messages.error(request, 'State not found.')
+        return redirect('state_list')
+
 
 @login_required(login_url='login_page')
 def city_list(request):
-    cities = City.objects.all().exclude(status=statusChoice.DELETE).order_by('-created_at')
-    if request.GET.get('search'):
-        city = cities.filter(city_name__icontains=request.GET.get('search'))
-        state = cities.filter(state__state_name__icontains=request.GET.get('search'))
-        cities = city.union(state)
+    try:
+        cities = City.objects.all().exclude(status=statusChoice.DELETE).order_by('-created_at')
+        if request.GET.get('search'):
+            city = cities.filter(city_name__icontains=request.GET.get('search'))
+            state = cities.filter(state__state_name__icontains=request.GET.get('search'))
+            cities = city.union(state)
 
-    p = Paginator(cities, 10)  
-    page_number = request.GET.get('page')
-    page_obj = p.get_page(page_number)
-    totalPages = page_obj.paginator.num_pages
-    context = {
-        'page_obj': page_obj,
-        'lastPage': totalPages,
-        'totalPagelist': [n+1 for n in range(totalPages)],
-    }
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        city_html = render_to_string('city_list_template.html', context, request=request)
-        return JsonResponse({'city_html': city_html})
-    return render(request, 'city_list.html', context)
+        p = Paginator(cities, 10)  
+        page_number = request.GET.get('page')
+        page_obj = p.get_page(page_number)
+        totalPages = page_obj.paginator.num_pages
+
+        context = {
+            'page_obj': page_obj,
+            'lastPage': totalPages,
+            'totalPagelist': [n+1 for n in range(totalPages)],
+        }
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            city_html = render_to_string('city_list_template.html', context, request=request)
+            return JsonResponse({'city_html': city_html})
+
+        return render(request, 'city_list.html', context)
+
+    except Exception:
+        return redirect('dashboard')
+
 
 @login_required(login_url='login_page')
 def create_city(request):
-    city_form = CityForm()
-    if request.method == 'POST':
-        city_form = CityForm(request.POST)
-        if city_form.is_valid():
-            city_form.save()
-            messages.success(request, 'City Created Successfully!')
-            return redirect('city_list')
-    context = {'city_form': city_form }
-    return render(request, 'create_city.html', context)
+    try:
+        city_form = CityForm()
+        if request.method == 'POST':
+            city_form = CityForm(request.POST)
+
+            if city_form.is_valid():
+                city_form.save()
+                messages.success(request, 'City Created Successfully!')
+                return redirect('city_list')
+
+        context = {'city_form': city_form }
+        return render(request, 'create_city.html', context)
+
+    except Exception:
+        return redirect('city_list')
+
 
 @login_required(login_url='login_page')
 def update_city(request, hashid):
-    pk = decode_id(hashid)
-    city = City.objects.get(id=pk)
-    city_form = CityForm(instance=city)
-    if request.method == 'POST':
-        city_form = CityForm(request.POST, instance=city)
-        if city_form.is_valid():
-            city = city_form.save()
-            new_status = city.status
-            city.set_status(new_status)
-            messages.success(request, 'City Updated Successfully!')
-            return redirect('city_list')
-    context = {'city_form': city_form }
-    return render(request, 'update_city.html', context)
+    try:
+        pk = decode_id(hashid)
+        city = City.objects.get(id=pk)
+        city_form = CityForm(instance=city)
+
+        if request.method == 'POST':
+            city_form = CityForm(request.POST, instance=city)
+
+            if city_form.is_valid():
+                city = city_form.save()
+                new_status = city.status
+                city.set_status(new_status)
+                messages.success(request, 'City Updated Successfully!')
+                return redirect('city_list')
+
+        context = {'city_form': city_form }
+        return render(request, 'update_city.html', context)
+
+    except City.DoesNotExist:
+        messages.error(request, 'City not found.')
+        return redirect('city_list')
+
 
 @login_required(login_url='login_page')
 def delete_city(request, hashid):
-    pk = decode_id(hashid)
-    city = City.objects.get(id=pk)
-    city.soft_delete()
-    messages.success(request, 'City Deleted Successfully!')
-    return redirect('city_list')
+    try:
+        pk = decode_id(hashid)
+        city = City.objects.get(id=pk)
+        city.soft_delete()
+        messages.success(request, 'City Deleted Successfully!')
+        return redirect('city_list')
+
+    except City.DoesNotExist:
+        messages.error(request, 'City not found.')
+        return redirect('city_list')
+
 
 @login_required(login_url='login_page')
 def city_excel(request):
@@ -162,6 +221,7 @@ def city_excel(request):
 
     workbook.save(response)
     return response
+
 
 @login_required(login_url='login_page')
 def state_excel(request):
