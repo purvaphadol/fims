@@ -133,7 +133,8 @@ class FamilyHead(BaseModel):
     status = models.IntegerField(choices = statusChoice.choices, default=statusChoice.ACTIVE.value)
 
     class Meta:
-        db_table = "family_head" 
+        db_table = "family_head"
+        ordering = ['-updated_at', '-created_at']
 
     @property
     def hashid(self):
