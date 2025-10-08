@@ -20,8 +20,10 @@
                 <td>{{ city.state }}</td>
                 <td>{{ city.status }}</td>
                 <td>
-                    <a href="{% url 'update_city' hashid=city.hashid %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a>
-                    <a href="{% url 'delete_city' hashid=city.hashid %}" onclick="return confirm('Are you sure you want to Delete {{city}}?')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
+                    <a href="{% url 'update_city' hashid=city.hashid %}"><img src="{% static 'images/edit.png' %}"
+                            alt="Edit"></a>
+                    <a href="#" onclick="confirmDelete(`{% url 'delete_city' hashid=city.hashid %}`)"><img
+                            src="{% static 'images/delete.png' %}" alt="Delete"></a>
                 </td>
                 <td>{{ city.created_at }}</td>
             </tr>
@@ -38,15 +40,38 @@
 
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page=1{% else %}?page=1{% endif %}" class="page-link">First</a>
-        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.previous_page_number}}{% else %}?page={{page_obj.previous_page_number}}{% endif %}" class="page-link">Previous</a>
+    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page=1{% else %}?page=1{% endif %}"
+        class="page-link">First</a>
+    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.previous_page_number}}{% else %}?page={{page_obj.previous_page_number}}{% endif %}"
+        class="page-link">Previous</a>
     {% endif %}
 
-    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.number}} {% else %} ?page={{page_obj.number}} {% endif %}" class="page-link {% if page_obj.number == page_obj.number %}active{% endif %}">{{page_obj.number}}</a>
+    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.number}} {% else %} ?page={{page_obj.number}} {% endif %}"
+        class="page-link {% if page_obj.number == page_obj.number %}active{% endif %}">{{page_obj.number}}</a>
 
     {% if page_obj.has_next %}
-        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.next_page_number}}{% else %}?page={{page_obj.next_page_number}}{% endif %}" class="page-link">Next</a>
-        <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{ lastPage }}{% else %}?page={{ lastPage }}{% endif %}" class="page-link">Last</a>
+    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{page_obj.next_page_number}}{% else %}?page={{page_obj.next_page_number}}{% endif %}"
+        class="page-link">Next</a>
+    <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{ lastPage }}{% else %}?page={{ lastPage }}{% endif %}"
+        class="page-link">Last</a>
     {% endif %}
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(deleteUrl) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;
+            }
+        })
+    };
+</script>
