@@ -17,19 +17,7 @@ $(document).ready(function () {
 
     $("#search-form").on('submit', function (e) {
         e.preventDefault();
-        const search = $("#search").val();
-        const url = `?search=${search}`;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            success: function (data) {
-                $('#ajax-table').html(data.family_html);
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-            }
-        });
+        getAjaxData();
     });
 
     $("#search-form").on('keyup', function (e) {
@@ -57,4 +45,19 @@ $(document).ready(function () {
     });
 });
 
+function getAjaxData() {
+    const search = $("#search").val();
+        const url = `?search=${search}`;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            success: function (data) {
+                $('#ajax-table').html(data.family_html);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", error);
+            }
+        });
+}
 

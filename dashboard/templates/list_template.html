@@ -29,7 +29,7 @@
                 <td>
                     <a href="{% url 'view_family' hashid=head.hashid %}"><img src="{% static 'images/visibility.png' %}" alt="View"></a>
                     <a href="{% url 'update_family' hashid=head.hashid %}"><img src="{% static 'images/edit.png' %}" alt="Edit"></a></a>
-                    <a href="{% url 'delete_family' hashid=head.hashid %}" onclick="return confirm('Are you sure you want to Delete {{head.surname}} Family ? Members within family will also get deleted.')"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
+                    <a href="#" onclick="confirmDelete(`{% url 'delete_family' hashid=head.hashid %}`)"><img src="{% static 'images/delete.png' %}" alt="Delete"></a>
                 </td>
                 <td>{{ head.created_at }}</td>
                 <!-- <td>{{ head.updated_at }}</td> -->
@@ -60,4 +60,10 @@
         <a href="{% if request.GET.search %}?search={{request.GET.search}}&page={{ lastPage }}{% else %}?page={{ lastPage }}{% endif %}" class="page-link">Last</a>
     {% endif %}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/delete_family.js' %}"></script>
+
+
+
 

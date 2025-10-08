@@ -56,9 +56,13 @@ form.addEventListener("submit", async (e) => {
         });
       }
     } else if (result.success === true) {
-      console.log("true");
-      alert(result.message);
-      window.location.href = `/view_family/${pk}`;
+      Swal.fire({
+        title: result.message,
+        icon: "success",
+        timer: 3000
+      }).then(() =>
+        window.location.href = `/view_family/${pk}`
+      )
       // form.reset();
     } else {
       console.log("Something went wrong.", err);

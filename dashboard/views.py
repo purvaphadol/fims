@@ -146,8 +146,9 @@ def delete_family(request, hashid):
         pk = decode_id(hashid)
         head = FamilyHead.objects.get(id=pk)
         head.soft_delete()
-        messages.success(request, 'Family Deleted Successfully!')
-        return redirect('family_list')
+        return JsonResponse({"success": True, "message": "Family Deleted Successfully."})
+        # messages.success(request, 'Family Deleted Successfully!')
+        # return redirect('family_list')
 
     except FamilyHead.DoesNotExist:
         return redirect('family_list')
