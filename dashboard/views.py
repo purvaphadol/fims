@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count, Q
+from django.db import transaction
 from family.models import FamilyMember, FamilyHead, State, City, statusChoice 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from family.forms import *
@@ -109,11 +110,12 @@ def update_family(request, hashid):
             member_formset = MemberFormset(request.POST, request.FILES, instance=head, prefix="members")
 
             if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
-                family_head = head_form.save()
-                hobby_formset.save()
-                member_formset.save()
-                new_status = family_head.status
-                family_head.set_status(new_status)
+                with transaction.atomic():
+                    family_head = head_form.save()
+                    hobby_formset.save()
+                    member_formset.save()
+                    new_status = family_head.status
+                    family_head.set_status(new_status)
                 return JsonResponse({"success": True, "message": "Family Updated Successfully."})
             else:
                 return JsonResponse({
@@ -133,6 +135,9 @@ def update_family(request, hashid):
 
     except FamilyHead.DoesNotExist:
         return redirect('family_list')
+
+    except Exception:
+        return JsonResponse({"success": False, "errorMessage": "An unexpected error occurred."})
 
 
 @login_required(login_url='login_page')

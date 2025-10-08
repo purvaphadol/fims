@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from family.models import State, City, statusChoice
 import re
 
+
 class StateForm(ModelForm):
     class Meta:
         model = State
@@ -27,6 +28,7 @@ class StateForm(ModelForm):
             self.add_error('state_name', 'State name cannot contain digits.')
         elif State.objects.exclude(status=statusChoice.DELETE).filter(state_name=state_name).exclude(pk=self.instance.pk).exists():
             self.add_error('state_name','State already exists.')
+
 
 class CityForm(ModelForm):
     class Meta:

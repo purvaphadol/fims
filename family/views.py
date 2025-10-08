@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.db import transaction
 from .forms import FamilyHeadForm, HobbyFormSet, MemberFormset
 from .models import FamilyHead, FamilyMember, Hobby, City, statusChoice
 from django.contrib.auth.decorators import login_required
@@ -51,11 +52,12 @@ def family_form(request):
             member_formset = MemberFormset(request.POST, request.FILES, instance=head_form.instance, prefix="members")
             
             if head_form.is_valid() and hobby_formset.is_valid() and member_formset.is_valid():
-                head = head_form.save()
-                hobby_formset.instance = head
-                hobby_formset.save()
-                member_formset.instance = head
-                member_formset.save()
+                with transaction.atomic():
+                    head = head_form.save()
+                    hobby_formset.instance = head
+                    hobby_formset.save()
+                    member_formset.instance = head
+                    member_formset.save()
                 return JsonResponse({"success": True, "message": "Family Created Successfully."})
 
             else:
@@ -326,5 +328,6 @@ def head_excel(request):
 
     workbook.save(response)
     return response
+
 
 
