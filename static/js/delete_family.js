@@ -45,7 +45,9 @@ async function confirmDelete(deleteUrl) {
                     icon: "success",
                     timer: 3000
                 })
-               getAjaxData();
+                const search = $("#search").val();
+                const url = `?search=${search}`;
+                loadPage(url);
             } else {
                 console.log("Something went wrong.", err);
             }
@@ -54,7 +56,4 @@ async function confirmDelete(deleteUrl) {
         }
     }
 };
-
-
-
 

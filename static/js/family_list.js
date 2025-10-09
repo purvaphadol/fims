@@ -2,22 +2,14 @@ $(document).ready(function () {
     $(document).on('click', '.pagination a.page-link', function (e) {
         e.preventDefault();
         const url = $(this).attr('href');
-        $.ajax({
-            url: url,
-            type: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            success: function (data) {
-                $('#ajax-table').html(data.family_html);
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-            }
-        });
+        loadPage(url);
     });
 
     $("#search-form").on('submit', function (e) {
         e.preventDefault();
-        getAjaxData();
+        const search = $("#search").val();
+        const url = `?search=${search}`;
+        loadPage(url);
     });
 
     $("#search-form").on('keyup', function (e) {
@@ -30,34 +22,23 @@ $(document).ready(function () {
 
         if (search === "") {
             const url = $(this).attr('href');
-            $.ajax({
-                url: url,
-                type: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                success: function (data) {
-                    $('#ajax-table').html(data.family_html);
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX Error:", error);
-                }
-            });
+            loadPage(url);
         }
     });
 });
 
-function getAjaxData() {
-    const search = $("#search").val();
-        const url = `?search=${search}`;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            success: function (data) {
-                $('#ajax-table').html(data.family_html);
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-            }
-        });
+function loadPage(url) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function (data) {
+            $('#ajax-table').html(data.family_html);
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", error);
+        }
+    });
 }
+
 
