@@ -90,11 +90,9 @@ def delete_state(request, hashid):
         pk = decode_id(hashid)
         state = State.objects.get(id=pk)
         state.soft_delete()
-        messages.success(request, 'State Deleted Successfully!')
-        return redirect('state_list')
+        return JsonResponse({"success": True, "message": "State Deleted Successfully."})
 
     except State.DoesNotExist:
-        messages.error(request, 'State not found.')
         return redirect('state_list')
 
 
@@ -178,11 +176,10 @@ def delete_city(request, hashid):
         pk = decode_id(hashid)
         city = City.objects.get(id=pk)
         city.soft_delete()
-        messages.success(request, 'City Deleted Successfully!')
-        return redirect('city_list')
+        return JsonResponse({"success": True, "message": "City Deleted Successfully."})
 
     except City.DoesNotExist:
-        messages.error(request, 'City not found.')
+        # messages.error(request, 'City not found.')
         return redirect('city_list')
 
 
